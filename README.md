@@ -1,5 +1,8 @@
 # One-of-one-apk
 
+/opt/tomcat/bin/shutdown.sh
+/opt/tomcat/bin/startup.sh
+
 OneOfOne/
 ├── src/
 │   ├── model/
