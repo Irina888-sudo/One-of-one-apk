@@ -3,6 +3,12 @@
 /opt/tomcat/bin/shutdown.sh
 /opt/tomcat/bin/startup.sh
 
+test connexion database
+javac -cp .:/usr/share/java/mysql-connector-j-9.4.0.jar -d . src/util/DBConnection.java
+java -cp .:/usr/share/java/mysql-connector-j-9.4.0.jar util.DBConnection 
+
+
+
 OneOfOne/
 ├── src/
 │   ├── model/
@@ -18,8 +24,8 @@ OneOfOne/
 │   │   ├── Produit.java
 │   │   ├── Collection.java
 │   │   ├── Salaire.java
-│   │   ├── Fournisseur.java
-│   │   └── Notification.java
+│   │   ├── 
+│   │   └── 
 
 │   ├── dao/
 │   │   ├── UtilisateurDAO.java
@@ -33,7 +39,7 @@ OneOfOne/
 │   │   ├── ProduitDAO.java
 │   │   ├── CollectionDAO.java
 │   │   ├── SalaireDAO.java
-│   │   └── FournisseurDAO.java
+│   │   └── 
 
 │   └── util/
 │       └── DBConnection.java
@@ -83,7 +89,7 @@ OneOfOne/
 │   │   ├── collection-list.jsp
 │   │   ├── salaire-list.jsp
 │   │   ├── graphiques.jsp
-│   │   └── notification-list.jsp
+│   │   └── 
 
 │   └── js/
 │       └── chart.min.js
