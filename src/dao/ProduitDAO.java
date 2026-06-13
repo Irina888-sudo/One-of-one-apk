@@ -30,6 +30,7 @@ public class ProduitDAO {
         int colId = rs.getInt("collection_id");
         p.setCollectionId(rs.wasNull() ? null : colId);
         p.setCollectionNom(rs.getString("collection_nom"));
+        p.setImage(rs.getString("image"));
         return p;
     }
 
@@ -98,8 +99,8 @@ public class ProduitDAO {
 
     // ── Ajouter ────────────────────────────────────────────
     public void ajouter(Produit p) throws SQLException {
-        String sql = "INSERT INTO produit (nom, categorie, taille, couleur, prix, statut, collection_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO produit (nom, categorie, taille, couleur, prix, statut, collection_id, image) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, p.getNom());
@@ -112,13 +113,14 @@ public class ProduitDAO {
                 ps.setInt(7, p.getCollectionId());
             else
                 ps.setNull(7, Types.INTEGER);
+            ps.setString(8, p.getImage());
             ps.executeUpdate();
         }
     }
 
     // ── Modifier ───────────────────────────────────────────
     public void modifier(Produit p) throws SQLException {
-        String sql = "UPDATE produit SET nom=?, categorie=?, taille=?, couleur=?, prix=?, statut=?, collection_id=? " +
+        String sql = "UPDATE produit SET nom=?, categorie=?, taille=?, couleur=?, prix=?, statut=?, collection_id=?, image=? " +
                 "WHERE id=?";
         try (Connection conn = getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -132,7 +134,8 @@ public class ProduitDAO {
                 ps.setInt(7, p.getCollectionId());
             else
                 ps.setNull(7, Types.INTEGER);
-            ps.setInt(8, p.getId());
+            ps.setString(8, p.getImage());
+            ps.setInt(9, p.getId());
             ps.executeUpdate();
         }
     }

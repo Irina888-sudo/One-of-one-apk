@@ -10,6 +10,7 @@ public class Produit {
     private String statut; // DISPONIBLE | VENDU
     private Integer collectionId;
     private String collectionNom; // from JOIN
+    private String image;
 
     public Produit() {
     }
@@ -85,6 +86,14 @@ public class Produit {
 
     public void setCollectionNom(String collectionNom) {
         this.collectionNom = collectionNom;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     /** Génère un SKU d'affichage type OOO-24-001 */
