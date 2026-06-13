@@ -87,6 +87,7 @@ categorie VARCHAR(50),
 taille VARCHAR(20),
 couleur VARCHAR(30),
 prix DECIMAL(10,2),
+image VARCHAR(255),
 
 statut ENUM('DISPONIBLE','VENDU')
 DEFAULT 'DISPONIBLE',
@@ -261,7 +262,7 @@ GROUP BY cl.id, cl.nom, cl.email, cl.telephone, cl.adresse, cl.statut;
 -- VIEW 7 : Produits avec collection
 CREATE VIEW vue_produits AS
 SELECT p.id, p.nom, p.categorie, p.taille, p.couleur,
-p.prix, p.statut, col.nom AS collection_nom
+p.prix, p.statut, p.image, col.nom AS collection_nom
 FROM produit p
 LEFT JOIN collection col ON p.collection_id = col.id;
 
