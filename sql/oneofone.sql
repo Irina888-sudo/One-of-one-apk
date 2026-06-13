@@ -36,26 +36,30 @@ CREATE TABLE conge (
                 GENERATED ALWAYS AS
                 (DATEDIFF(date_fin, date_debut) + 1) STORED,
     motif       VARCHAR(200),
+    
     statut      ENUM('EN_ATTENTE','VALIDE','REFUSE') DEFAULT 'EN_ATTENTE'
+    
 );
 
 -- ─── 3. SALAIRES ──────────────────────────────────────────────────────────────
 CREATE TABLE salaire (
-    id            INT PRIMARY KEY AUTO_INCREMENT,
-    employe_id    INT,                                 
-    mois          DATE NOT NULL,                        
-    salaire_brut  DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    jours_absents INT DEFAULT 0,
-    deduction     DECIMAL(10,2)
-                  GENERATED ALWAYS AS
-                  (ROUND(salaire_brut / 30 * jours_absents, 2)) STORED,
-    salaire_net   DECIMAL(10,2)
-                  GENERATED ALWAYS AS
-                  (ROUND(salaire_brut - (salaire_brut / 30 * jours_absents), 2)) STORED,
-    statut        ENUM('ATTENTE','PAYE') DEFAULT 'ATTENTE',
-    UNIQUE KEY uq_employe_mois (employe_id, mois)
-);
+    id INT PRIMARY KEY AUTO_INCREMENT,
 
+    employe_id INT NOT NULL,
+
+    mois DATE NOT NULL,
+
+    salaire_brut DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+
+    statut ENUM('ATTENTE','PAYE')
+           DEFAULT 'ATTENTE',
+
+    UNIQUE KEY uq_employe_mois (employe_id, mois),
+
+    CONSTRAINT fk_salaire_employe
+        FOREIGN KEY (employe_id)
+        REFERENCES employe(id)
+);
 
 -- ─── 5. MATIÈRES (Stock) ──────────────────────────────────
 CREATE TABLE matiere (
