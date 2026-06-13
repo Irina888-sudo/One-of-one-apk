@@ -12,8 +12,12 @@ if not exist "WebContent\WEB-INF\classes" (
     mkdir "WebContent\WEB-INF\classes"
 )
 
-:: Generer la liste de tous les fichiers .java recursivement
-dir /s /b src\*.java > sources.txt
+:: Generer la liste de tous les fichiers .java recursivement en les entourant de guillemets et en remplacant \ par /
+(for /f "delims=" %%i in ('dir /s /b src\*.java') do (
+    set "filePath=%%i"
+    set "filePath=!filePath:\=/!"
+    echo "!filePath!"
+)) > sources.txt
 
 :: Compiler en utilisant la liste des fichiers et le classpath Windows (avec le separateur ';')
 javac -cp ".;WebContent\WEB-INF\lib\*" -d WebContent\WEB-INF\classes @sources.txt
@@ -29,7 +33,11 @@ echo Compilation reussie.
 echo.
 echo [2/4] Creation du fichier WAR...
 cd WebContent
-jar -cvf ..\One-of-one-apk.war .
+set "JAR_CMD=jar"
+if exist "%JAVA_HOME%\bin\jar.exe" (
+    set "JAR_CMD=%JAVA_HOME%\bin\jar.exe"
+)
+"%JAR_CMD%" -cvf ..\One-of-one-apk.war .
 if %errorlevel% neq 0 (
     echo [ERREUR] La creation du fichier WAR a echoue !
     cd ..
