@@ -1,7 +1,5 @@
 package util;
 
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -14,13 +12,11 @@ public class DBConnection {
         String password = "";
 
         try {
-            
 
             Connection conn = DriverManager.getConnection(
                     url,
                     user,
-                    password
-            );
+                    password);
 
             System.out.println("Connexion réussie !");
             conn.close();
