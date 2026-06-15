@@ -16,7 +16,6 @@
     int id = 0;
     String errorMsg = null;
     
-    // If conge_id provided -> editing existing conge; else if id provided -> employe id for new conge
     int congeId = 0;
     if (request.getParameter("conge_id") != null) {
         congeId = Integer.parseInt(request.getParameter("conge_id"));
@@ -105,7 +104,7 @@
                                 } catch (Exception ignore) {}
                             }
                         }
-                        // update salary for the month using total non-payé days
+                        
                         new dao.SalaireDAO().updateSalaryForMonthWithTotalLeave(conge.getEmployeId(), mois, totalNonPaye, false);
                     } catch (Exception ex) { ex.printStackTrace(); }
                 }

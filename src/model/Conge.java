@@ -11,7 +11,7 @@ public class Conge {
     private Integer nbrJours;
     private String statut;
     private String motif;
-    private String typeConge; // PAYE or NON_PAYE
+    private String typeConge; 
 
     public Conge() {}
     

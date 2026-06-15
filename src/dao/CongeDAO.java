@@ -11,8 +11,7 @@ import java.util.List;
 
 public class CongeDAO {
     public boolean addConge(Conge conge) throws SQLException {
-        // The DB schema defines `nb_jours` as a GENERATED column (DATEDIFF + 1). Do not write to it.
-        // Use INSERT matching existing schema: (employe_id, date_debut, date_fin, motif, statut)
+       
         String sql = "INSERT INTO conge (employe_id, date_debut, date_fin, motif, statut) VALUES (?, ?, ?, ?, ?)";
         Connection conn = DBConnection.getConnection();
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
