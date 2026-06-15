@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Date;
+
 public class Livraison {
 
     private int id;
@@ -15,13 +17,13 @@ public class Livraison {
 
     private String statut;
 
-    private String dateLivraison;
+    private Date dateLivraison;
 
     public Livraison() {}
 
     public Livraison(int id, String numero, int commandeId, Integer employeId,
                      String livreur, String lieu, double frais,
-                     String statut, String dateLivraison) {
+                     String statut, Date dateLivraison) {
         this.id = id;
         this.numero = numero;
         this.commandeId = commandeId;
@@ -50,7 +52,7 @@ public class Livraison {
 
     public String getStatut() { return statut; }
 
-    public String getDateLivraison() { return dateLivraison; }
+    public Date getDateLivraison() { return dateLivraison; }
 
     // 🔹 SETTERS
     public void setId(int id) { this.id = id; }
@@ -69,5 +71,6 @@ public class Livraison {
 
     public void setStatut(String statut) { this.statut = statut; }
 
-    public void setDateLivraison(String dateLivraison) { this.dateLivraison = dateLivraison; }
+    public void setDateLivraison(Date dateLivraison) { this.dateLivraison = dateLivraison; }
+
 }
