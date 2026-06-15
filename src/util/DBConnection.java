@@ -1,33 +1,24 @@
 package util;
 
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DBConnection {
 
-    public static void main(String[] args) {
+    private static final String URL = "jdbc:mysql://localhost:3306/oneofone";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
 
-        String url = "jdbc:mysql://localhost:3306/oneofone";
-        String user = "root";
-        String password = "";
-
+    public static Connection getConnection() {
         try {
-            
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-            Connection conn = DriverManager.getConnection(
-                    url,
-                    user,
-                    password
-            );
-
-            System.out.println("Connexion réussie !");
-            conn.close();
+            return DriverManager.getConnection(URL, USER, PASSWORD);
 
         } catch (Exception e) {
             System.out.println("Erreur de connexion !");
             e.printStackTrace();
+            return null;
         }
     }
 }
