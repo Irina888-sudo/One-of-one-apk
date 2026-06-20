@@ -99,6 +99,16 @@ FOREIGN KEY (collection_id)
 REFERENCES collection(id)
 );
 
+-- ─── ASSOCIATION PRODUIT - MATIÈRE ────────────────────────
+CREATE TABLE produit_matiere (
+    produit_id INT NOT NULL,
+    matiere_id INT NOT NULL,
+    quantite DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (produit_id, matiere_id),
+    CONSTRAINT fk_pm_produit FOREIGN KEY (produit_id) REFERENCES produit(id) ON DELETE CASCADE,
+    CONSTRAINT fk_pm_matiere FOREIGN KEY (matiere_id) REFERENCES matiere(id) ON DELETE CASCADE
+);
+
 -- ─── 8. CLIENTS ───────────────────────────────────────────
 CREATE TABLE client (
 id          INT PRIMARY KEY AUTO_INCREMENT,

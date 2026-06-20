@@ -8,6 +8,7 @@
 <%@ page import="java.nio.file.Paths" %>
 <%@ page import="java.nio.file.StandardCopyOption" %>
 <%@ page import="java.util.UUID" %>
+<%@ page import="java.util.List, java.util.ArrayList" %>
 <%
     String idParam  = request.getParameter("id");
     String nom      = request.getParameter("nom");
@@ -87,21 +88,70 @@
     ProduitDAO dao = new ProduitDAO();
     boolean isEdit = (idParam != null && !idParam.isBlank());
 
+    // ── Traitement des matières premières (si création) ──
+    List<Integer> matiereIds = new java.util.ArrayList<>();
+    List<Double> quantites = new java.util.ArrayList<>();
+    
+    if (!isEdit) {
+        String[] matiereIdsParam = request.getParameterValues("matiereId");
+        String[] quantitesParam = request.getParameterValues("quantiteMatiere");
+        
+        if (matiereIdsParam != null && quantitesParam != null) {
+            for (int i = 0; i < matiereIdsParam.length; i++) {
+                String mIdStr = matiereIdsParam[i];
+                String qtyStr = i < quantitesParam.length ? quantitesParam[i] : "";
+                
+                if (mIdStr == null || mIdStr.isBlank()) {
+                    continue;
+                }
+                
+                int mId;
+                double qty;
+                try {
+                    mId = Integer.parseInt(mIdStr);
+                } catch (NumberFormatException e) {
+                    request.setAttribute("erreur", "Matière invalide.");
+                    request.getRequestDispatcher("produit-form.jsp").forward(request, response);
+                    return;
+                }
+                
+                try {
+                    qty = Double.parseDouble(qtyStr);
+                    if (qty <= 0) {
+                        throw new NumberFormatException();
+                    }
+                } catch (NumberFormatException e) {
+                    request.setAttribute("erreur", "La quantité utilisée pour chaque matière doit être un nombre strictement positif.");
+                    request.getRequestDispatcher("produit-form.jsp").forward(request, response);
+                    return;
+                }
+                
+                if (matiereIds.contains(mId)) {
+                    request.setAttribute("erreur", "Une matière ne peut pas être sélectionnée plusieurs fois.");
+                    request.getRequestDispatcher("produit-form.jsp").forward(request, response);
+                    return;
+                }
+                
+                matiereIds.add(mId);
+                quantites.add(qty);
+            }
+        }
+    }
+
     try {
         if (isEdit) {
             p.setId(Integer.parseInt(idParam));
             dao.modifier(p);
             session.setAttribute("flash", "Produit modifié avec succès.");
         } else {
-            dao.ajouter(p);
+            dao.ajouter(p, matiereIds, quantites);
             session.setAttribute("flash", "Produit ajouté avec succès.");
         }
         session.setAttribute("flashType", "success");
+        response.sendRedirect("produits.jsp");
     } catch (Exception e) {
-        session.setAttribute("flash", "Erreur : " + e.getMessage());
-        session.setAttribute("flashType", "error");
+        request.setAttribute("erreur", "Erreur : " + e.getMessage());
+        request.getRequestDispatcher(isEdit ? "produit-form.jsp?id=" + idParam : "produit-form.jsp").forward(request, response);
     }
-
-    response.sendRedirect("produits.jsp");
 
 %>

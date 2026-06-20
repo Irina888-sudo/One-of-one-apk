@@ -1,20 +1,27 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="dao.ProduitDAO, dao.CollectionDAO" %>
-<%@ page import="model.Produit, model.Collection" %>
+<%@ page import="dao.ProduitDAO, dao.CollectionDAO, dao.MatiereDAO" %>
+<%@ page import="model.Produit, model.Collection, model.Matiere" %>
 <%@ page import="java.util.List" %>
 <%
     ProduitDAO dao = new ProduitDAO();
     CollectionDAO colDao = new CollectionDAO();
+    MatiereDAO matDao = new MatiereDAO();
+
     List<Collection> collections = colDao.listerActives();
+    List<Matiere> matieres = matDao.lister();
 
     String idParam = request.getParameter("id");
     Produit p = null;
     boolean isEdit = (idParam != null && !idParam.isBlank());
 
+    List<Matiere> matieresProduit = new java.util.ArrayList<>();
     if (isEdit) {
         try {
             p = dao.trouverParId(Integer.parseInt(idParam));
-        } catch (NumberFormatException e) {
+            if (p != null) {
+                matieresProduit = dao.getMatieresParProduit(p.getId());
+            }
+        } catch (Exception e) {
             /* ignore */
         }
     }
@@ -32,6 +39,49 @@
         <meta charset="UTF-8">
         <title><%= titre %> – One of One</title>
         <link rel="stylesheet" href="css/style.css">
+        <script>
+            function updateUnite(selectEl) {
+                const selectedOpt = selectEl.options[selectEl.selectedIndex];
+                const unite = selectedOpt.getAttribute('data-unite') || '';
+                const row = selectEl.closest('tr');
+                if (row) {
+                    const label = row.querySelector('.unite-label');
+                    if (label) label.textContent = unite;
+                }
+            }
+
+            function ajouterMatiere() {
+                const tbody = document.getElementById('matieres-body');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="padding: 8px 4px;">
+                        <select name="matiereId" class="select-matiere" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: #faf9f7;" onchange="updateUnite(this)">
+                            <option value="">-- Choisir une matière --</option>
+                            <% for (Matiere m : matieres) { %>
+                                <option value="<%= m.getId() %>" data-unite="<%= m.getUnite() != null ? m.getUnite() : "" %>">
+                                    <%= m.getNom() %> (Stock: <%= m.getQuantite() %> <%= m.getUnite() != null ? m.getUnite() : "" %>)
+                                </option>
+                            <% } %>
+                        </select>
+                    </td>
+                    <td style="padding: 8px 4px; display: flex; align-items: center; gap: 4px;">
+                        <input type="number" name="quantiteMatiere" step="0.01" min="0" placeholder="0.00" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: #faf9f7;">
+                        <span class="unite-label" style="font-size: 12px; color: var(--text-muted); min-width: 30px;"></span>
+                    </td>
+                    <td style="padding: 8px 4px; text-align: center;">
+                        <button type="button" class="action-small" onclick="supprimerMatiere(this)">Supprimer</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            }
+
+            function supprimerMatiere(btn) {
+                const row = btn.closest('tr');
+                if (row) {
+                    row.remove();
+                }
+            }
+        </script>
     </head>
     <style>
         :root {
@@ -59,6 +109,8 @@
         .btn-primary:hover { opacity: .9; }
         .btn-secondary { background: #f0ede8; color: #555; border: none; border-radius: 8px; padding: 12px 18px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; }
         .erreur { background: #fde8e8; color: #d94f4f; border: 1px solid #f5c0c0; border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-bottom: 18px; }
+        .action-small { border:none; color:var(--accent-orange); background:none; cursor:pointer; font-weight:700; font-size: 12px; }
+        .action-small:hover { text-decoration: underline; }
 </style>
     <body>
         <div class="card">
@@ -154,6 +206,62 @@
                             <% } %>
                         </select>
                     </div>
+                </div>
+
+                <!-- Section Matières Premières -->
+                <div class="form-group" style="margin-top: 18px;">
+                    <label style="margin-bottom: 8px;">Matières premières utilisées</label>
+                    
+                    <% if (isEdit) { %>
+                        <!-- En modification, afficher en lecture seule pour éviter des incohérences de stock -->
+                        <% if (matieresProduit != null && !matieresProduit.isEmpty()) { %>
+                            <div style="background: #faf9f7; border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 13px;">
+                                <ul style="list-style: none; display: flex; flex-direction: column; gap: 6px;">
+                                    <% for (Matiere mp : matieresProduit) { %>
+                                        <li style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid #f5f0ea;">
+                                            <span style="font-weight: 600;"><%= mp.getNom() %></span>
+                                            <span style="color: var(--text-muted); font-weight: 500;"><%= mp.getQuantite() %> <%= mp.getUnite() != null ? mp.getUnite() : "" %></span>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                            </div>
+                        <% } else { %>
+                            <p style="font-size: 13px; color: var(--text-muted); font-style: italic;">Aucune matière associée à ce produit.</p>
+                        <% } %>
+                    <% } else { %>
+                        <!-- En création, permettre l'ajout dynamique -->
+                        <table class="ligne-table" style="margin-bottom: 10px; width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 8px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); text-align: left; border-bottom: 1px solid var(--border);">Matière</th>
+                                    <th style="padding: 8px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); text-align: left; border-bottom: 1px solid var(--border); width: 150px;">Quantité</th>
+                                    <th style="padding: 8px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); text-align: center; border-bottom: 1px solid var(--border); width: 80px;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="matieres-body">
+                                <tr>
+                                    <td style="padding: 8px 4px;">
+                                        <select name="matiereId" class="select-matiere" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: #faf9f7;" onchange="updateUnite(this)">
+                                            <option value="">-- Choisir une matière --</option>
+                                            <% for (Matiere m : matieres) { %>
+                                                <option value="<%= m.getId() %>" data-unite="<%= m.getUnite() != null ? m.getUnite() : "" %>">
+                                                    <%= m.getNom() %> (Stock: <%= m.getQuantite() %> <%= m.getUnite() != null ? m.getUnite() : "" %>)
+                                                </option>
+                                            <% } %>
+                                        </select>
+                                    </td>
+                                    <td style="padding: 8px 4px; display: flex; align-items: center; gap: 4px;">
+                                        <input type="number" name="quantiteMatiere" step="0.01" min="0" placeholder="0.00" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: #faf9f7;">
+                                        <span class="unite-label" style="font-size: 12px; color: var(--text-muted); min-width: 30px;"></span>
+                                    </td>
+                                    <td style="padding: 8px 4px; text-align: center;">
+                                        <button type="button" class="action-small" onclick="supprimerMatiere(this)">Supprimer</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn-secondary" style="padding: 8px 14px; font-size: 12px; align-self: flex-start;" onclick="ajouterMatiere()">+ Ajouter une matière</button>
+                    <% } %>
                 </div>
 
                 <div class="btn-row">

@@ -1,6 +1,7 @@
 package dao;
 
 import model.Produit;
+import model.Matiere;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -99,22 +100,96 @@ public class ProduitDAO {
 
     // ── Ajouter ────────────────────────────────────────────
     public void ajouter(Produit p) throws SQLException {
-        String sql = "INSERT INTO produit (nom, categorie, taille, couleur, prix, statut, collection_id, image) " +
+        ajouter(p, null, null);
+    }
+
+    public void ajouter(Produit p, List<Integer> matiereIds, List<Double> quantites) throws SQLException {
+        String sqlProduit = "INSERT INTO produit (nom, categorie, taille, couleur, prix, statut, collection_id, image) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, p.getNom());
-            ps.setString(2, p.getCategorie());
-            ps.setString(3, p.getTaille());
-            ps.setString(4, p.getCouleur());
-            ps.setDouble(5, p.getPrix());
-            ps.setString(6, p.getStatut() != null ? p.getStatut() : "DISPONIBLE");
-            if (p.getCollectionId() != null)
-                ps.setInt(7, p.getCollectionId());
-            else
-                ps.setNull(7, Types.INTEGER);
-            ps.setString(8, p.getImage());
-            ps.executeUpdate();
+        String sqlPM = "INSERT INTO produit_matiere (produit_id, matiere_id, quantite) VALUES (?, ?, ?)";
+        String sqlSelectMatiere = "SELECT nom, quantite FROM matiere WHERE id = ? FOR UPDATE";
+        String sqlUpdateMatiere = "UPDATE matiere SET quantite = quantite - ? WHERE id = ?";
+        
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            conn.setAutoCommit(false);
+            
+            int prodId;
+            try (PreparedStatement ps = conn.prepareStatement(sqlProduit, Statement.RETURN_GENERATED_KEYS)) {
+                ps.setString(1, p.getNom());
+                ps.setString(2, p.getCategorie());
+                ps.setString(3, p.getTaille());
+                ps.setString(4, p.getCouleur());
+                ps.setDouble(5, p.getPrix());
+                ps.setString(6, p.getStatut() != null ? p.getStatut() : "DISPONIBLE");
+                if (p.getCollectionId() != null)
+                    ps.setInt(7, p.getCollectionId());
+                else
+                    ps.setNull(7, Types.INTEGER);
+                ps.setString(8, p.getImage());
+                ps.executeUpdate();
+                
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        prodId = rs.getInt(1);
+                        p.setId(prodId);
+                    } else {
+                        throw new SQLException("Échec de la création du produit, aucun ID généré.");
+                    }
+                }
+            }
+            
+            if (matiereIds != null && quantites != null) {
+                for (int i = 0; i < matiereIds.size(); i++) {
+                    int matId = matiereIds.get(i);
+                    double qtyNeeded = quantites.get(i);
+                    if (qtyNeeded <= 0) continue;
+                    
+                    // Check stock with lock
+                    try (PreparedStatement psSelect = conn.prepareStatement(sqlSelectMatiere)) {
+                        psSelect.setInt(1, matId);
+                        try (ResultSet rs = psSelect.executeQuery()) {
+                            if (rs.next()) {
+                                String nomMat = rs.getString("nom");
+                                double currentQty = rs.getDouble("quantite");
+                                if (currentQty < qtyNeeded) {
+                                    throw new SQLException("Stock insuffisant pour la matière \"" + nomMat + 
+                                        "\" (disponible: " + currentQty + ", demandé: " + qtyNeeded + ")");
+                                }
+                            } else {
+                                throw new SQLException("Matière avec l'ID " + matId + " introuvable.");
+                            }
+                        }
+                    }
+                    
+                    // Decrement stock
+                    try (PreparedStatement psUpdate = conn.prepareStatement(sqlUpdateMatiere)) {
+                        psUpdate.setDouble(1, qtyNeeded);
+                        psUpdate.setInt(2, matId);
+                        psUpdate.executeUpdate();
+                    }
+                    
+                    // Insert association
+                    try (PreparedStatement psPM = conn.prepareStatement(sqlPM)) {
+                        psPM.setInt(1, prodId);
+                        psPM.setInt(2, matId);
+                        psPM.setDouble(3, qtyNeeded);
+                        psPM.executeUpdate();
+                    }
+                }
+            }
+            
+            conn.commit();
+        } catch (SQLException e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { /* ignore */ }
+            }
+            throw e;
+        } finally {
+            if (conn != null) {
+                try { conn.close(); } catch (SQLException e) { /* ignore */ }
+            }
         }
     }
 
@@ -192,5 +267,29 @@ public class ProduitDAO {
                 return rs.getInt(1);
         }
         return 0;
+    }
+
+    public List<Matiere> getMatieresParProduit(int produitId) throws SQLException {
+        List<Matiere> liste = new ArrayList<>();
+        String sql = "SELECT m.id, m.nom, pm.quantite, m.unite, m.valeur_unitaire " +
+                     "FROM produit_matiere pm " +
+                     "JOIN matiere m ON pm.matiere_id = m.id " +
+                     "WHERE pm.produit_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, produitId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Matiere m = new Matiere();
+                    m.setId(rs.getInt("id"));
+                    m.setNom(rs.getString("nom"));
+                    m.setQuantite(rs.getDouble("quantite")); // Quantity used
+                    m.setUnite(rs.getString("unite"));
+                    m.setValeurUnitaire(rs.getDouble("valeur_unitaire"));
+                    liste.add(m);
+                }
+            }
+        }
+        return liste;
     }
 }
