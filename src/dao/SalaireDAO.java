@@ -1,15 +1,13 @@
 package dao;
 
-import model.Salaire;
-import model.Employe;
-import util.DBConnection;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import model.Salaire;
+import util.DBConnection;
 
 public class SalaireDAO {
     private final Connection connection;
@@ -18,7 +16,38 @@ public class SalaireDAO {
     // Convenience no-arg constructor for JSPs that instantiate DAO directly
     public SalaireDAO() { this.connection = null; }
 
-    public Salaire findById(int id) throws SQLException { throw new UnsupportedOperationException("Not implemented yet"); }
+    public Salaire findById(int id) throws SQLException {
+        String sql = "SELECT * FROM salaire WHERE id = ? LIMIT 1";
+        boolean externalConn = this.connection != null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            conn = externalConn ? this.connection : DBConnection.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, id);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Salaire s = new Salaire();
+                s.setId(rs.getInt("id"));
+                s.setEmployeId(rs.getInt("employe_id"));
+                java.sql.Date moisDate = rs.getDate("mois");
+                if (moisDate != null) s.setMois(moisDate.toLocalDate());
+                s.setSalaireBrut(rs.getBigDecimal("salaire_brut"));
+                s.setStatut(rs.getString("statut"));
+                try { s.setSalaireNet(rs.getBigDecimal("salaire_net")); } catch (Exception ignored) {}
+                try { s.setJoursConges(rs.getInt("jours_conges")); } catch (Exception ignored) {}
+                return s;
+            }
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException ignored) {}
+            try { if (pstmt != null) pstmt.close(); } catch (SQLException ignored) {}
+            if (!externalConn) {
+                try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
+            }
+        }
+        return null;
+    }
     public boolean delete(int id) throws SQLException { throw new UnsupportedOperationException("Not implemented yet"); }
 
     public boolean updateStatut(int salaireId, String statut) throws SQLException {
@@ -67,8 +96,59 @@ public class SalaireDAO {
         return result;
     }
 
+    // Paginated fetch
+    public List<Salaire> findAll(int offset, int limit) throws SQLException {
+        List<Salaire> result = new ArrayList<>();
+        String sql = "SELECT * FROM salaire ORDER BY mois DESC, id DESC LIMIT ? OFFSET ?";
+
+        boolean externalConn = this.connection != null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = externalConn ? this.connection : DBConnection.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, limit);
+            pstmt.setInt(2, offset);
+            rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Salaire s = new Salaire();
+                s.setId(rs.getInt("id"));
+                s.setEmployeId(rs.getInt("employe_id"));
+                java.sql.Date moisDate = rs.getDate("mois");
+                if (moisDate != null) s.setMois(moisDate.toLocalDate());
+                s.setSalaireBrut(rs.getBigDecimal("salaire_brut"));
+                s.setStatut(rs.getString("statut"));
+                try { s.setSalaireNet(rs.getBigDecimal("salaire_net")); } catch (Exception ignored) {}
+                try { s.setJoursConges(rs.getInt("jours_conges")); } catch (Exception ignored) {}
+                result.add(s);
+            }
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException ignored) {}
+            try { if (pstmt != null) pstmt.close(); } catch (SQLException ignored) {}
+            if (!externalConn) {
+                try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
+            }
+        }
+
+        return result;
+    }
+
     public List<Salaire> getAllSalaires() throws SQLException {
         return findAll();
+    }
+
+    public List<Salaire> getAllSalaires(int offset, int limit) throws SQLException {
+        return findAll(offset, limit);
+    }
+
+    public int getTotalSalaires() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM salaire";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        }
+        return 0;
     }
 
     public Salaire findByEmployeAndMonth(int employeId, java.time.LocalDate month) throws SQLException {

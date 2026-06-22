@@ -13,6 +13,7 @@
         int id = Integer.parseInt(idStr);
         boolean ok = new SalaireDAO().updateStatut(id, statut);
         if (ok) {
+            // Invoice export disabled per user request. Only update status and return to list.
             response.sendRedirect(redirect + "?success=" + java.net.URLEncoder.encode("Statut mis à jour", "UTF-8"));
         } else {
             response.sendRedirect(redirect + "?error=" + java.net.URLEncoder.encode("Impossible de mettre à jour", "UTF-8"));

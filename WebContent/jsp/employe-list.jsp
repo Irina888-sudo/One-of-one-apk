@@ -207,7 +207,7 @@
                             <td><%= e.getEmail() != null ? e.getEmail() : "-" %></td>
                             <td><%= e.getTelephone() != null ? e.getTelephone() : "-" %></td>
                             <td><%= e.getRole() != null ? e.getRole() : "-" %></td>
-                            <td><%= String.format("%,.2f", e.getSalaireBrut()) %> €</td>
+                            <td><%= String.format("%,.2f", e.getSalaireBrut()) %> Ariary</td>
                             <td>
                                 <% if ("ACTIF".equals(e.getStatut())) { %>
                                     <span class="badge badge-success">ACTIF</span>

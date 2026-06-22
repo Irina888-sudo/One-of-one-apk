@@ -1,12 +1,10 @@
 package dao;
 
-import model.Conge;
-import util.DBConnection;
-
-import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import model.Conge;
+import util.DBConnection;
 
 
 public class CongeDAO {
@@ -50,6 +48,42 @@ public class CongeDAO {
             e.printStackTrace();
         }
         return conges;
+    }
+
+    // Paginated list of all congés
+    public List<Conge> getAllConges(int offset, int limit) {
+        List<Conge> conges = new ArrayList<>();
+        String sql = "SELECT * FROM conge ORDER BY date_debut DESC, id DESC LIMIT ? OFFSET ?";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, limit);
+            pstmt.setInt(2, offset);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                Conge conge = new Conge();
+                conge.setId(rs.getInt("id"));
+                conge.setEmployeId(rs.getInt("employe_id"));
+                conge.setDateDebut(rs.getDate("date_debut"));
+                conge.setDateFin(rs.getDate("date_fin"));
+                try { conge.setNbrJours(rs.getInt("nb_jours")); } catch (SQLException ignored) {}
+                conge.setMotif(rs.getString("motif"));
+                try { conge.setTypeConge(rs.getString("type_conge")); } catch (SQLException ignored) {}
+                conge.setStatut(rs.getString("statut"));
+                conges.add(conge);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return conges;
+    }
+
+    public int getTotalConges() {
+        String sql = "SELECT COUNT(*) FROM conge";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public boolean updateConge(Conge conge) throws SQLException {

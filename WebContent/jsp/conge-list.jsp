@@ -10,25 +10,28 @@
 </head>
 <body>
 <div class="container">
-    <h1>Liste des Congés</h1>
-    <div class="nav-links">
-        <a href="employe-list.jsp">Retour à la liste des employés</a>
+    <div style="margin-bottom:10px;">
+        <button onclick="history.back()" class="btn">Retour</button>
+        <h1 style="display:inline-block; margin-left:10px;">Liste des Congés</h1>
     </div>
 
     <%
+    int pageNumber = 1; int size = 10;
+    try { if (request.getParameter("page") != null) pageNumber = Integer.parseInt(request.getParameter("page")); } catch(Exception ignored){}
+    try { if (request.getParameter("size") != null) size = Integer.parseInt(request.getParameter("size")); } catch(Exception ignored){}
+    if (pageNumber < 1) pageNumber = 1; if (size < 1) size = 10;
+    int offset = (pageNumber - 1) * size;
+
         List<Conge> conges = new ArrayList<>();
+        int total = 0;
         try {
-            // get all employees (max 1000) then gather conges per employe
-            java.util.List<model.Employe> employes = new dao.EmployeDAO().getAllEmployes(null, null, null, null, null, 0, 1000);
-            if (employes != null) {
-                for (model.Employe emp : employes) {
-                    try {
-                        List<Conge> c = new CongeDAO().getCongesByEmployeId(emp.getId());
-                        if (c != null && !c.isEmpty()) conges.addAll(c);
-                    } catch (Exception ignored) {}
-                }
-            }
-        } catch (Exception ignored) {}
+            CongeDAO dao = new CongeDAO();
+            conges = dao.getAllConges(offset, size);
+            total = dao.getTotalConges();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        request.setAttribute("conge_total", total);
     %>
 
     <table>
@@ -63,6 +66,37 @@
         %>
         </tbody>
     </table>
+    <% int totalPages = (int)Math.ceil((double) total / size);
+       if (totalPages > 1) { %>
+        <div class="pagination">
+            <% if (pageNumber > 1) { %>
+                <a href="?page=<%= pageNumber - 1 %>&size=<%= size %>">&laquo; Précédent</a>
+            <% } %>
+
+            <% int startPage = Math.max(1, pageNumber - 2);
+               int endPage = Math.min(totalPages, pageNumber + 2);
+               if (startPage > 1) { %>
+                <a href="?page=1&size=<%= size %>">1</a>
+                <% if (startPage > 2) { %><span>...</span><% } %>
+            <% }
+               for (int i = startPage; i <= endPage; i++) {
+                   if (i == pageNumber) { %>
+                       <span class="active"><%= i %></span>
+                   <% } else { %>
+                       <a href="?page=<%= i %>&size=<%= size %>"><%= i %></a>
+                   <% }
+               }
+               if (endPage < totalPages) {
+                   if (endPage < totalPages - 1) { %><span>...</span><% }
+            %>
+                <a href="?page=<%= totalPages %>&size=<%= size %>"><%= totalPages %></a>
+            <% } %>
+
+            <% if (pageNumber < totalPages) { %>
+                <a href="?page=<%= pageNumber + 1 %>&size=<%= size %>">Suivant &raquo;</a>
+            <% } %>
+        </div>
+    <% } %>
 </div>
 </body>
 </html>
