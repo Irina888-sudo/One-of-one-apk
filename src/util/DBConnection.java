@@ -2,23 +2,44 @@ package util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DBConnection {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/oneofone";
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
-
-    public static Connection getConnection() {
+    static {
         try {
+            // Pour MySQL
             Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("Driver MySQL chargé avec succès !");
+        } catch (ClassNotFoundException e) {
+            System.err.println("ERREUR: Driver MySQL non trouvé !");
+            e.printStackTrace();
+        }
+    }
 
-            return DriverManager.getConnection(URL, USER, PASSWORD);
+    public static Connection getConnection() throws SQLException {
+        String url = "jdbc:mysql://localhost:3306/oneofone?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+        String user = "root";
+        String password = "";
+        
+        return DriverManager.getConnection(url, user, password);
+    }
 
+    public static void main(String[] args) {
+        try {
+
+
+            Connection conn = DriverManager.getConnection(
+                    url,
+                    user,
+                    password);
+
+
+            System.out.println("Connexion réussie !");
+            conn.close();
         } catch (Exception e) {
             System.out.println("Erreur de connexion !");
             e.printStackTrace();
-            return null;
         }
     }
 }
