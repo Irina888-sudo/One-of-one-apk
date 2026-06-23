@@ -27,7 +27,14 @@ public class DBConnection {
 
     public static void main(String[] args) {
         try {
-            Connection conn = getConnection();
+
+
+            Connection conn = DriverManager.getConnection(
+                    url,
+                    user,
+                    password);
+
+
             System.out.println("Connexion réussie !");
             conn.close();
         } catch (Exception e) {

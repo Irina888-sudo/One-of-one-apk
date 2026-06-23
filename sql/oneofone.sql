@@ -12,7 +12,6 @@ actif       BOOLEAN DEFAULT TRUE,
 created_at  DATETIME DEFAULT NOW()
 );
 
--
 -- ─── 1. EMPLOYÉS ──────────────────────────────────────────────────────────────
 CREATE TABLE employe (
     id              INT PRIMARY KEY AUTO_INCREMENT,
@@ -92,6 +91,7 @@ categorie VARCHAR(50),
 taille VARCHAR(20),
 couleur VARCHAR(30),
 prix DECIMAL(10,2),
+image VARCHAR(255),
 
 statut ENUM('DISPONIBLE','VENDU')
 DEFAULT 'DISPONIBLE',
@@ -101,6 +101,16 @@ collection_id INT NULL,
 CONSTRAINT fk_produit_collection
 FOREIGN KEY (collection_id)
 REFERENCES collection(id)
+);
+
+-- ─── ASSOCIATION PRODUIT - MATIÈRE ────────────────────────
+CREATE TABLE produit_matiere (
+    produit_id INT NOT NULL,
+    matiere_id INT NOT NULL,
+    quantite DECIMAL(10,2) NOT NULL,
+    PRIMARY KEY (produit_id, matiere_id),
+    CONSTRAINT fk_pm_produit FOREIGN KEY (produit_id) REFERENCES produit(id) ON DELETE CASCADE,
+    CONSTRAINT fk_pm_matiere FOREIGN KEY (matiere_id) REFERENCES matiere(id) ON DELETE CASCADE
 );
 
 -- ─── 8. CLIENTS ───────────────────────────────────────────
@@ -201,6 +211,7 @@ FOREIGN KEY (commande_id) REFERENCES commande(id)
 
 
 
+
 -- ══════════════════════════════════════════════════════════
 -- VIEWS
 -- ══════════════════════════════════════════════════════════
@@ -218,17 +229,14 @@ cl.nom, cl.email;
 
 -- VIEW 2 : Stock avec alertes
 CREATE VIEW vue_stock_alertes AS
-SELECT m.id, m.nom, m.reference, m.quantite, m.unite,
-m.seuil_alerte, m.valeur_unitaire,
-f.nom AS fournisseur_nom,
+SELECT m.id, m.nom, m.quantite, m.unite, m.valeur_unitaire,
 CASE
 WHEN m.quantite = 0                       THEN 'RUPTURE'
-WHEN m.quantite <= m.seuil_alerte         THEN 'CRITIQUE'
-WHEN m.quantite <= m.seuil_alerte * 1.5   THEN 'BAS'
+WHEN m.quantite <= 5                      THEN 'CRITIQUE'
+WHEN m.quantite <= 10                     THEN 'BAS'
 ELSE 'OK'
 END AS statut_stock
-FROM matiere m
-LEFT JOIN fournisseur f ON m.fournisseur_id = f.id;
+FROM matiere m;
 
 -- VIEW 3 : Salaires avec nom employé
 CREATE VIEW vue_salaires AS
@@ -267,8 +275,8 @@ GROUP BY cl.id, cl.nom, cl.email, cl.telephone, cl.adresse, cl.statut;
 
 -- VIEW 7 : Produits avec collection
 CREATE VIEW vue_produits AS
-SELECT p.id, p.nom, p.sku, p.categorie, p.taille, p.couleur,
-p.prix, p.statut, col.nom AS collection_nom
+SELECT p.id, p.nom, p.categorie, p.taille, p.couleur,
+p.prix, p.statut, p.image, col.nom AS collection_nom
 FROM produit p
 LEFT JOIN collection col ON p.collection_id = col.id;
 
@@ -280,14 +288,7 @@ u.email AS email_login, u.role AS role_app
 FROM employe e
 LEFT JOIN utilisateur u ON e.utilisateur_id = u.id;
 
--- VIEW 9 : Notifications non lues
-CREATE VIEW vue_notifications_nonlues AS
-SELECT n.id, n.type, n.message, n.date_creation,
-u.email AS destinataire_email
-FROM notification n
-JOIN utilisateur u ON n.destinataire_id = u.id
-WHERE n.lu = FALSE
-ORDER BY n.date_creation DESC;
+
 
 -- VIEW 10 : Dashboard KPI
 CREATE VIEW vue_dashboard_kpi AS
@@ -316,7 +317,7 @@ AND YEAR(date_transaction)  = YEAR(NOW())) AS benefice_net,
 
 (SELECT COUNT(*)
 FROM matiere
-WHERE quantite <= seuil_alerte) AS alertes_stock,
+WHERE quantite <= 5) AS alertes_stock,
 
 (SELECT COUNT(*) FROM produit) AS total_produits,
 
