@@ -37,7 +37,7 @@ public class Matiere {
     public void setId(int id) { this.id = id; }
     public void setNom(String nom) { this.nom = nom; }
     public void setDescription(String description) { this.description = description; }
-    public void setQuantite(int quantite) { this.quantite = quantite; }
+    public void setQuantite(double quantite) { this.quantite = (int) quantite; }
     public void setUnite(String unite) { this.unite = unite; }
     public void setStatut(String statut) { this.statut = statut; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
@@ -45,5 +45,10 @@ public class Matiere {
     @Override
     public String toString() {
         return "Matiere{id=" + id + ", nom='" + nom + "', quantite=" + quantite + "}";
+    }
+
+    public void setValeurUnitaire(double double1) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setValeurUnitaire'");
     }
 }

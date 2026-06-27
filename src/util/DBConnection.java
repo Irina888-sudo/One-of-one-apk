@@ -6,6 +6,10 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
+    private static final String URL = "jdbc:mysql://localhost:3306/oneofone?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
+
     static {
         try {
             // Pour MySQL
@@ -18,22 +22,12 @@ public class DBConnection {
     }
 
     public static Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/oneofone?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-        String user = "root";
-        String password = "";
-        
-        return DriverManager.getConnection(url, user, password);
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
     public static void main(String[] args) {
         try {
-
-
-            Connection conn = DriverManager.getConnection(
-                    url,
-                    user,
-                    password);
-
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
 
             System.out.println("Connexion réussie !");
             conn.close();
