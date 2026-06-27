@@ -36,7 +36,6 @@ public class SalaireDAO {
                 s.setSalaireBrut(rs.getBigDecimal("salaire_brut"));
                 s.setStatut(rs.getString("statut"));
                 try { s.setSalaireNet(rs.getBigDecimal("salaire_net")); } catch (Exception ignored) {}
-                try { s.setJoursConges(rs.getInt("jours_conges")); } catch (Exception ignored) {}
                 return s;
             }
         } finally {
@@ -82,7 +81,6 @@ public class SalaireDAO {
                 s.setSalaireBrut(rs.getBigDecimal("salaire_brut"));
                 s.setStatut(rs.getString("statut"));
                 try { s.setSalaireNet(rs.getBigDecimal("salaire_net")); } catch (Exception ignored) {}
-                try { s.setJoursConges(rs.getInt("jours_conges")); } catch (Exception ignored) {}
                 result.add(s);
             }
         } finally {
@@ -121,7 +119,6 @@ public class SalaireDAO {
                 s.setSalaireBrut(rs.getBigDecimal("salaire_brut"));
                 s.setStatut(rs.getString("statut"));
                 try { s.setSalaireNet(rs.getBigDecimal("salaire_net")); } catch (Exception ignored) {}
-                try { s.setJoursConges(rs.getInt("jours_conges")); } catch (Exception ignored) {}
                 result.add(s);
             }
         } finally {
@@ -173,7 +170,6 @@ public class SalaireDAO {
                 s.setSalaireBrut(rs.getBigDecimal("salaire_brut"));
                 s.setStatut(rs.getString("statut"));
                 try { s.setSalaireNet(rs.getBigDecimal("salaire_net")); } catch (Exception ignored) {}
-                try { s.setJoursConges(rs.getInt("jours_conges")); } catch (Exception ignored) {}
                 return s;
             }
         } finally {
@@ -187,7 +183,7 @@ public class SalaireDAO {
     }
 
     public Salaire create(Salaire s) throws SQLException {
-        String sql = "INSERT INTO salaire (employe_id, mois, salaire_brut, salaire_net, jours_conges, statut) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO salaire (employe_id, mois, salaire_brut, salaire_net, statut) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, s.getEmployeId());
             pstmt.setDate(2, java.sql.Date.valueOf(s.getMois()));
@@ -195,8 +191,7 @@ public class SalaireDAO {
             // If salaire_net is not provided, default it to salaire_brut
             java.math.BigDecimal salaireNetToSet = s.getSalaireNet() != null ? s.getSalaireNet() : (s.getSalaireBrut() != null ? s.getSalaireBrut() : java.math.BigDecimal.ZERO);
             if (salaireNetToSet != null) pstmt.setBigDecimal(4, salaireNetToSet); else pstmt.setNull(4, java.sql.Types.DECIMAL);
-            if (s.getJoursConges() != null) pstmt.setInt(5, s.getJoursConges()); else pstmt.setInt(5, 0);
-            pstmt.setString(6, s.getStatut());
+            pstmt.setString(5, s.getStatut());
             int affected = pstmt.executeUpdate();
             if (affected > 0) {
                 ResultSet keys = pstmt.getGeneratedKeys();
@@ -208,90 +203,17 @@ public class SalaireDAO {
     }
 
     public boolean update(Salaire s) throws SQLException {
-        String sql = "UPDATE salaire SET salaire_brut = ?, salaire_net = ?, jours_conges = ?, statut = ? WHERE id = ?";
+        String sql = "UPDATE salaire SET salaire_brut = ?, salaire_net = ?, statut = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setBigDecimal(1, s.getSalaireBrut());
             if (s.getSalaireNet() != null) pstmt.setBigDecimal(2, s.getSalaireNet()); else pstmt.setNull(2, java.sql.Types.DECIMAL);
-            pstmt.setInt(3, s.getJoursConges() != null ? s.getJoursConges() : 0);
-            pstmt.setString(4, s.getStatut());
-            pstmt.setInt(5, s.getId());
+            pstmt.setString(3, s.getStatut());
+            pstmt.setInt(4, s.getId());
             return pstmt.executeUpdate() > 0;
         }
     }
 
-    public void applyLeaveToSalary(int employeId, java.time.LocalDate month, int additionalJoursConges, boolean isPaid) throws SQLException {
-        // If paid leave, no impact
-        if (isPaid) return;
-
-        Salaire s = findByEmployeAndMonth(employeId, month);
-        // get employe salaire_brut if needed
-        model.Employe e = null;
-        try { e = new dao.EmployeDAO().getEmployeById(employeId); } catch (Exception ignored) {}
-        java.math.BigDecimal salaireBrut = s != null && s.getSalaireBrut() != null ? s.getSalaireBrut() : (e != null ? e.getSalaireBrut() : java.math.BigDecimal.ZERO);
-
-        int existingJours = s != null && s.getJoursConges() != null ? s.getJoursConges() : 0;
-        int totalJours = existingJours + additionalJoursConges;
-
-        // 22 working days per month
-        java.math.BigDecimal deduction = java.math.BigDecimal.ZERO;
-        if (salaireBrut != null) {
-            java.math.BigDecimal jours = new java.math.BigDecimal(totalJours);
-            java.math.BigDecimal factor = jours.divide(new java.math.BigDecimal(22), 6, java.math.RoundingMode.HALF_UP);
-            deduction = salaireBrut.multiply(factor).setScale(2, java.math.RoundingMode.HALF_UP);
-        }
-
-        java.math.BigDecimal salaireNet = salaireBrut.subtract(deduction).setScale(2, java.math.RoundingMode.HALF_UP);
-
-        if (s == null) {
-            Salaire newS = new Salaire();
-            newS.setEmployeId(employeId);
-            newS.setMois(month);
-            newS.setSalaireBrut(salaireBrut);
-            newS.setJoursConges(totalJours);
-            newS.setSalaireNet(salaireNet);
-            newS.setStatut("ATTENTE");
-            create(newS);
-        } else {
-            s.setJoursConges(totalJours);
-            s.setSalaireNet(salaireNet);
-            s.setSalaireBrut(salaireBrut);
-            update(s);
-        }
-    }
-
-    
-     
-    public void updateSalaryForMonthWithTotalLeave(int employeId, java.time.LocalDate month, int totalJours, boolean isPaid) throws SQLException {
-        if (isPaid) return;
-
-        Salaire s = findByEmployeAndMonth(employeId, month);
-        model.Employe e = null;
-        try { e = new dao.EmployeDAO().getEmployeById(employeId); } catch (Exception ignored) {}
-        java.math.BigDecimal salaireBrut = s != null && s.getSalaireBrut() != null ? s.getSalaireBrut() : (e != null ? e.getSalaireBrut() : java.math.BigDecimal.ZERO);
-
-        java.math.BigDecimal deduction = java.math.BigDecimal.ZERO;
-        if (salaireBrut != null) {
-            java.math.BigDecimal jours = new java.math.BigDecimal(totalJours);
-            java.math.BigDecimal factor = jours.divide(new java.math.BigDecimal(22), 6, java.math.RoundingMode.HALF_UP);
-            deduction = salaireBrut.multiply(factor).setScale(2, java.math.RoundingMode.HALF_UP);
-        }
-
-        java.math.BigDecimal salaireNet = salaireBrut.subtract(deduction).setScale(2, java.math.RoundingMode.HALF_UP);
-
-        if (s == null) {
-            Salaire newS = new Salaire();
-            newS.setEmployeId(employeId);
-            newS.setMois(month);
-            newS.setSalaireBrut(salaireBrut);
-            newS.setJoursConges(totalJours);
-            newS.setSalaireNet(salaireNet);
-            newS.setStatut("ATTENTE");
-            create(newS);
-        } else {
-            s.setJoursConges(totalJours);
-            s.setSalaireNet(salaireNet);
-            s.setSalaireBrut(salaireBrut);
-            update(s);
-        }
-    }
+   public java.math.BigDecimal calculerSalaireNet(java.math.BigDecimal salaireBrut) {
+    return salaireBrut;
+}
 }
