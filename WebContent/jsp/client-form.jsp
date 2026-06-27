@@ -113,7 +113,6 @@
         <a href="commande-list.jsp">🛒 Commandes</a>
         <a href="livraison-list.jsp">🚚 Livraisons</a>
         <a href="client-list.jsp" class="active">👥 Clients</a>
-        <a href="employe-list.jsp">👔 Employés</a>
         <a href="finance-list.jsp">💰 Finances</a>
         <a href="salaire-list.jsp">💳 Salaires</a>
         <a href="graphiques.jsp">📊 Graphiques</a>

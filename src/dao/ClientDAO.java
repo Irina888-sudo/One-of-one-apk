@@ -4,40 +4,14 @@ import model.Client;
 import util.DBConnection;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- * ClientDAO — Data Access Object pour la table `client`.
- *
- * Contient toutes les opérations BDD :
- *   - listerTous()          → récupérer tous les clients (tri alphabétique)
- *   - listerParStatut()     → filtrer par ACTIF ou BLOQUE
- *   - trouverParId()        → récupérer un seul client
- *   - ajouter()             → INSERT
- *   - modifier()            → UPDATE
- *   - supprimer()           → DELETE
- *
- * RÈGLE : pas de HashMap ni de List non castée → on utilise ArrayList<Client>.
- */
+
 public class ClientDAO {
 
-    private Connection getConnection() throws SQLException {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return DriverManager.getConnection("jdbc:mysql://localhost:3306/oneofone", "root", "");
-    }
-
-    // ─────────────────────────────────────────────────────────────────────
-    // Méthode privée utilitaire : convertit une ligne ResultSet → objet Client
-    // Evite de dupliquer le même code dans chaque méthode
-    // ─────────────────────────────────────────────────────────────────────
     private Client construireClient(ResultSet rs) throws SQLException {
         Client c = new Client();
         c.setId(rs.getInt("id"));
@@ -59,7 +33,7 @@ public class ClientDAO {
         String sql = "SELECT * FROM client ORDER BY nom ASC";
 
         try {
-            Connection conn = this.getConnection();
+            Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
@@ -86,7 +60,7 @@ public class ClientDAO {
         String sql = "SELECT * FROM client WHERE statut = ? ORDER BY nom ASC";
 
         try {
-            Connection conn = this.getConnection();
+            Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, statut);  // évite les injections SQL
             ResultSet rs = ps.executeQuery();
@@ -115,7 +89,7 @@ public class ClientDAO {
         String sql = "SELECT * FROM client WHERE id = ?";
 
         try {
-            Connection conn = this.getConnection();
+            Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -143,7 +117,7 @@ public class ClientDAO {
         String sql = "INSERT INTO client (nom, email, telephone, adresse, statut) VALUES (?, ?, ?, ?, 'ACTIF')";
 
         try {
-            Connection conn = this.getConnection();
+            Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, client.getNom());
             ps.setString(2, client.getEmail());
@@ -170,7 +144,7 @@ public class ClientDAO {
         String sql = "UPDATE client SET nom=?, email=?, telephone=?, adresse=? WHERE id=?";
 
         try {
-            Connection conn = this.getConnection();
+            Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, client.getNom());
             ps.setString(2, client.getEmail());
@@ -198,7 +172,7 @@ public class ClientDAO {
         String sql = "DELETE FROM client WHERE id = ?";
 
         try {
-            Connection conn = this.getConnection();
+            Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
 
