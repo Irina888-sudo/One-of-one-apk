@@ -14,7 +14,6 @@ public class Salaire {
     private LocalDate mois;
     private String statut;
     private BigDecimal salaireNet;
-    private Integer joursConges;
 
     public Salaire() {}
 
@@ -41,9 +40,6 @@ public class Salaire {
     public BigDecimal getSalaireNet() { return salaireNet; }
     public void setSalaireNet(BigDecimal salaireNet) { this.salaireNet = salaireNet; }
 
-    public Integer getJoursConges() { return joursConges; }
-    public void setJoursConges(Integer joursConges) { this.joursConges = joursConges; }
-
     public static String formatMois(LocalDate date) {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("MMMM yyyy", Locale.FRENCH);
@@ -51,6 +47,3 @@ public class Salaire {
         return date.format(formatter);
     }
 }
-
-
-

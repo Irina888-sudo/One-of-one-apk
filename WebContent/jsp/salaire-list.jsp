@@ -60,7 +60,6 @@
     <style>
         .badge-paid { background:#4caf50; color:#fff; padding:3px 6px; border-radius:4px; font-weight:600; }
         .badge-wait { background:#ff9800; color:#fff; padding:3px 6px; border-radius:4px; font-weight:600; }
-        .conge-item { font-size:0.9em; margin-top:6px; }
         .paid-row { background: #f1fff5; }
     </style>
 
@@ -75,13 +74,12 @@
                 <th>Salaire Net</th>
                 <th>Actions</th>
                 <th>Statut</th>
-                <th>Conge</th>
             </tr>
         </thead>
         <tbody>
             <% if (salaires == null || salaires.isEmpty()) { %>
                 <tr class="empty-row">
-                    <td colspan="8" style="text-align:center; padding:40px;">Aucun salaire trouvé.</td>
+                    <td colspan="7" style="text-align:center; padding:40px;">Aucun salaire trouvé.</td>
                 </tr>
             <% } else {
                    // Make PAYE salaries appear first in the list for emphasis
@@ -110,43 +108,15 @@
                     <a href="salaire-form.jsp?id=<%= salaire.getId() %>" class="btn">Modifier</a>
                 </td>
                 <td>
-                    <!-- Invoice feature disabled: no download available -->
-                    -
-                </td>
-                <td>
                     <% String statut = salaire.getStatut() != null ? salaire.getStatut() : "-"; %>
                     <span class="<%= "PAYE".equals(statut) ? "badge-paid" : "badge-wait" %>"><%= statut %></span>
                     <br/>
                     <a href="salaire-status.jsp?id=<%= salaire.getId() %>&statut=PAYE" class="btn" style="margin-top:6px; display:inline-block;">Marquer PAYE</a>
                     <a href="salaire-status.jsp?id=<%= salaire.getId() %>&statut=ATTENTE" class="btn" style="margin-top:6px; display:inline-block;">Marquer ATTENTE</a>
-                </td>
-                <td>
-                    <a href="conge-form.jsp?id=<%= salaire.getEmployeId() %>" class="btn">Demander un Congé</a>
-                    <br/>
-                    <%-- show conge dates for same month --%>
-                    <%
-                        try {
-                            java.time.LocalDate mois = salaire.getMois() != null ? salaire.getMois() : java.time.LocalDate.now().withDayOfMonth(1);
-                            java.util.List<model.Conge> conges = new dao.CongeDAO().getCongesByEmployeId(salaire.getEmployeId());
-                            StringBuilder sb = new StringBuilder();
-                            for (model.Conge c : conges) {
-                                if (c.getDateDebut() != null) {
-                                    java.time.LocalDate ddeb = c.getDateDebut().toLocalDate();
-                                    java.time.LocalDate dfin = c.getDateFin() != null ? c.getDateFin().toLocalDate() : ddeb;
-                                    if (ddeb.getYear() == mois.getYear() && ddeb.getMonthValue() == mois.getMonthValue()) {
-                                        if (sb.length() > 0) sb.append("<br/>");
-                                        String type = c.getTypeConge() != null ? c.getTypeConge() + " - " : "";
-                                        String jours = c.getNbrJours() != null ? (c.getNbrJours() + "j") : "";
-                                        sb.append(type).append(jours).append(" : ")
-                                          .append(ddeb.toString()).append(" → ").append(dfin.toString());
-                                    }
-                                }
-                            }
-                            String congeDates = sb.length() > 0 ? sb.toString() : "-";
-                    %>
-                    <div class="conge-item">Congés: <%= congeDates %></div>
-                    <% } catch (Exception ignored) { %>
-                        <div class="conge-item">Congés: -</div>
+                    <% if ("PAYE".equals(statut)) { %>
+                        <br/>
+                        <a href="facture.jsp?id=<%= salaire.getId() %>" class="btn" target="_blank" style="margin-top:6px; display:inline-block;">📄 Facture</a>
+                        <a href="salaire-export-csv.jsp?id=<%= salaire.getId() %>" class="btn" style="margin-top:6px; display:inline-block;">📊 Exporter CSV</a>
                     <% } %>
                 </td>
             </tr>
