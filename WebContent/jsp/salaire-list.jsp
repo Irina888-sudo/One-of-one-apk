@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, java.math.BigDecimal, model.Salaire, dao.SalaireDAO, dao.EmployeDAO, util.DBConnection" %>
+<%@ page import="java.util.*, java.math.BigDecimal, model.Salaire, dao.SalaireDAO, dao.EmployeDAO, util.DBConnection, model.Employe" %>
 <%@ page import="java.sql.Date, java.sql.Connection" %>
 <%@ page import="java.time.LocalDate" %>
 <!DOCTYPE html>
@@ -13,60 +13,74 @@
 <body>
 <div class="container">
     <h1>Liste des Salaires</h1>
-    
-    <% 
-        List<Salaire> salaires = new ArrayList<>();
-        Connection conn = null;
-        String errorMessage = null;
-        // Pagination params
-        int pageNumber = 1;
-        int size = 10;
-        try {
-            String pageParam = request.getParameter("page");
-            String sizeParam = request.getParameter("size");
-            if (pageParam != null && !pageParam.trim().isEmpty()) pageNumber = Integer.parseInt(pageParam);
-            if (sizeParam != null && !sizeParam.trim().isEmpty()) size = Integer.parseInt(sizeParam);
-            if (pageNumber < 1) pageNumber = 1;
-            if (size < 1) size = 10;
-        } catch (Exception ignore) {}
 
-        int offset = (pageNumber - 1) * size;
+<form method="get" action="salaire-list.jsp" class="filter-bar" style="margin:15px 0; display:flex; gap:10px; align-items:center;">
+    <input type="text" id="searchInput" name="search" 
+           value="<%= request.getParameter("search") != null ? request.getParameter("search") : "" %>"
+           placeholder="Rechercher un employé..." autocomplete="off"
+           style="padding:8px; border:1px solid #ccc; border-radius:4px;">
+    <div id="suggestions" style="position:relative;"></div>
 
+    <select name="statut" style="padding:8px; border-radius:4px;">
+        <option value="">Tous les statuts</option>
+        <option value="ATTENTE" <%= "ATTENTE".equals(request.getParameter("statut")) ? "selected" : "" %>>En attente</option>
+        <option value="PAYE" <%= "PAYE".equals(request.getParameter("statut")) ? "selected" : "" %>>Payé</option>
+    </select>
+
+    <button type="submit" class="btn">Filtrer</button>
+    <a href="salaire-list.jsp" class="btn">Réinitialiser</a>
+</form>
+
+   <%
+    List<Salaire> salaires = new ArrayList<>();
+    Connection conn = null;
+    String errorMessage = null;
+    int pageNumber = 1;
+    int size = 10;
+    try {
+        String pageParam = request.getParameter("page");
+        String sizeParam = request.getParameter("size");
+        if (pageParam != null && !pageParam.trim().isEmpty()) pageNumber = Integer.parseInt(pageParam);
+        if (sizeParam != null && !sizeParam.trim().isEmpty()) size = Integer.parseInt(sizeParam);
+        if (pageNumber < 1) pageNumber = 1;
+        if (size < 1) size = 10;
+    } catch (Exception ignore) {}
+
+    int offset = (pageNumber - 1) * size;
+
+    // Filtres
+    String statutFilter = request.getParameter("statut");
+    String searchFilter = request.getParameter("search");
+    if (statutFilter != null && statutFilter.trim().isEmpty()) statutFilter = null;
+    if (searchFilter != null && searchFilter.trim().isEmpty()) searchFilter = null;
+
+    try {
+        conn = DBConnection.getConnection();
+        SalaireDAO salaireDAO = new SalaireDAO(conn);
         try {
-            conn = DBConnection.getConnection();
-            SalaireDAO salaireDAO = new SalaireDAO(conn);
-            try {
-                salaires = salaireDAO.getAllSalaires(offset, size);
-            } catch (Exception e) {
-                errorMessage = "Erreur en récupérant les salaires: " + e.getMessage();
-                e.printStackTrace();
-            }
-            // total count for pagination
-            int total = 0;
-            try { total = salaireDAO.getTotalSalaires(); } catch (Exception ignored) {}
-            request.setAttribute("salaire_total", total);
+            salaires = salaireDAO.getAllSalairesFiltered(offset, size, statutFilter, searchFilter);
         } catch (Exception e) {
-            errorMessage = "Erreur de connexion à la base: " + e.getMessage();
+            errorMessage = "Erreur en récupérant les salaires: " + e.getMessage();
             e.printStackTrace();
-        } finally {
-            try { if (conn != null) conn.close(); } catch (Exception ignored) {}
         }
-    %>
+        int total = 0;
+        try { total = salaireDAO.getTotalSalairesFiltered(statutFilter, searchFilter); } catch (Exception ignored) {}
+        request.setAttribute("salaire_total", total);
+    } catch (Exception e) {
+        errorMessage = "Erreur de connexion à la base: " + e.getMessage();
+        e.printStackTrace();
+    } finally {
+        try { if (conn != null) conn.close(); } catch (Exception ignored) {}
+    }
+%>
 
     <% if (errorMessage != null) { %>
         <div class="alert alert-error" style="margin:10px; padding:10px;"> <strong>Erreur :</strong> <%= errorMessage %> </div>
     <% } %>
-    
-    <style>
-        .badge-paid { background:#4caf50; color:#fff; padding:3px 6px; border-radius:4px; font-weight:600; }
-        .badge-wait { background:#ff9800; color:#fff; padding:3px 6px; border-radius:4px; font-weight:600; }
-        .paid-row { background: #f1fff5; }
-    </style>
 
     <table>
         <thead>
             <tr>
-            
                 <th>Nom Employé</th>
                 <th>Role</th>
                 <th>Mois</th>
@@ -95,12 +109,15 @@
                        if (cmp != 0) return cmp;
                        return Integer.compare(b.getId(), a.getId());
                    });
-
+                   EmployeDAO employeDAO = new EmployeDAO();
                    for (Salaire salaire : salaires) {
             %>
             <tr class="<%= "PAYE".equals(salaire.getStatut()) ? "paid-row" : "" %>">
-                <td><%= (salaire.getEmployeId() != null ? (EmployeDAO.getNomEmployeById(salaire.getEmployeId()) != null ? EmployeDAO.getNomEmployeById(salaire.getEmployeId()) : "-") : "-") %></td>
-                <td><%= (salaire.getEmployeId() != null ? (EmployeDAO.getRoleById(salaire.getEmployeId()) != null ? EmployeDAO.getRoleById(salaire.getEmployeId()) : "-") : "-") %></td>
+               <%
+                   Employe empRow = (salaire.getEmployeId() != null) ? employeDAO.getEmployeById(salaire.getEmployeId()) : null;
+               %>
+                <td><%= (empRow != null && empRow.getNom() != null ? empRow.getNom() : "-") %></td>
+                <td><%= (empRow != null && empRow.getRole() != null ? empRow.getRole() : "-") %></td>
                 <td><%= (salaire.getMois() != null ? Salaire.formatMois(salaire.getMois()) : "-") %></td>
                 <td><%= (salaire.getSalaireBrut() != null ? String.format("%,.2f", salaire.getSalaireBrut()) + " Ariary" : "-") %></td>
                 <td><%= (salaire.getSalaireNet() != null ? String.format("%,.2f", salaire.getSalaireNet()) + " Ariary" : "-" ) %></td>
@@ -125,6 +142,10 @@
             %>
         </tbody>
     </table>
+     <%
+        String qsFilters = (statutFilter != null ? "&statut=" + java.net.URLEncoder.encode(statutFilter, "UTF-8") : "")
+                          + (searchFilter != null ? "&search=" + java.net.URLEncoder.encode(searchFilter, "UTF-8") : "");
+    %>
 
     <%-- Pagination controls --%>
     <%
@@ -134,30 +155,74 @@
     <% if (totalPages > 1) { %>
         <div class="pagination">
             <% if (pageNumber > 1) { %>
-                <a href="?page=<%= pageNumber - 1 %>&size=<%= size %>">&laquo; Précédent</a>
+                <a href="?page=<%= pageNumber - 1 %>&size=<%= size %><%= qsFilters %>">&laquo; Précédent</a>
             <% } %>
 
             <% int startPage = Math.max(1, pageNumber - 2);
                int endPage = Math.min(totalPages, pageNumber + 2);
                if (startPage > 1) { %>
-                <a href="?page=1&size=<%= size %>">1</a>
+                <a href="?page=1&size=<%= size %><%= qsFilters %>">1</a>
                 <% if (startPage > 2) { %><span>...</span><% } %>
             <% }
                for (int i = startPage; i <= endPage; i++) {
                    if (i == pageNumber) { %>
                        <span class="active"><%= i %></span>
                    <% } else { %>
-                       <a href="?page=<%= i %>&size=<%= size %>"><%= i %></a>
+                       <a href="?page=<%= i %>&size=<%= size %><%= qsFilters %>"><%= i %></a>
                    <% }
                }
                if (endPage < totalPages) {
                    if (endPage < totalPages - 1) { %><span>...</span><% }
             %>
-                <a href="?page=<%= totalPages %>&size=<%= size %>"><%= totalPages %></a>
+                <a href="?page=<%= totalPages %>&size=<%= size %><%= qsFilters %>"><%= totalPages %></a>
             <% } %>
 
             <% if (pageNumber < totalPages) { %>
-                <a href="?page=<%= pageNumber + 1 %>&size=<%= size %>">Suivant &raquo;</a>
+                <a href="?page=<%= pageNumber + 1 %>&size=<%= size %><%= qsFilters %>">Suivant &raquo;</a>
             <% } %>
         </div>
     <% } %>
+</div>
+
+<script>
+const searchInput = document.getElementById('searchInput');
+const suggestionsBox = document.getElementById('suggestions');
+let debounceTimer;
+
+searchInput.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    const term = this.value.trim();
+
+    if (term.length < 2) {
+        suggestionsBox.innerHTML = '';
+        return;
+    }
+
+    debounceTimer = setTimeout(() => {
+        fetch('salaire-autocomplete.jsp?term=' + encodeURIComponent(term))
+            .then(res => res.json())
+            .then(data => afficherSuggestions(data));
+    }, 300);
+});
+
+document.addEventListener('click', function(event) {
+    if (!searchInput.contains(event.target) && !suggestionsBox.contains(event.target)) {
+        suggestionsBox.innerHTML = '';
+    }
+});
+
+function afficherSuggestions(data) {
+    suggestionsBox.innerHTML = '';
+    data.forEach(function(item) {
+        let div = document.createElement('div');
+        div.textContent = item.nom;
+        div.addEventListener('click', function() {
+            searchInput.value = this.textContent;
+            suggestionsBox.innerHTML = '';
+        });
+        suggestionsBox.appendChild(div);
+    });
+}
+</script>
+</body>
+</html>

@@ -5,7 +5,7 @@
 :root {
   --bg:          #F7F5F2;
   --surface:     #FFFFFF;
-  --primary:     #2D1B4E;      /* violet profond */
+  --primary:     #4caf50;      /* violet profond */
   --accent:      #C45C8A;      /* rose couture */
   --accent-soft: #F3D6E4;
   --text:        #1A1A2E;
@@ -16,6 +16,10 @@
   --radius:      10px;
   --shadow:      0 2px 16px rgba(45,27,78,0.08);
 }
+
+.badge-paid { background:#4caf50; color:#fff; padding:3px 6px; border-radius:4px; font-weight:600; }
+        .badge-wait { background:#ff9800; color:#fff; padding:3px 6px; border-radius:4px; font-weight:600; }
+        .paid-row { background: #f1fff5; }
 
 * {
   box-sizing: border-box;

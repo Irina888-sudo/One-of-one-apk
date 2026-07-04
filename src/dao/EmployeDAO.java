@@ -10,7 +10,7 @@ import java.util.List;
 
 public class EmployeDAO {
     
-
+    // Create - Ajouter un employé
     public boolean addEmploye(Employe employe) {
         String sql = "INSERT INTO employe (utilisateur_id, nom, email, telephone, role, salaire_brut, statut, date_embauche) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
@@ -390,65 +390,51 @@ public List<Employe> getAllEmployes(String statut, String role, String dateDebut
         return employe;
     }
 
+public List<Employe> getSuggestions(String searchTerm) {
+    List<Employe> suggestions = new ArrayList<>();
 
-    public static String getNomEmployeById(int id) {
-        String sql = "SELECT nom FROM employe WHERE id = ?";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        
-        try {
-            conn = DBConnection.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            rs = pstmt.executeQuery();
-            
-            if (rs.next()) {
-                return rs.getString("nom");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        return null;
+    if (searchTerm == null || searchTerm.trim().isEmpty()) {
+        return suggestions;
     }
 
-    public static String getRoleById(int id) {
-        String sql = "SELECT role FROM employe WHERE id = ?";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        
+    String sql =
+        "SELECT * FROM employe " +
+        "WHERE COALESCE(nom,'') LIKE ? " +
+        "OR COALESCE(email,'') LIKE ? " +
+        "ORDER BY COALESCE(nom,'') ASC " +
+        "LIMIT 10";
+
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    try {
+        conn = DBConnection.getConnection();
+        pstmt = conn.prepareStatement(sql);
+
+        String pattern = "%" + searchTerm.trim() + "%";
+        pstmt.setString(1, pattern);
+        pstmt.setString(2, pattern);
+
+        rs = pstmt.executeQuery();
+
+        while (rs.next()) {
+            suggestions.add(extractEmployeFromResultSet(rs));
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
         try {
-            conn = DBConnection.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            rs = pstmt.executeQuery();
-            
-            if (rs.next()) {
-                return rs.getString("role");
-            }
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-        
-        return null;
     }
-    
+
+    return suggestions;
+}
+
 }
