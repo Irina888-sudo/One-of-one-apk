@@ -46,7 +46,7 @@ public class CommandeDAO {
         );
         List<Object> params = new ArrayList<>();
 
-        if (recherche != null && !recherche.isBlank()) {
+        if (recherche != null && !recherche.trim().isEmpty()) {
             sql.append("AND (c.numero LIKE ? OR cl.nom LIKE ? OR cl.email LIKE ?) ");
             String term = "%" + recherche.trim() + "%";
             params.add(term);
@@ -54,12 +54,12 @@ public class CommandeDAO {
             params.add(term);
         }
 
-        if (statut != null && !statut.isBlank()) {
+        if (statut != null && !statut.trim().isEmpty()) {
             sql.append("AND c.statut = ? ");
             params.add(statut);
         }
 
-        if (clientId != null && !clientId.isBlank()) {
+        if (clientId != null && !clientId.trim().isEmpty()) {
             sql.append("AND c.client_id = ? ");
             params.add(Integer.parseInt(clientId));
         }
