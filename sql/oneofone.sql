@@ -13,28 +13,26 @@ created_at  DATETIME DEFAULT NOW()
 
 CREATE TABLE employe (
     id              INT PRIMARY KEY AUTO_INCREMENT,
-    utilisateur_id  INT UNIQUE,                         
+    utilisateur_id  INT UNIQUE,
     nom             VARCHAR(100) NOT NULL,
     email           VARCHAR(100),
     telephone       VARCHAR(20),
     role            VARCHAR(50),
     salaire_brut    DECIMAL(10,2) DEFAULT 0.00,
     statut          ENUM('ACTIF','INACTIF') DEFAULT 'ACTIF',
-    date_embauche   DATE DEFAULT (CURRENT_DATE)
+    date_embauche   DATE DEFAULT (CURRENT_DATE),
+    CONSTRAINT fk_employe_utilisateur FOREIGN KEY (utilisateur_id) REFERENCES utilisateur(id) ON DELETE SET NULL
 );
 
 CREATE TABLE conge (
     id          INT PRIMARY KEY AUTO_INCREMENT,
-    employe_id  INT,                                    
+    employe_id  INT NOT NULL,
     date_debut  DATE NOT NULL,
     date_fin    DATE NOT NULL,
-    nb_jours    INT
-                GENERATED ALWAYS AS
-                (DATEDIFF(date_fin, date_debut) + 1) STORED,
+    nb_jours    INT GENERATED ALWAYS AS (DATEDIFF(date_fin, date_debut) + 1) STORED,
     motif       VARCHAR(200),
-    
-    statut      ENUM('EN_ATTENTE','VALIDE','REFUSE') DEFAULT 'EN_ATTENTE'
-    
+    statut      ENUM('EN_ATTENTE','VALIDE','REFUSE') DEFAULT 'EN_ATTENTE',
+    CONSTRAINT fk_conge_employe FOREIGN KEY (employe_id) REFERENCES employe(id) ON DELETE CASCADE
 );
 
 CREATE TABLE salaire (
@@ -157,31 +155,20 @@ CREATE TABLE ligne_commande (
 
 CREATE TABLE livraison (
     id              INT PRIMARY KEY AUTO_INCREMENT,
-
     numero          VARCHAR(20) UNIQUE NOT NULL,
-
     commande_id     INT UNIQUE NOT NULL,
-
     employe_id      INT NULL,
-
     livreur         VARCHAR(100),
     lieu            VARCHAR(100),
-
     frais           DECIMAL(10,2) DEFAULT 0,
-
     statut ENUM(
         'ATTENTE',
         'EN_COURS',
-        'LIVRE'
+        'LIVREE'
     ) DEFAULT 'ATTENTE',
-
     date_livraison  DATE,
-
-    FOREIGN KEY (commande_id)
-        REFERENCES commande(id),
-
-    FOREIGN KEY (employe_id)
-        REFERENCES employe(id)
+    FOREIGN KEY (commande_id) REFERENCES commande(id),
+    FOREIGN KEY (employe_id) REFERENCES employe(id)
 );
 
 
@@ -221,9 +208,8 @@ END AS statut_stock
 FROM matiere m;
 
 CREATE VIEW vue_salaires AS
-SELECT s.id, s.mois, s.salaire_brut, s.jours_absents,
-s.deduction, s.salaire_net, s.statut,
-e.nom AS employe_nom, e.role AS employe_role
+SELECT s.id, s.mois, s.salaire_brut, s.statut,
+e.nom AS employe_nom, e.role AS employe_role, e.salaire_brut AS salaire_brut_employe
 FROM salaire s
 JOIN employe e ON s.employe_id = e.id;
 

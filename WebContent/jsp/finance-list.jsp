@@ -3,11 +3,6 @@
 <%@ page import="java.util.ArrayList" %>
 
 <%
-    if (session.getAttribute("userId") == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-
     FinanceDAO dao = new FinanceDAO();
 
     // ── Les 4 grands chiffres ──────────────────────────
