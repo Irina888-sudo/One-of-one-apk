@@ -226,17 +226,19 @@ List<Object> params = new ArrayList<>();
 boolean whereAdded = false;
 
 if (statut != null) {
-    sql.append(" ___ s.statut = ?");  
+    sql.append(" WHERE s.statut = ?");  
     params.add(statut);
     whereAdded = true;
 }
 
 if (search != null) {
-    sql.append(whereAdded ? " ___ " : " WHERE ");  
+    sql.append(whereAdded ? " AND " : " WHERE ");  
     sql.append("e.nom LIKE ?");
     params.add("%" + search + "%");
-    sql.append(" ORDER BY s.mois DESC, s.id DESC LIMIT ? OFFSET ?");
+   
 }
+
+ sql.append(" ORDER BY s.mois DESC, s.id DESC LIMIT ? OFFSET ?");
 Connection conn = null;
 PreparedStatement pstmt = null;
 ResultSet rs = null;
@@ -267,19 +269,61 @@ try {
 }
     
 } finally {
-
+    try { if (rs != null) rs.close(); } catch (SQLException ignored) {}
+            try { if (pstmt != null) pstmt.close(); } catch (SQLException ignored) {}
+            
+            try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
   
 }
 
 
-    return null;
+    return result
+    ;
 }
 
-// ⭐ À CODER PAR MOI — getTotalSalairesFiltered
-// Durée estimée : 10-15 min
-// Même logique de filtre que ci-dessus, mais COUNT(*)
 public int getTotalSalairesFiltered(String statut, String search) throws SQLException {
-    // TODO
+    StringBuilder sql = new StringBuilder(
+        "SELECT COUNT(*) FROM salaire s JOIN employe e ON s.employe_id = e.id"
+    );
+
+    List<Object> params = new ArrayList<>();
+    boolean whereAdded = false;
+
+    if (statut != null) {
+        sql.append(" WHERE s.statut = ?");
+        params.add(statut);
+        whereAdded = true;
+    }
+
+    if (search != null) {
+        sql.append(whereAdded ? " AND " : " WHERE ");
+        sql.append("e.nom LIKE ?");
+        params.add("%" + search + "%");
+    }
+
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    try {
+        conn = DBConnection.getConnection();
+        pstmt = conn.prepareStatement(sql.toString());
+
+        int index = 1;
+        for (Object param : params) {
+            pstmt.setObject(index++, param);
+        }
+
+        rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+    } finally {
+        try { if (rs != null) rs.close(); } catch (SQLException ignored) {}
+        try { if (pstmt != null) pstmt.close(); } catch (SQLException ignored) {}
+        try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
+    }
     return 0;
 }
+
 }
