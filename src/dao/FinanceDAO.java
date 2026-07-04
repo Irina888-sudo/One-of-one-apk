@@ -80,7 +80,7 @@ public class FinanceDAO {
     //    = valeur actuelle de tout le stock (quantite × valeur_unitaire)
     //    C'est ce que représente l'investissement en matières
     // ─────────────────────────────────────────────────────────────
-    public double getTotalAchatsMatières() {
+    public double getTotalAchatsMatieres() {
         double total = 0;
         String sql = "SELECT COALESCE(SUM(quantite * valeur_unitaire), 0) AS total_matieres "
                    + "FROM matiere";
@@ -91,7 +91,7 @@ public class FinanceDAO {
             if (rs.next()) total = rs.getDouble("total_matieres");
             rs.close(); ps.close(); conn.close();
         } catch (SQLException e) {
-            System.err.println("FinanceDAO.getTotalAchatsMatières() : " + e.getMessage());
+            System.err.println("FinanceDAO.getTotalAchatsMatieres() : " + e.getMessage());
         }
         return total;
     }

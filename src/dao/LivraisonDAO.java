@@ -27,7 +27,7 @@ public class LivraisonDAO {
                 l.setNumero(rs.getString("numero"));
                 l.setCommandeId(rs.getInt("commande_id"));
 
-                // ⚠️ employe_id peut être NULL
+                //employe_id peut être NULL
                 int empId = rs.getInt("employe_id");
                 if (rs.wasNull()) {
                     l.setEmployeId(null);
