@@ -19,7 +19,6 @@
     String dateFin = request.getParameter("dateFin");
     String search = request.getParameter("search");
     
-    // Paramètres de tri
     String sortBy = request.getParameter("sortBy");
     String sortOrder = request.getParameter("sortOrder");
     
@@ -41,7 +40,6 @@
     
     int offset = (pageNumber - 1) * recordsPerPage;
     
-    // Récupération des données avec tri
     List<Employe> employes = employeDAO.getAllEmployes(statut, role, dateDebut, dateFin, search, 
                                                         sortBy, sortOrder, offset, recordsPerPage);
     int totalEmployes = employeDAO.getTotalEmployes(statut, role, dateDebut, dateFin, search);
@@ -52,7 +50,6 @@
     String successMessage = request.getParameter("success");
     String errorMessage = request.getParameter("error");
     
-    // Construction de l'URL de base pour les liens
     String queryParams = "";
     if (statut != null && !statut.isEmpty()) queryParams += "&statut=" + statut;
     if (role != null && !role.isEmpty() && !role.equals("TOUS")) queryParams += "&role=" + role;
@@ -61,28 +58,29 @@
     if (search != null && !search.isEmpty()) queryParams += "&search=" + java.net.URLEncoder.encode(search, "UTF-8");
     if (sortBy != null && !sortBy.isEmpty()) queryParams += "&sortBy=" + sortBy;
     if (sortOrder != null && !sortOrder.isEmpty()) queryParams += "&sortOrder=" + sortOrder;
+    
+    String suggestionsPath = request.getContextPath() + "/jsp/suggestions.jsp";
 %>
 
 <div class="container">
     <div class="header">
-        <h1> Gestion des Employés</h1>
+        <h1>Gestion des Employés</h1>
         <p>OneOfOne - Application de gestion RH</p>
     </div>
     
     <div class="nav">
         <div class="nav-links">
-            <a href="<%= basePath %>employe-list.jsp"> Accueil</a>
-            <a href="<%= basePath %>employe-form.jsp"> Nouvel Employé</a>
+            <a href="<%= basePath %>employe-list.jsp">Accueil</a>
+            <a href="<%= basePath %>employe-form.jsp">Nouvel Employé</a>
         </div>
         <div>
             Total : <strong><%= totalEmployes %></strong> employé(s)
         </div>
     </div>
     
-    <!-- Messages d'alerte -->
     <% if (successMessage != null && !successMessage.isEmpty()) { %>
         <div class="alert alert-success">
-             <%= successMessage %>
+            <%= successMessage %>
         </div>
     <% } %>
     
@@ -92,12 +90,12 @@
         </div>
     <% } %>
     
-    <!-- Filtres et recherche -->
+
     <div class="filters">
-        <form method="get" action="<%= basePath %>employe-list.jsp" class="filter-form">
+        <form method="get" action="<%= basePath %>employe-list.jsp" class="filter-form" id="filterForm">
             <div class="filter-group">
-                <label>Statut</label>
-                <select name="statut">
+                <label for="statutSelect">Statut</label>
+                <select name="statut" id="statutSelect">
                     <option value="">Tous</option>
                     <option value="ACTIF" <%= "ACTIF".equals(statut) ? "selected" : "" %>>ACTIF</option>
                     <option value="INACTIF" <%= "INACTIF".equals(statut) ? "selected" : "" %>>INACTIF</option>
@@ -105,8 +103,8 @@
             </div>
             
             <div class="filter-group">
-                <label>Rôle</label>
-                <select name="role">
+                <label for="roleSelect">Rôle</label>
+                <select name="role" id="roleSelect">
                     <option value="">Tous</option>
                     <% for(String r : roles) { 
                         if(!r.equals("TOUS")) {
@@ -117,24 +115,29 @@
             </div>
             
             <div class="filter-group">
-                <label>Date embauche (début)</label>
-                <input type="date" name="dateDebut" value="<%= dateDebut != null ? dateDebut : "" %>">
+                <label for="dateDebut">Date embauche (début)</label>
+                <input type="date" name="dateDebut" id="dateDebut" value="<%= dateDebut != null ? dateDebut : "" %>">
             </div>
             
             <div class="filter-group">
-                <label>Date embauche (fin)</label>
-                <input type="date" name="dateFin" value="<%= dateFin != null ? dateFin : "" %>">
+                <label for="dateFin">Date embauche (fin)</label>
+                <input type="date" name="dateFin" id="dateFin" value="<%= dateFin != null ? dateFin : "" %>">
+            </div>
+            
+            <div class="filter-group" style="position: relative; flex: 2;">
+                <label for="searchInput">Recherche</label>
+                <div class="search-container">
+                    <input type="text" name="search" id="searchInput" 
+                           placeholder="Nom ou email..." 
+                           value="<%= search != null ? search : "" %>"
+                           autocomplete="off">
+                    <div class="suggestions-box" id="suggestionsBox"></div>
+                </div>
             </div>
             
             <div class="filter-group">
-                <label>Recherche</label>
-                <input type="text" name="search" placeholder="Nom ou email..." value="<%= search != null ? search : "" %>">
-            </div>
-            
-            <!-- NOUVEAU : Sélecteur de tri -->
-            <div class="filter-group">
-                <label>Trier par</label>
-                <select name="sortBy" onchange="this.form.submit()">
+                <label for="sortBySelect">Trier par</label>
+                <select name="sortBy" id="sortBySelect">
                     <option value="id" <%= "id".equals(sortBy) ? "selected" : "" %>>ID</option>
                     <option value="nom" <%= "nom".equals(sortBy) ? "selected" : "" %>>Nom (A-Z)</option>
                     <option value="date" <%= "date".equals(sortBy) ? "selected" : "" %>>Date d'embauche</option>
@@ -142,28 +145,27 @@
             </div>
             
             <div class="filter-group">
-                <label>Ordre</label>
-                <select name="sortOrder" onchange="this.form.submit()">
-                    <option value="ASC" <%= "ASC".equals(sortOrder) ? "selected" : "" %>>Croissant </option>
-                    <option value="DESC" <%= "DESC".equals(sortOrder) ? "selected" : "" %>>Décroissant </option>
+                <label for="sortOrderSelect">Ordre</label>
+                <select name="sortOrder" id="sortOrderSelect">
+                    <option value="ASC" <%= "ASC".equals(sortOrder) ? "selected" : "" %>>Croissant</option>
+                    <option value="DESC" <%= "DESC".equals(sortOrder) ? "selected" : "" %>>Décroissant</option>
                 </select>
             </div>
             
             <div class="filter-group">
                 <label>&nbsp;</label>
-                <button type="submit" class="btn btn-primary"> Filtrer</button>
+                <button type="submit" class="btn btn-primary">Filtrer</button>
             </div>
             
             <div class="filter-group">
                 <label>&nbsp;</label>
-                <a href="<%= basePath %>employe-list.jsp" class="btn btn-warning"> Réinitialiser</a>
+                <a href="<%= basePath %>employe-list.jsp" class="btn btn-warning">Réinitialiser</a>
             </div>
         </form>
     </div>
     
-    <!-- Affichage du tri actif -->
     <div class="sort-info" style="padding: 10px 30px; background: #e3f2fd; margin: 10px 0; border-radius: 5px;">
-        <strong> Tri actif :</strong> 
+        <strong>Tri actif :</strong> 
         <% 
             String sortLabel = "";
             switch(sortBy) {
@@ -176,7 +178,7 @@
         <%= "ASC".equals(sortOrder) ? "Croissant ↑" : "Décroissant ↓" %>
     </div>
     
-    <!-- Liste des employés -->
+
     <div class="table-container">
         <table>
             <thead>
@@ -196,7 +198,7 @@
                 <% if (employes.isEmpty()) { %>
                     <tr class="empty-row">
                         <td colspan="9" style="text-align: center; padding: 40px;">
-                             Aucun employé trouvé
+                            Aucun employé trouvé
                         </td>
                     </tr>
                 <% } else { %>
@@ -217,9 +219,11 @@
                             </td>
                             <td><%= e.getDateEmbauche() != null ? e.getDateEmbauche() : "-" %></td>
                             <td class="actions">
-                                <a href="<%= basePath %>employe-form.jsp?id=<%= e.getId() %>" class="btn btn-primary btn-small"> Modifier</a>
-                                <a href="<%= basePath %>employe-delete.jsp?id=<%= e.getId() %>" class="btn btn-danger btn-small" 
-                                   onclick="return confirm('Êtes-vous sûr de vouloir désactiver cet employé ?')"> Désactiver</a>
+                                <a href="<%= basePath %>employe-form.jsp?id=<%= e.getId() %>" class="btn btn-primary btn-small">Modifier</a>
+                                <% if ("ACTIF".equals(e.getStatut())) { %>
+                                    <a href="<%= basePath %>employe-delete.jsp?id=<%= e.getId() %>" class="btn btn-danger btn-small" 
+                                       onclick="return confirm('Êtes-vous sûr de vouloir désactiver cet employé ?')">Désactiver</a>
+                                <% } %>
                             </td>
                         </tr>
                     <% } %>
@@ -228,7 +232,7 @@
         </table>
     </div>
     
-    <!-- Pagination -->
+
     <% if (totalPages > 1) { %>
         <div class="pagination">
             <% if (pageNumber > 1) { %>
@@ -269,12 +273,183 @@
 </div>
 
 <script>
-    // Auto-submit quand les selects changent
-    document.querySelectorAll('select').forEach(select => {
-        select.addEventListener('change', () => {
-            document.querySelector('form').submit();
+
+    (function() {
+        const box = document.getElementById('suggestionsBox');
+        if (box) {
+            box.innerHTML = '';
+            box.classList.remove('active');
+            console.log('🧹 Boîte de suggestions vidée à l\'initialisation');
+        }
+    })();
+
+    let debounceTimer;
+    let currentXHR = null;
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsBox = document.getElementById('suggestionsBox');
+    const filterForm = document.getElementById('filterForm');
+    const suggestionsUrl = '<%= request.getContextPath() %>/jsp/suggestions.jsp';
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (suggestionsBox) {
+            suggestionsBox.innerHTML = '';
+            suggestionsBox.classList.remove('active');
+        }
+        
+        console.log('🔍 Vérification des éléments:');
+        console.log('- searchInput:', searchInput);
+        console.log('- suggestionsBox:', suggestionsBox);
+        console.log('- filterForm:', filterForm);
+        console.log('🚀 Page chargée, URL des suggestions:', suggestionsUrl);
+        
+        if (suggestionsBox) {
+            suggestionsBox.innerHTML = '';
+            suggestionsBox.classList.remove('active');
+        }
+    });
+
+    function fetchSuggestions(query) {
+        console.log('🔍 Recherche de suggestions pour:', query);
+
+        if (currentXHR) {
+            currentXHR.abort();
+            currentXHR = null;
+        }
+
+        if (query.trim().length === 0) {
+            suggestionsBox.innerHTML = '';
+            suggestionsBox.classList.remove('active');
+            return;
+        }
+
+        suggestionsBox.innerHTML = '<div class="suggestion-loading"><div class="spinner"></div> Recherche en cours...</div>';
+        suggestionsBox.classList.add('active');
+
+        currentXHR = new XMLHttpRequest();
+        const url = suggestionsUrl + '?q=' + encodeURIComponent(query);
+        console.log('📡 URL de la requête:', url);
+        
+        currentXHR.open('GET', url, true);
+        currentXHR.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        
+        currentXHR.onreadystatechange = function() {
+            if (currentXHR.readyState === 4) {
+                if (currentXHR.status === 200) {
+                    try {
+                        if (currentXHR.responseText && currentXHR.responseText.trim().length > 0) {
+                            const suggestions = JSON.parse(currentXHR.responseText);
+                            console.log('✅ Suggestions trouvées:', suggestions);
+                            displaySuggestions(suggestions);
+                        } else {
+                            suggestionsBox.innerHTML = '<div class="suggestion-no-result">Aucun employé trouvé</div>';
+                        }
+                    } catch (e) {
+    console.log("===== REPONSE =====");
+    console.log(currentXHR.responseText);
+
+    console.error("===== ERREUR =====");
+    console.error(e);
+
+    suggestionsBox.innerHTML =
+        "<div class='suggestion-no-result'>Erreur de chargement</div>";
+}
+                } else {
+                    suggestionsBox.innerHTML = '<div class="suggestion-no-result">Erreur de chargement (HTTP ' + currentXHR.status + ')</div>';
+                }
+                currentXHR = null;
+            }
+        };
+        
+        currentXHR.onerror = function() {
+            console.error('❌ Erreur de connexion');
+            suggestionsBox.innerHTML = '<div class="suggestion-no-result">Erreur de connexion</div>';
+            currentXHR = null;
+        };
+        
+        currentXHR.send();
+    }
+
+function displaySuggestions(suggestions) {
+
+    suggestionsBox.innerHTML = "";
+
+    if (!suggestions || suggestions.length === 0) {
+        suggestionsBox.innerHTML =
+            "<div class='suggestion-no-result'>Aucun résultat</div>";
+        return;
+    }
+
+    const ul = document.createElement("ul");
+    ul.style.listStyle = "none";
+    ul.style.margin = "0";
+    ul.style.padding = "0";
+
+    suggestions.forEach(function(emp){
+
+        const li = document.createElement("li");
+
+        li.className = "suggestion-item";
+
+        li.innerHTML =
+            "<strong>"+emp.nom+"</strong><br>" +
+            emp.role + "<br>" +
+            emp.email;
+
+        li.onclick = function(){
+            searchInput.value = emp.nom;
+            suggestionsBox.innerHTML = "";
+            filterForm.submit();
+        };
+
+        ul.appendChild(li);
+    });
+
+    suggestionsBox.appendChild(ul);
+    suggestionsBox.classList.add("active");
+}
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            const query = this.value;
+            console.log('⌨️ Texte saisi:', query);
+            
+            debounceTimer = setTimeout(function() {
+                fetchSuggestions(query);
+            }, 300);
+        });
+    }
+
+    document.addEventListener('click', function(e) {
+        const searchContainer = document.querySelector('.search-container');
+        if (searchContainer && !searchContainer.contains(e.target)) {
+            suggestionsBox.innerHTML = '';
+            suggestionsBox.classList.remove('active');
+        }
+    });
+
+    if (suggestionsBox) {
+        suggestionsBox.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            suggestionsBox.innerHTML = '';
+            suggestionsBox.classList.remove('active');
+        }
+    });
+
+
+    document.querySelectorAll('#statutSelect, #roleSelect, #sortBySelect, #sortOrderSelect').forEach(select => {
+        select.addEventListener('change', function() {
+            filterForm.submit();
         });
     });
+    
+    console.log('🚀 Script de suggestions chargé avec succès');
 </script>
+
 </body>
 </html>
