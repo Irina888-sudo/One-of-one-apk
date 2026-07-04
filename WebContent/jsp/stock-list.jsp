@@ -4,11 +4,6 @@
 <%@ page import="java.util.ArrayList" %>
 
 <%
-    if (session.getAttribute("userId") == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-
     String filtreStatut = request.getParameter("statut");
     if (filtreStatut == null) {
         filtreStatut = "tous";

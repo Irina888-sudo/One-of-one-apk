@@ -2,7 +2,6 @@ CREATE DATABASE oneofone;
 USE oneofone;
 
 
---- ─── 1. UTILISATEURS (Auth) ───────────────────────────────
 CREATE TABLE utilisateur (
 id          INT PRIMARY KEY AUTO_INCREMENT,
 email       VARCHAR(100) UNIQUE NOT NULL,
@@ -12,35 +11,30 @@ actif       BOOLEAN DEFAULT TRUE,
 created_at  DATETIME DEFAULT NOW()
 );
 
--- ─── 1. EMPLOYÉS ──────────────────────────────────────────────────────────────
 CREATE TABLE employe (
     id              INT PRIMARY KEY AUTO_INCREMENT,
-    utilisateur_id  INT UNIQUE,                         
+    utilisateur_id  INT UNIQUE,
     nom             VARCHAR(100) NOT NULL,
     email           VARCHAR(100),
     telephone       VARCHAR(20),
     role            VARCHAR(50),
     salaire_brut    DECIMAL(10,2) DEFAULT 0.00,
     statut          ENUM('ACTIF','INACTIF') DEFAULT 'ACTIF',
-    date_embauche   DATE DEFAULT (CURRENT_DATE)
+    date_embauche   DATE DEFAULT (CURRENT_DATE),
+    CONSTRAINT fk_employe_utilisateur FOREIGN KEY (utilisateur_id) REFERENCES utilisateur(id) ON DELETE SET NULL
 );
 
--- ─── 2. CONGÉS ────────────────────────────────────────────────────────────────
 CREATE TABLE conge (
     id          INT PRIMARY KEY AUTO_INCREMENT,
-    employe_id  INT,                                    
+    employe_id  INT NOT NULL,
     date_debut  DATE NOT NULL,
     date_fin    DATE NOT NULL,
-    nb_jours    INT
-                GENERATED ALWAYS AS
-                (DATEDIFF(date_fin, date_debut) + 1) STORED,
+    nb_jours    INT GENERATED ALWAYS AS (DATEDIFF(date_fin, date_debut) + 1) STORED,
     motif       VARCHAR(200),
-    
-    statut      ENUM('EN_ATTENTE','VALIDE','REFUSE') DEFAULT 'EN_ATTENTE'
-    
+    statut      ENUM('EN_ATTENTE','VALIDE','REFUSE') DEFAULT 'EN_ATTENTE',
+    CONSTRAINT fk_conge_employe FOREIGN KEY (employe_id) REFERENCES employe(id) ON DELETE CASCADE
 );
 
--- ─── 3. SALAIRES ──────────────────────────────────────────────────────────────
 CREATE TABLE salaire (
     id INT PRIMARY KEY AUTO_INCREMENT,
 
@@ -60,7 +54,7 @@ CREATE TABLE salaire (
         REFERENCES employe(id)
 );
 
--- ─── 5. MATIÈRES (Stock) ──────────────────────────────────
+
 CREATE TABLE matiere (
 id              INT PRIMARY KEY AUTO_INCREMENT,
 nom             VARCHAR(100) NOT NULL,
@@ -73,7 +67,6 @@ valeur_unitaire DECIMAL(10,2) DEFAULT 0
 
 );
 
--- ─── 6. COLLECTIONS ───────────────────────────────────────
 CREATE TABLE collection (
 id INT PRIMARY KEY AUTO_INCREMENT,
 nom VARCHAR(100) NOT NULL,
@@ -82,7 +75,6 @@ date_fin DATE,
 statut ENUM('ACTIVE','ARCHIVEE') DEFAULT 'ACTIVE'
 );
 
--- ─── 7. PRODUITS ──────────────────────────────────────────
 CREATE TABLE produit (
 id INT PRIMARY KEY AUTO_INCREMENT,
 nom VARCHAR(100) NOT NULL,
@@ -103,7 +95,6 @@ FOREIGN KEY (collection_id)
 REFERENCES collection(id)
 );
 
--- ─── ASSOCIATION PRODUIT - MATIÈRE ────────────────────────
 CREATE TABLE produit_matiere (
     produit_id INT NOT NULL,
     matiere_id INT NOT NULL,
@@ -113,7 +104,6 @@ CREATE TABLE produit_matiere (
     CONSTRAINT fk_pm_matiere FOREIGN KEY (matiere_id) REFERENCES matiere(id) ON DELETE CASCADE
 );
 
--- ─── 8. CLIENTS ───────────────────────────────────────────
 CREATE TABLE client (
 id          INT PRIMARY KEY AUTO_INCREMENT,
 nom         VARCHAR(100) NOT NULL,
@@ -125,7 +115,6 @@ motif_blocage VARCHAR(200),
 created_at  DATETIME DEFAULT NOW()
 );
 
--- ─── COMMANDES ────────────────────────────────────────────
 CREATE TABLE commande (
     id              INT PRIMARY KEY AUTO_INCREMENT,
     numero          VARCHAR(20) UNIQUE NOT NULL,
@@ -147,7 +136,6 @@ CREATE TABLE commande (
 );
 
 
--- ─── LIGNES COMMANDE ──────────────────────────────────────
 CREATE TABLE ligne_commande (
     id              INT PRIMARY KEY AUTO_INCREMENT,
 
@@ -165,39 +153,26 @@ CREATE TABLE ligne_commande (
 );
 
 
--- ─── LIVRAISONS ───────────────────────────────────────────
 CREATE TABLE livraison (
     id              INT PRIMARY KEY AUTO_INCREMENT,
-
     numero          VARCHAR(20) UNIQUE NOT NULL,
-
     commande_id     INT UNIQUE NOT NULL,
-
     employe_id      INT NULL,
-
     livreur         VARCHAR(100),
     lieu            VARCHAR(100),
-
     frais           DECIMAL(10,2) DEFAULT 0,
-
     statut ENUM(
         'ATTENTE',
         'EN_COURS',
-        'LIVRE'
+        'LIVREE'
     ) DEFAULT 'ATTENTE',
-
     date_livraison  DATE,
-
-    FOREIGN KEY (commande_id)
-        REFERENCES commande(id),
-
-    FOREIGN KEY (employe_id)
-        REFERENCES employe(id)
+    FOREIGN KEY (commande_id) REFERENCES commande(id),
+    FOREIGN KEY (employe_id) REFERENCES employe(id)
 );
 
 
 
--- ─── 12. FINANCES ─────────────────────────────────────────
 CREATE TABLE finance (
 id               INT PRIMARY KEY AUTO_INCREMENT,
 description      VARCHAR(200) NOT NULL,
@@ -212,11 +187,6 @@ FOREIGN KEY (commande_id) REFERENCES commande(id)
 
 
 
--- ══════════════════════════════════════════════════════════
--- VIEWS
--- ══════════════════════════════════════════════════════════
-
--- VIEW 1 : Commandes avec nom client + montant calculé
 CREATE VIEW vue_commandes AS
 SELECT c.id, c.numero, c.statut, c.date_commande,
 cl.nom AS client_nom, cl.email AS client_email,
@@ -227,7 +197,6 @@ LEFT JOIN ligne_commande lc ON lc.commande_id = c.id
 GROUP BY c.id, c.numero, c.statut, c.date_commande,
 cl.nom, cl.email;
 
--- VIEW 2 : Stock avec alertes
 CREATE VIEW vue_stock_alertes AS
 SELECT m.id, m.nom, m.quantite, m.unite, m.valeur_unitaire,
 CASE
@@ -238,15 +207,12 @@ ELSE 'OK'
 END AS statut_stock
 FROM matiere m;
 
--- VIEW 3 : Salaires avec nom employé
 CREATE VIEW vue_salaires AS
-SELECT s.id, s.mois, s.salaire_brut, s.jours_absents,
-s.deduction, s.salaire_net, s.statut,
-e.nom AS employe_nom, e.role AS employe_role
+SELECT s.id, s.mois, s.salaire_brut, s.statut,
+e.nom AS employe_nom, e.role AS employe_role, e.salaire_brut AS salaire_brut_employe
 FROM salaire s
 JOIN employe e ON s.employe_id = e.id;
 
--- VIEW 4 : Livraisons avec commande + livreur
 CREATE VIEW vue_livraisons AS
 SELECT l.id, l.numero, l.lieu, l.frais, l.statut, l.date_livraison,
 c.numero AS commande_numero,
@@ -255,7 +221,6 @@ FROM livraison l
 JOIN commande c ON l.commande_id = c.id
 LEFT JOIN employe e ON l.employe_id = e.id;
 
--- VIEW 5 : Finances résumé par mois
 CREATE VIEW vue_finances_resume AS
 SELECT DATE_FORMAT(date_transaction, '%Y-%m') AS mois,
 SUM(CASE WHEN type = 'RECETTE' THEN montant ELSE 0 END) AS total_recettes,
@@ -264,7 +229,6 @@ SUM(CASE WHEN type = 'RECETTE' THEN montant ELSE -montant END) AS benefice_net
 FROM finance
 GROUP BY DATE_FORMAT(date_transaction, '%Y-%m');
 
--- VIEW 6 : Clients avec nb commandes
 CREATE VIEW vue_clients AS
 SELECT cl.id, cl.nom, cl.email, cl.telephone, cl.adresse, cl.statut,
 COUNT(c.id) AS nb_commandes,
@@ -273,14 +237,12 @@ FROM client cl
 LEFT JOIN commande c ON c.client_id = cl.id
 GROUP BY cl.id, cl.nom, cl.email, cl.telephone, cl.adresse, cl.statut;
 
--- VIEW 7 : Produits avec collection
 CREATE VIEW vue_produits AS
 SELECT p.id, p.nom, p.categorie, p.taille, p.couleur,
 p.prix, p.statut, p.image, col.nom AS collection_nom
 FROM produit p
 LEFT JOIN collection col ON p.collection_id = col.id;
 
--- VIEW 8 : Employés avec compte utilisateur
 CREATE VIEW vue_employes AS
 SELECT e.id, e.nom, e.email, e.telephone, e.role,
 e.salaire_brut, e.statut, e.date_embauche,
@@ -290,7 +252,6 @@ LEFT JOIN utilisateur u ON e.utilisateur_id = u.id;
 
 
 
--- VIEW 10 : Dashboard KPI
 CREATE VIEW vue_dashboard_kpi AS
 SELECT
 (SELECT COALESCE(SUM(montant), 0)

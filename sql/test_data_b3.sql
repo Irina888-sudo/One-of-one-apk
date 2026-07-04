@@ -1,12 +1,8 @@
--- ═══════════════════════════════════════════════════════════
--- TEST DATA — À exécuter dans MySQL après le schéma principal
--- Permet de tester client-list.jsp et client-form.jsp sans
--- avoir besoin que les autres binômes aient fini leur travail
--- ═══════════════════════════════════════════════════════════
+
 
 USE oneofone;
 
--- ── Création des tables si elles n'existent pas ───────────
+
 CREATE TABLE IF NOT EXISTS utilisateur (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(150) NOT NULL UNIQUE,
@@ -36,12 +32,11 @@ CREATE TABLE IF NOT EXISTS matiere (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- ── Insérer un utilisateur de test (pour la session) ──────
--- Mot de passe "admin123" hashé en SHA-256
+
+
 INSERT IGNORE INTO utilisateur (id, email, password, role, actif) VALUES
 (1, 'admin@oneofone.fr', SHA2('admin123', 256), 'ADMIN', TRUE);
 
--- ── Insérer des clients de démo ───────────────────────────
 INSERT INTO client (nom, email, telephone, adresse, statut) VALUES
 ('Jean-Baptiste Durand',  'durand.jb@email.com',    '06 12 34 56 78', '12 Rue de la Paix, 75002 Paris',            'ACTIF'),
 ('Marie Laurent',         'marie.l@domain.fr',       '07 98 76 54 32', '45 Avenue Foch, 69006 Lyon',                'ACTIF'),
@@ -56,5 +51,5 @@ INSERT INTO client (nom, email, telephone, adresse, statut) VALUES
 ('Inès Morel',            'ines.m@domain.fr',         '07 66 55 44 33', '18 Avenue de la Gare, 67000 Strasbourg',   'ACTIF'),
 ('Antoine Leroy',         'antoine.l@outlook.com',    '06 44 55 66 77', '30 Rue du Commerce, 75015 Paris',           'ACTIF');
 
--- ── Vérification rapide ───────────────────────────────────
+
 SELECT 'Clients insérés :' AS info, COUNT(*) AS nb FROM client;
