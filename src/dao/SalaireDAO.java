@@ -216,4 +216,70 @@ public class SalaireDAO {
    public java.math.BigDecimal calculerSalaireNet(java.math.BigDecimal salaireBrut) {
     return salaireBrut;
 }
+
+
+public List<Salaire> getAllSalairesFiltered(int offset, int limit, String statut, String search) throws SQLException {
+     StringBuilder sql = new StringBuilder(
+    "SELECT s.* FROM salaire s JOIN employe e ON s.employe_id = e.id"
+);
+List<Object> params = new ArrayList<>();
+boolean whereAdded = false;
+
+if (statut != null) {
+    sql.append(" ___ s.statut = ?");  
+    params.add(statut);
+    whereAdded = true;
+}
+
+if (search != null) {
+    sql.append(whereAdded ? " ___ " : " WHERE ");  
+    sql.append("e.nom LIKE ?");
+    params.add("%" + search + "%");
+    sql.append(" ORDER BY s.mois DESC, s.id DESC LIMIT ? OFFSET ?");
+}
+Connection conn = null;
+PreparedStatement pstmt = null;
+ResultSet rs = null;
+List<Salaire> result = new ArrayList<>();
+
+try {
+    conn = DBConnection.getConnection();
+    pstmt = conn.prepareStatement(sql.toString());
+
+    int index = 1;
+    for (Object param : params) {
+        pstmt.setObject(index++, param);   
+    }
+    pstmt.setInt(index++, limit);  
+    pstmt.setInt(index++, offset);   
+
+    rs = pstmt.executeQuery();
+    while (rs.next()) {
+    Salaire s = new Salaire();
+    s.setId(rs.getInt("id"));
+    s.setEmployeId(rs.getInt("employe_id"));
+    java.sql.Date moisDate = rs.getDate("mois");
+    if (moisDate != null) s.setMois(moisDate.toLocalDate());
+    s.setSalaireBrut(rs.getBigDecimal("salaire_brut"));
+    s.setStatut(rs.getString("statut"));
+    try { s.setSalaireNet(rs.getBigDecimal("salaire_net")); } catch (Exception ignored) {}
+    result.add(s);
+}
+    
+} finally {
+
+  
+}
+
+
+    return null;
+}
+
+// ⭐ À CODER PAR MOI — getTotalSalairesFiltered
+// Durée estimée : 10-15 min
+// Même logique de filtre que ci-dessus, mais COUNT(*)
+public int getTotalSalairesFiltered(String statut, String search) throws SQLException {
+    // TODO
+    return 0;
+}
 }

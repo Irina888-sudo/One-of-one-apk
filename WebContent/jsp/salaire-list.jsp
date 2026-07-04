@@ -14,6 +14,23 @@
 <div class="container">
     <h1>Liste des Salaires</h1>
     
+<form method="get" action="salaire-list.jsp" class="filter-bar" style="margin:15px 0; display:flex; gap:10px; align-items:center;">
+    <input type="text" id="searchInput" name="search" 
+           value="<%= request.getParameter("search") != null ? request.getParameter("search") : "" %>"
+           placeholder="Rechercher un employé..." autocomplete="off"
+           style="padding:8px; border:1px solid #ccc; border-radius:4px;">
+    <div id="suggestions" style="position:relative;"></div>
+
+    <select name="statut" style="padding:8px; border-radius:4px;">
+        <option value="">Tous les statuts</option>
+        <option value="ATTENTE" <%= "ATTENTE".equals(request.getParameter("statut")) ? "selected" : "" %>>En attente</option>
+        <option value="PAYE" <%= "PAYE".equals(request.getParameter("statut")) ? "selected" : "" %>>Payé</option>
+    </select>
+
+    <button type="submit" class="btn">Filtrer</button>
+    <a href="salaire-list.jsp" class="btn">Réinitialiser</a>
+</form>
+    
     <% 
         List<Salaire> salaires = new ArrayList<>();
         Connection conn = null;
@@ -57,11 +74,7 @@
         <div class="alert alert-error" style="margin:10px; padding:10px;"> <strong>Erreur :</strong> <%= errorMessage %> </div>
     <% } %>
     
-    <style>
-        .badge-paid { background:#4caf50; color:#fff; padding:3px 6px; border-radius:4px; font-weight:600; }
-        .badge-wait { background:#ff9800; color:#fff; padding:3px 6px; border-radius:4px; font-weight:600; }
-        .paid-row { background: #f1fff5; }
-    </style>
+    
 
     <table>
         <thead>
