@@ -13,7 +13,7 @@ setlocal enabledelayedexpansion
 :: ==============================================================================
 :: CONFIGURATION DES CHEMINS - MODIFIEZ CES CHEMINS SELON VOTRE CONFIGURATION
 :: ==============================================================================
-set "TOMCAT_DIR=C:\tomcat 10"
+set "TOMCAT_DIR=C:\tomcat 10"  :: Chemin vers le dossier d'installation de Tomcat
 :: ==============================================================================
 
 echo [1/4] Compilation des fichiers Java...
