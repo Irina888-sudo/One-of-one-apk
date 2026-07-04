@@ -47,27 +47,27 @@ public class ProduitDAO {
         StringBuilder sql = new StringBuilder(BASE_SELECT + "WHERE 1=1 ");
         List<Object> params = new ArrayList<>();
 
-        if (recherche != null && !recherche.isBlank()) {
+        if (recherche != null && !recherche.trim().isEmpty()) {
             sql.append("AND p.nom LIKE ? ");
             params.add("%" + recherche.trim() + "%");
         }
-        if (categorie != null && !categorie.isBlank()) {
+        if (categorie != null && !categorie.trim().isEmpty()) {
             sql.append("AND p.categorie = ? ");
             params.add(categorie);
         }
-        if (statut != null && !statut.isBlank()) {
+        if (statut != null && !statut.trim().isEmpty()) {
             sql.append("AND p.statut = ? ");
             params.add(statut);
         }
-        if (collectionId != null && !collectionId.isBlank()) {
+        if (collectionId != null && !collectionId.trim().isEmpty()) {
             sql.append("AND p.collection_id = ? ");
             params.add(Integer.parseInt(collectionId));
         }
-        if (taille != null && !taille.isBlank()) {
+        if (taille != null && !taille.trim().isEmpty()) {
             sql.append("AND p.taille = ? ");
             params.add(taille);
         }
-        if (couleur != null && !couleur.isBlank()) {
+        if (couleur != null && !couleur.trim().isEmpty()) {
             sql.append("AND p.couleur = ? ");
             params.add(couleur);
         }
