@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="dao.ProduitDAO" %>
 <%@ page import="model.Produit" %>
-<%@ page import="jakarta.servlet.http.Part" %>
+<%@ page import="javax.servlet.http.Part" %>
 <%@ page import="java.io.File" %>
 <%@ page import="java.io.InputStream" %>
 <%@ page import="java.nio.file.Files" %>
@@ -9,6 +9,11 @@
 <%@ page import="java.nio.file.StandardCopyOption" %>
 <%@ page import="java.util.UUID" %>
 <%@ page import="java.util.List, java.util.ArrayList" %>
+<%!
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+%>
 <%
     String idParam  = request.getParameter("id");
     String nom      = request.getParameter("nom");
@@ -22,7 +27,7 @@
     // valeur précédente
 
     // ── Validation basique ───────────────────────────────
-    if (nom == null || nom.isBlank() || prixStr == null || prixStr.isBlank()) {
+    if (isBlank(nom) || isBlank(prixStr)) {
         request.setAttribute("erreur", "Le nom et le prix sont obligatoires.");
         request.getRequestDispatcher(idParam != null
         ? "produit-form.jsp?id=" + idParam
@@ -46,7 +51,13 @@
     String imagePath = imageActuelle;
     // conserver l'ancienne image par défaut
 
-    Part filePart = request.getPart("image");
+    Part filePart = null;
+    try {
+        filePart = request.getPart("image");
+    } catch (Exception e) {
+        filePart = null;
+    }
+
     if (filePart != null && filePart.getSize() > 0) {
         // Récupérer le nom du fichier original
         String originalName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
@@ -58,14 +69,13 @@
         // Générer un nom unique pour éviter les conflits
         String uniqueName = UUID.randomUUID().toString() + extension;
 
-        // Dossier de stockage absolu (dans WebContent/assets/img/)
-        String uploadDir = application.getRealPath("") + File.separator
-        + "assets" + File.separator + "img";
-        File uploadFolder = new File(uploadDir);
-        if (!uploadFolder.exists()) uploadFolder.mkdirs();
+        // Dossier de stockage externe, situé à côté du déploiement
+        File webappRoot = new File(application.getRealPath(""));
+        File externalUploads = new File(webappRoot.getParentFile(), "uploads" + File.separator + "img");
+        if (!externalUploads.exists()) externalUploads.mkdirs();
 
-        // Copier le fichier sur le disque
-        File destFile = new File(uploadFolder, uniqueName);
+        // Copier le fichier sur le disque externe
+        File destFile = new File(externalUploads, uniqueName);
         try (InputStream in = filePart.getInputStream()) {
             Files.copy(in, destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
@@ -86,7 +96,7 @@
     p.setImage(imagePath);
 
     ProduitDAO dao = new ProduitDAO();
-    boolean isEdit = (idParam != null && !idParam.isBlank());
+    boolean isEdit = !isBlank(idParam);
 
     // ── Traitement des matières premières (si création) ──
     List<Integer> matiereIds = new java.util.ArrayList<>();
@@ -101,7 +111,7 @@
                 String mIdStr = matiereIdsParam[i];
                 String qtyStr = i < quantitesParam.length ? quantitesParam[i] : "";
                 
-                if (mIdStr == null || mIdStr.isBlank()) {
+                if (isBlank(mIdStr)) {
                     continue;
                 }
                 

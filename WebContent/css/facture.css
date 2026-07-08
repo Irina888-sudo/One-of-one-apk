@@ -1,106 +1,199 @@
- body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: #f4f6f8;
-            margin: 0;
-            padding: 30px;
-            color: #2c2c2c;
-        }
-        .facture-container {
-            max-width: 750px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-            padding: 40px;
-        }
-        .facture-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 3px solid #2e7d32;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        .entreprise-nom {
-            font-size: 1.6em;
-            font-weight: 700;
-            color: #2e7d32;
-            margin: 0;
-        }
-        .entreprise-sub {
-            color: #777;
-            font-size: 0.9em;
-            margin-top: 4px;
-        }
-        .facture-meta {
-            text-align: right;
-            font-size: 0.9em;
-            color: #555;
-        }
-        .facture-meta strong {
-            color: #2c2c2c;
-        }
-        .facture-titre {
-            font-size: 1.3em;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #2c2c2c;
-        }
-        table.detail {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-        }
-        table.detail th, table.detail td {
-            text-align: left;
-            padding: 12px 10px;
-            border-bottom: 1px solid #eee;
-        }
-        table.detail th {
-            background: #f9f9f9;
-            color: #555;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .montant-net {
-            font-size: 1.4em;
-            font-weight: 700;
-            color: #2e7d32;
-        }
-        .statut-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-            background: #4caf50;
-            color: #fff;
-        }
-        .facture-footer {
-            margin-top: 40px;
-            text-align: center;
-            color: #999;
-            font-size: 0.8em;
-        }
-        .btn-print {
-            display: block;
-            margin: 0 auto 25px auto;
-            background: #2e7d32;
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 1em;
-            cursor: pointer;
-        }
-        .btn-print:hover {
-            background: #256428;
-        }
+/*==================================================
+=                FACTURE SALAIRE
+==================================================*/
 
-        /* Cache le bouton à l'impression */
-        @media print {
-            .btn-print { display: none; }
-            body { background: #fff; padding: 0; }
-            .facture-container { box-shadow: none; }
-        }
+body{
+    margin:0;
+    padding:40px;
+    background:#f5f1eb;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    color:#333;
+}
+
+/*==================================================
+=                Bouton Impression
+==================================================*/
+
+.btn-print{
+    display:block;
+    margin:0 auto 25px;
+    padding:12px 26px;
+    border:none;
+    border-radius:8px;
+    background:#e88912;
+    color:#fff;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.btn-print:hover{
+    background:#cf7708;
+}
+
+/*==================================================
+=                Carte Facture
+==================================================*/
+
+.facture-container{
+    max-width:900px;
+    margin:auto;
+    background:#fff;
+    border-radius:18px;
+    padding:40px 45px;
+    box-shadow:0 8px 30px rgba(0,0,0,.08);
+    border:1px solid #ece4d9;
+}
+
+/*==================================================
+=                Header
+==================================================*/
+
+.facture-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    padding-bottom:25px;
+    border-bottom:2px solid #efe7dc;
+}
+
+.entreprise-nom{
+    font-size:30px;
+    font-weight:700;
+    color:#1f1f1f;
+    margin:0;
+}
+
+.entreprise-sub{
+    margin-top:6px;
+    color:#7c7c7c;
+    font-size:14px;
+}
+
+.facture-meta{
+    text-align:right;
+    font-size:14px;
+    color:#666;
+    line-height:28px;
+}
+
+.facture-meta strong{
+    color:#111;
+}
+
+/*==================================================
+=                Titre
+==================================================*/
+
+.facture-titre{
+    text-align:center;
+    font-size:30px;
+    font-weight:700;
+    margin:35px 0;
+    color:#222;
+}
+
+/*==================================================
+=                Tableau
+==================================================*/
+
+.detail{
+    width:100%;
+    border-collapse:collapse;
+    overflow:hidden;
+    border-radius:12px;
+    border:1px solid #e8ddd0;
+}
+
+.detail th{
+    width:30%;
+    text-align:left;
+    background:#faf7f3;
+    padding:18px;
+    color:#7d5b34;
+    font-weight:600;
+    border-bottom:1px solid #ece2d7;
+}
+
+.detail td{
+    padding:18px;
+    border-bottom:1px solid #f1ebe4;
+    font-size:15px;
+}
+
+.detail tr:last-child th,
+.detail tr:last-child td{
+    border-bottom:none;
+}
+
+.detail tr:hover{
+    background:#fcfaf7;
+}
+
+/*==================================================
+=                Montant
+==================================================*/
+
+.montant-net{
+    color:#16914a;
+    font-size:20px;
+    font-weight:700;
+}
+
+/*==================================================
+=                Badge Statut
+==================================================*/
+
+.statut-badge{
+    display:inline-block;
+    padding:8px 18px;
+    background:#fff5df;
+    color:#c67900;
+    border-radius:30px;
+    font-weight:600;
+    font-size:14px;
+    border:1px solid #f0d7a3;
+}
+
+/*==================================================
+=                Footer
+==================================================*/
+
+.facture-footer{
+    margin-top:40px;
+    text-align:center;
+    color:#888;
+    font-size:13px;
+    border-top:1px solid #ece4d8;
+    padding-top:20px;
+}
+
+/*==================================================
+=                Impression
+==================================================*/
+
+@media print{
+
+    body{
+        background:#fff;
+        padding:0;
+    }
+
+    .btn-print{
+        display:none;
+    }
+
+    .facture-container{
+        box-shadow:none;
+        border:none;
+        width:100%;
+        max-width:100%;
+        padding:0;
+    }
+
+    .facture-header{
+        margin-top:20px;
+    }
+
+}

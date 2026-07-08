@@ -1,0 +1,381 @@
+/* ==========================================================================
+   EMPLOYES.CSS - ONEOFONE RH PANEL
+   Compatible :
+   - employe-list.jsp (table + filtres + pagination)
+   - employe-form.jsp (formulaire CRUD)
+   ========================================================================== */
+
+/* =========================
+   GLOBAL LAYOUT
+========================= */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f4f1;
+}
+
+.container {
+    flex: 1;
+    padding: 28px 32px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.header {
+    margin-bottom: 18px;
+}
+
+.header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-dark);
+}
+
+.header p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+/* =========================
+   NAV BAR TOP
+========================= */
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-right: 8px;
+    transition: 0.15s;
+}
+
+.nav-links a:hover {
+    background: var(--accent-teal);
+    color: #fff;
+    border-color: var(--accent-teal);
+}
+
+/* =========================
+   ALERTES
+========================= */
+.alert {
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background: #e6f9f5;
+    color: #1db899;
+    border: 1px solid #b0eada;
+}
+
+.alert-error {
+    background: #fde8e8;
+    color: #c0392b;
+    border: 1px solid #f5b5b5;
+}
+
+/* =========================
+   FILTRES LISTE
+========================= */
+.filters {
+    background: #fff;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+}
+
+.filter-group label {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.filter-group input,
+.filter-group select {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+/* =========================
+   BOUTONS
+========================= */
+.btn {
+    display: inline-block;
+    padding: 9px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: 0.15s;
+}
+
+.btn-primary {
+    background: var(--accent-orange);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-danger {
+    background: #fff;
+    border: 1px solid #f5b5b5;
+    color: #c0392b;
+}
+
+.btn-danger:hover {
+    background: #fde8e8;
+}
+
+.btn-warning {
+    background: #fff;
+    border: 1px solid #f6d58a;
+    color: #b7791f;
+}
+
+.btn-warning:hover {
+    background: #fff6db;
+}
+
+.btn-success {
+    background: var(--accent-teal);
+    color: #fff;
+}
+
+.btn-success:hover {
+    opacity: 0.9;
+}
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 12px;
+}
+
+/* =========================
+   TABLE LISTE
+========================= */
+.table-container {
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    background: #faf9f6;
+    padding: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+tbody td {
+    padding: 12px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--border);
+}
+
+tbody tr:hover {
+    background: #f9f7f4;
+}
+
+/* =========================
+   BADGES
+========================= */
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.badge-success {
+    background: #e6f9f5;
+    color: #1db899;
+}
+
+.badge-danger {
+    background: #fde8e8;
+    color: #c0392b;
+}
+
+/* =========================
+   ACTIONS TABLE
+========================= */
+.actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* =========================
+   PAGINATION
+========================= */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.pagination a,
+.pagination span {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 13px;
+    background: #fff;
+    color: var(--text-dark);
+}
+
+.pagination a:hover {
+    background: #f0ede8;
+}
+
+.pagination .active {
+    background: var(--accent-teal);
+    color: #fff;
+    border-color: var(--accent-teal);
+}
+
+/* =========================
+   FORMULAIRE EMPLOYE
+========================= */
+.form-container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* =========================
+   FORM ACTIONS
+========================= */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* =========================
+   TRI INFO
+========================= */
+.sort-info {
+    font-size: 13px;
+    padding: 10px 15px;
+    background: #e3f2fd;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+    .container {
+        padding: 16px;
+    }
+
+    .filter-form {
+        flex-direction: column;
+    }
+
+    .nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tbody tr {
+        display: block;
+        margin-bottom: 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 8px;
+    }
+
+    tbody td {
+        display: block;
+        border: none;
+    }
+}

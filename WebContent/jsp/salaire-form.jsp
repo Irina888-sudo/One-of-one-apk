@@ -6,9 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulaire Employé - OneOfOne</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/base.css">
 </head>
 <body>
+    <%@ include file="nav/navbar.jsp" %>
 <%
     // DAOs
     dao.SalaireDAO salaireDAO = null;
@@ -102,11 +103,7 @@
         <p>OneOfOne - Gestion RH</p>
     </div>
     
-    <div class="nav">
-        <div class="nav-links">
-            <a href="Salaire-list.jsp"> Retour à la liste</a>
-        </div>
-    </div>
+    
     
     <% if (errorMsg != null) { %>
         <div class="alert alert-error">

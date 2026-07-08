@@ -1,0 +1,59 @@
+/* ==========================================================================
+   02-DASHBOARD.CSS
+   Page "Home" / Bonjour Admin — stat cards + tableau "Dernières Commandes"
+   Nécessite 00-base.css
+   ========================================================================== */
+
+.dashboard-greeting h2 { font-size: 26px; font-weight: 800; }
+.dashboard-greeting p { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+
+/* -------------------- Grille de cartes stats (3 colonnes) -------------------- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 22px 24px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.stat-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+
+.stat-card-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.stat-card-icon svg { width: 20px; height: 20px; }
+.stat-card-icon.icon-teal   { background: var(--status-success-bg); color: var(--status-success-text); }
+.stat-card-icon.icon-orange { background: var(--status-warning-bg); color: var(--status-warning-text); }
+.stat-card-icon.icon-blue   { background: var(--status-info-bg);    color: var(--status-info-text); }
+
+.stat-card-trend {
+    font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 4px;
+}
+.stat-card-trend.up   { color: var(--status-success-text); }
+.stat-card-trend.flag { color: var(--text-muted); font-weight: 600; }
+.stat-card-trend.warn { color: var(--accent-orange); }
+
+.stat-card-label {
+    font-size: 13px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px;
+}
+.stat-card-label.accent { color: var(--accent-orange); }
+
+.stat-card-value { font-size: 26px; font-weight: 800; letter-spacing: -.5px; color: var(--text-dark); }
+
+/* -------------------- Bloc "Dernières Commandes" -------------------- */
+.recent-orders-table thead th:nth-child(5),
+.recent-orders-table tbody td:nth-child(5) { text-align: left; }
+
+.recent-orders-table .client-cell { display: flex; align-items: center; gap: 10px; }
+.recent-orders-table .client-cell .name { font-weight: 600; }
+
+.recent-orders-table .view-icon { width: 18px; height: 18px; color: var(--text-muted); cursor: pointer; }

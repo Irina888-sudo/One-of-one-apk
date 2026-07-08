@@ -1,17 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="dao.FinanceDAO" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.time.LocalDate" %>
 
 <%
     FinanceDAO dao = new FinanceDAO();
+    int anneeCourante = LocalDate.now().getYear();
 
     // ── Les 4 grands chiffres ──────────────────────────
-    double ca         = dao.getChiffreAffairesTotal();    // CA = commandes LIVREES
-    double salaires   = dao.getTotalSalairesPaies();      // dépenses = salaires PAYES
-    double matieres   = dao.getTotalAchatsMatières();     // dépenses = valeur stock matières
+    double ca         = dao.getChiffreAffairesTotal(anneeCourante);
+    double salaires   = dao.getTotalSalairesPaies(anneeCourante);
+    double matieres   = dao.getTotalAchatsMatieres(anneeCourante);
     double depenses   = salaires + matieres;
     double margeNette = ca - depenses;
-    int    nbCmd      = dao.getNbCommandesLivrees();
+    int    nbCmd      = dao.getNbCommandesLivrees(anneeCourante);
 
     // ── Pourcentages pour le camembert ────────────────
     double pctSalaires = depenses > 0 ? (salaires / depenses) * 100 : 0;
@@ -26,43 +28,31 @@
     String margeLabel   = margeNette >= 0 ? "📈 Bénéfice net" : "📉 Perte nette";
 
     // ── Valeurs JS-safe (point décimal, pas de virgule) ─
-    String jsSalaires = String.format("%.2f", salaires).replace(",", ".");
-    String jsMatieres = String.format("%.2f", matieres).replace(",", ".");
+    String jsSalaires = String.format("%.0f", salaires).replace(",", ".");
+    String jsMatieres = String.format("%.0f", matieres).replace(",", ".");
+    String pieData = "[" + jsSalaires + ", " + jsMatieres + "]";
+    String margeStyle = "color:" + margeCouleur;
+    String salaireWidth = ((int) pctSalaires) + "%";
+    String matiereWidth = ((int) pctMatieres) + "%";
 %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>One of One — Finances</title>
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/finance.css">
+    <link rel="stylesheet" href="../css/finances.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="sidebar-logo"><h2>One of One</h2><small>Management Suite</small></div>
-    <nav>
-        <a href="dashboard-admin.jsp">🏠 Home</a>
-        <a href="stock-list.jsp">📦 Stock</a>
-        <a href="produit-list.jsp">🛍 Produits</a>
-        <a href="commande-list.jsp">🛒 Commandes</a>
-        <a href="livraison-list.jsp">🚚 Livraisons</a>
-        <a href="client-list.jsp">👥 Clients</a>
-        <a href="employe-list.jsp">👔 Employés</a>
-        <a href="finance-list.jsp" class="active">💰 Finances</a>
-        <a href="salaire-list.jsp">💳 Salaires</a>
-        <a href="graphiques.jsp">📊 Graphiques</a>
-        <a href="ia.jsp">🤖 IA</a>
-        <a href="notification-list.jsp">🔔 Notifs</a>
-    </nav>
-    <a href="logout.jsp" class="sidebar-logout">Se déconnecter</a>
-</div>
+<%@ include file="nav/navbar.jsp" %>
+
 
 <div class="main-content">
 
     <div class="page-header">
         <div>
+            <%@ include file="nav/header.jsp" %>
             <h1>GESTION DES FINANCES</h1>
             <p>Résumé financier — chiffre d'affaires, dépenses et marge nette.</p>
         </div>
@@ -78,8 +68,8 @@
             <div class="kpi-icone">💹</div>
             <div class="kpi-contenu">
                 <small>CHIFFRE D'AFFAIRES TOTAL</small>
-                <h2><%= String.format("%,.2f", ca) %> €</h2>
-                <p>Somme de toutes les commandes livrées (<%= nbCmd %> commandes)</p>
+                <h2><%= String.format("%,.0f", ca) %> Ar</h2>
+                <p>Somme du montant total des commandes de l'année <%= anneeCourante %> (<%= nbCmd %> commandes livrées)</p>
             </div>
         </div>
 
@@ -87,8 +77,8 @@
             <div class="kpi-icone">💸</div>
             <div class="kpi-contenu">
                 <small>DÉPENSES TOTALES</small>
-                <h2><%= String.format("%,.2f", depenses) %> €</h2>
-                <p>Salaires payés + achats matières premières</p>
+                <h2><%= String.format("%,.0f", depenses) %> Ar</h2>
+                <p>Salaires payés + coûts matières premières consommées</p>
             </div>
         </div>
 
@@ -96,8 +86,8 @@
             <div class="kpi-icone"><%= margeNette >= 0 ? "📈" : "📉" %></div>
             <div class="kpi-contenu">
                 <small><%= margeLabel.toUpperCase() %></small>
-                <h2 style="color:<%= margeCouleur %>">
-                    <%= margeSymbole %> <%= String.format("%,.2f", Math.abs(margeNette)) %> €
+                <h2 style="<%= margeStyle %>">
+                    <%= margeSymbole %> <%= String.format("%,.0f", Math.abs(margeNette)) %> Ar
                 </h2>
                 <p>CA − Dépenses totales</p>
             </div>
@@ -120,27 +110,27 @@
                 <tbody>
                     <tr>
                         <td><span class="point-couleur point-salaires"></span> 💼 Salaires payés</td>
-                        <td><strong><%= String.format("%,.2f", salaires) %> €</strong></td>
+                        <td><strong><%= String.format("%,.0f", salaires) %> Ar</strong></td>
                         <td>
                             <div class="barre-progress">
-                                <div class="barre-remplie barre-salaires" style="width:<%= (int)pctSalaires %>%"></div>
+                                <div class="barre-remplie barre-salaires" style="width:<%= salaireWidth %>"></div>
                             </div>
                             <%= String.format("%.1f", pctSalaires) %>%
                         </td>
                     </tr>
                     <tr>
                         <td><span class="point-couleur point-matieres"></span> 🧵 Matières premières</td>
-                        <td><strong><%= String.format("%,.2f", matieres) %> €</strong></td>
+                        <td><strong><%= String.format("%,.0f", matieres) %> Ar</strong></td>
                         <td>
                             <div class="barre-progress">
-                                <div class="barre-remplie barre-matieres" style="width:<%= (int)pctMatieres %>%"></div>
+                                <div class="barre-remplie barre-matieres" style="width:<%= matiereWidth %>"></div>
                             </div>
                             <%= String.format("%.1f", pctMatieres) %>%
                         </td>
                     </tr>
                     <tr class="ligne-total">
                         <td><strong>TOTAL</strong></td>
-                        <td><strong><%= String.format("%,.2f", depenses) %> €</strong></td>
+                        <td><strong><%= String.format("%,.0f", depenses) %> Ar</strong></td>
                         <td><strong>100%</strong></td>
                     </tr>
                 </tbody>
@@ -150,9 +140,9 @@
             <div class="note-calcul">
                 <strong>📌 Calculs :</strong>
                 <ul>
-                    <li><b>CA</b> = SUM(quantite × prix_unitaire) des commandes <em>LIVREE</em></li>
-                    <li><b>Salaires</b> = SUM(salaire_net) où statut = <em>PAYE</em></li>
-                    <li><b>Matières</b> = SUM(quantite × valeur_unitaire) de la table matiere</li>
+                    <li><b>CA</b> = SOMME du montant total des commandes de l'année (hors annulées)</li>
+                    <li><b>Salaires</b> = SOMME des salaires payés de l'année</li>
+                    <li><b>Matières</b> = COÛT des matières consommées par les commandes de l'année</li>
                     <li><b>Marge</b> = CA − (Salaires + Matières)</li>
                 </ul>
             </div>
@@ -193,28 +183,28 @@
             <tbody>
                 <tr>
                     <td>💹 Chiffre d'affaires total</td>
-                    <td class="montant-positif"><strong><%= String.format("%,.2f", ca) %> €</strong></td>
+                    <td class="montant-positif"><strong><%= String.format("%,.0f", ca) %> Ar</strong></td>
                     <td><%= nbCmd %> commandes livrées (ligne_commande × commande LIVREE)</td>
                 </tr>
                 <tr>
                     <td>💼 Salaires payés</td>
-                    <td class="montant-negatif">− <%= String.format("%,.2f", salaires) %> €</td>
+                    <td class="montant-negatif">− <%= String.format("%,.0f", salaires) %> Ar</td>
                     <td>SUM(salaire_net) où statut = PAYE</td>
                 </tr>
                 <tr>
                     <td>🧵 Achats matières premières</td>
-                    <td class="montant-negatif">− <%= String.format("%,.2f", matieres) %> €</td>
+                    <td class="montant-negatif">− <%= String.format("%,.0f", matieres) %> Ar</td>
                     <td>SUM(quantite × valeur_unitaire) dans la table matiere</td>
                 </tr>
                 <tr class="ligne-separateur">
                     <td>💸 Dépenses totales</td>
-                    <td class="montant-negatif"><strong>− <%= String.format("%,.2f", depenses) %> €</strong></td>
+                    <td class="montant-negatif"><strong>− <%= String.format("%,.0f", depenses) %> Ar</strong></td>
                     <td>Salaires + Matières</td>
                 </tr>
                 <tr class="ligne-marge-finale">
                     <td><strong><%= margeLabel %></strong></td>
-                    <td style="color:<%= margeCouleur %>; font-size:1.1rem;">
-                        <strong><%= margeSymbole %> <%= String.format("%,.2f", Math.abs(margeNette)) %> €</strong>
+                    <td style="<%= margeStyle %>; font-size:1.1rem;">
+                        <strong><%= margeSymbole %> <%= String.format("%,.0f", Math.abs(margeNette)) %> Ar</strong>
                     </td>
                     <td><%= margeNette >= 0 ? "✅ Résultat positif" : "⚠️ Dépenses > CA" %></td>
                 </tr>
@@ -242,7 +232,7 @@
                     <tr>
                         <td><strong><%= cmd[0] != null ? cmd[0] : "—" %></strong></td>
                         <td><%= cmd[1] != null ? cmd[1] : "—" %></td>
-                        <td class="montant-positif"><strong><%= cmd[2] %> €</strong></td>
+                        <td class="montant-positif"><strong><%= cmd[2] %> Ar</strong></td>
                         <td><%= cmd[3] != null ? cmd[3].substring(0, Math.min(10, cmd[3].length())) : "—" %></td>
                     </tr>
                 <%  }
@@ -272,7 +262,7 @@
             labels: ['Salaires payés', 'Achats matières premières'],
             datasets: [{
                 // Les valeurs viennent des variables Java injectées ici :
-                data: [ <%= jsSalaires %>, <%= jsMatieres %> ],
+                data: <%= pieData %>,
                 backgroundColor: ['#2D6A6A', '#F97316'],
                 borderColor:     ['#ffffff', '#ffffff'],
                 borderWidth: 3
@@ -288,7 +278,7 @@
                             var total = ctx.dataset.data.reduce(function(a, b){ return a + b; }, 0);
                             var pct   = ((ctx.parsed / total) * 100).toFixed(1);
                             var val   = ctx.parsed.toLocaleString('fr-FR', {minimumFractionDigits:2});
-                            return ctx.label + ' : ' + val + ' € (' + pct + '%)';
+                            return ctx.label + ' : ' + val + ' Ar (' + pct + '%)';
                         }
                     }
                 }

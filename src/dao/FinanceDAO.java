@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -31,19 +32,21 @@ public class FinanceDAO {
     // 1. CHIFFRE D'AFFAIRES TOTAL
     //    = somme des montant_total de toutes les commandes LIVREES
     //    Une commande est comptée dans le CA seulement quand elle
-    //    est livrée (statut = 'LIVREE')
+    //    est livrée (statut != 'ANNULEE')
     // ─────────────────────────────────────────────────────────────
     public double getChiffreAffairesTotal() {
+        return getChiffreAffairesTotal(LocalDate.now().getYear());
+    }
+
+    public double getChiffreAffairesTotal(int annee) {
         double total = 0;
-        // On somme les montants de toutes les lignes_commande liées
-        // aux commandes dont le statut est LIVREE
-        String sql = "SELECT COALESCE(SUM(lc.quantite * lc.prix_unitaire), 0) AS ca "
-                   + "FROM ligne_commande lc "
-                   + "JOIN commande c ON lc.commande_id = c.id "
-                   + "WHERE c.statut = 'LIVREE'";
+        String sql = "SELECT COALESCE(SUM(c.montant_total), 0) AS ca "
+                   + "FROM commande c "
+                   + "WHERE YEAR(c.date_commande) = ? AND c.statut <> 'ANNULEE'";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, annee);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) total = rs.getDouble("ca");
             rs.close(); ps.close(); conn.close();
@@ -55,17 +58,22 @@ public class FinanceDAO {
 
     // ─────────────────────────────────────────────────────────────
     // 2. TOTAL SALAIRES PAYÉS
-    //    = somme des salaire_net de tous les salaires avec statut=PAYE
-    //    (salaire_net est calculé automatiquement par MySQL : brut - déduction congés)
+    //    = somme des salaire_brut de tous les salaires avec statut=PAYE
+    //    pour garder le même calcul que le dashboard
     // ─────────────────────────────────────────────────────────────
     public double getTotalSalairesPaies() {
+        return getTotalSalairesPaies(LocalDate.now().getYear());
+    }
+
+    public double getTotalSalairesPaies(int annee) {
         double total = 0;
-        String sql = "SELECT COALESCE(SUM(salaire_net), 0) AS total_salaires "
+        String sql = "SELECT COALESCE(SUM(salaire_brut), 0) AS total_salaires "
                    + "FROM salaire "
-                   + "WHERE statut = 'PAYE'";
+                   + "WHERE statut = 'PAYE' AND YEAR(mois) = ?";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, annee);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) total = rs.getDouble("total_salaires");
             rs.close(); ps.close(); conn.close();
@@ -77,16 +85,22 @@ public class FinanceDAO {
 
     // ─────────────────────────────────────────────────────────────
     // 3. TOTAL ACHATS MATIÈRES PREMIÈRES
-    //    = valeur actuelle de tout le stock (quantite × valeur_unitaire)
-    //    C'est ce que représente l'investissement en matières
+    //    = somme des dépenses enregistrées dans la table finance
+    //    pour correspondre au calcul du dashboard
     // ─────────────────────────────────────────────────────────────
     public double getTotalAchatsMatieres() {
+        return getTotalAchatsMatieres(LocalDate.now().getYear());
+    }
+
+    public double getTotalAchatsMatieres(int annee) {
         double total = 0;
-        String sql = "SELECT COALESCE(SUM(quantite * valeur_unitaire), 0) AS total_matieres "
-                   + "FROM matiere";
+        String sql = "SELECT COALESCE(SUM(montant), 0) AS total_matieres "
+                   + "FROM finance "
+                   + "WHERE type = 'DEPENSE' AND YEAR(date_transaction) = ?";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, annee);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) total = rs.getDouble("total_matieres");
             rs.close(); ps.close(); conn.close();
@@ -96,16 +110,25 @@ public class FinanceDAO {
         return total;
     }
 
+    public double getTotalAchatsMatières() {
+        return getTotalAchatsMatieres();
+    }
+
     // ─────────────────────────────────────────────────────────────
     // 4. NOMBRE TOTAL DE COMMANDES LIVRÉES
     //    Sert à afficher un KPI sur la page finance
     // ─────────────────────────────────────────────────────────────
     public int getNbCommandesLivrees() {
+        return getNbCommandesLivrees(LocalDate.now().getYear());
+    }
+
+    public int getNbCommandesLivrees(int annee) {
         int nb = 0;
-        String sql = "SELECT COUNT(*) AS nb FROM commande WHERE statut = 'LIVREE'";
+        String sql = "SELECT COUNT(*) AS nb FROM commande WHERE YEAR(date_commande) = ? AND statut = 'LIVREE'";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, annee);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) nb = rs.getInt("nb");
             rs.close(); ps.close(); conn.close();
@@ -121,29 +144,32 @@ public class FinanceDAO {
     //    On récupère les 10 plus récentes avec le nom du client
     // ─────────────────────────────────────────────────────────────
     public ArrayList<String[]> getDernieresCommandesLivrees() {
+        return getDernieresCommandesLivrees(LocalDate.now().getYear());
+    }
+
+    public ArrayList<String[]> getDernieresCommandesLivrees(int annee) {
         // On utilise String[] à 4 cases : [numero, client_nom, montant, date]
         // Règle du projet : pas de HashMap → tableau simple String[]
         ArrayList<String[]> liste = new ArrayList<String[]>();
 
         String sql = "SELECT c.numero, cl.nom AS client_nom, "
-                   + "COALESCE(SUM(lc.quantite * lc.prix_unitaire), 0) AS montant, "
+                   + "c.montant_total AS montant, "
                    + "c.date_commande "
                    + "FROM commande c "
                    + "JOIN client cl ON c.client_id = cl.id "
-                   + "LEFT JOIN ligne_commande lc ON lc.commande_id = c.id "
-                   + "WHERE c.statut = 'LIVREE' "
-                   + "GROUP BY c.id "
+                   + "WHERE YEAR(c.date_commande) = ? AND c.statut = 'LIVREE' "
                    + "ORDER BY c.date_commande DESC "
                    + "LIMIT 10";
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, annee);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String[] ligne = new String[4];
                 ligne[0] = rs.getString("numero");          // numéro commande
                 ligne[1] = rs.getString("client_nom");      // nom du client
-                ligne[2] = String.format("%.2f", rs.getDouble("montant")); // montant formaté
+                ligne[2] = String.format("%,.0f", rs.getDouble("montant"));
                 ligne[3] = rs.getString("date_commande");   // date
                 liste.add(ligne);
             }

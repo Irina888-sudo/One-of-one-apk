@@ -7,16 +7,11 @@
 <%@ page import="model.Produit" %>
 <%@ page import="java.util.List" %>
 <%
-    // if (session.getAttribute("userEmail") == null) {
-    //     response.sendRedirect("login.jsp");
-    //     return;
-    // }
-
     CommandeDAO dao = new CommandeDAO();
     ProduitDAO produitDao = new ProduitDAO();
     String idParam = request.getParameter("id");
     Commande commande = null;
-    boolean isEdit = (idParam != null && !idParam.isBlank());
+    boolean isEdit = (idParam != null && idParam != null && !idParam.trim().isEmpty());
 
     if (isEdit) {
         try {
@@ -30,7 +25,12 @@
         commande = new Commande();
         isEdit = false;
         commande.setNumero("ORD-" + (1000 + new java.util.Random().nextInt(9000)));
-        commande.setDateCommande(new java.sql.Timestamp(System.currentTimeMillis()));
+        java.util.Date now = new java.util.Date();
+        commande.setDateCommande(new java.sql.Timestamp(now.getTime()));
+    }
+
+    if (commande.getLignes() == null) {
+        commande.setLignes(new java.util.ArrayList<>());
     }
 
     List<Client> clients = dao.getClients();
@@ -51,27 +51,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg-main:#f5f0ea; --border:#e6e1d9; --accent-teal:#3ecfb2; --accent-orange:#e8820c; --text-dark:#111111; --text-muted:#76716a; }
-        * { box-sizing:border-box; margin:0; padding:0; }
-        body { font-family:'Inter',sans-serif; background:var(--bg-main); color:var(--text-dark); min-height:100vh; display:flex; align-items:flex-start; justify-content:center; padding:40px 20px; }
-        .card { width:100%; max-width:760px; background:#fff; border:1px solid var(--border); border-radius:14px; padding:36px 40px; }
-        .card h2 { font-size:24px; font-weight:800; margin-bottom:6px; }
-        .card .sub { color:var(--text-muted); font-size:13px; margin-bottom:24px; }
-        .form-group { display:flex; flex-direction:column; gap:5px; margin-bottom:18px; }
-        .form-group label { font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; }
-        .form-group input, .form-group select { border:1px solid var(--border); border-radius:8px; padding:10px 12px; font-size:14px; outline:none; background:#faf9f7; }
-        .form-group input:focus, .form-group select:focus { border-color:var(--accent-teal); }
-        .row2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-        .ligne-table { width:100%; border-collapse:collapse; margin-top:12px; }
-        .ligne-table th, .ligne-table td { padding:12px 10px; border:1px solid var(--border); text-align:left; font-size:14px; }
-        .ligne-table th { background:#faf9f6; color:var(--text-muted); text-transform:uppercase; letter-spacing:.4px; }
-        .btn-row { display:flex; gap:10px; margin-top:22px; }
-        .btn-primary { background:var(--accent-orange); color:#fff; border:none; border-radius:8px; padding:12px 24px; font-size:14px; font-weight:700; cursor:pointer; }
-        .btn-secondary { background:#f0ede8; color:#555; border:none; border-radius:8px; padding:12px 18px; font-size:14px; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; }
-        .erreur { background:#fde8e8; color:#d94f4f; border:1px solid #f5c0c0; border-radius:8px; padding:12px 16px; font-size:13px; margin-bottom:18px; }
-        .action-small { border:none; color:var(--accent-orange); background:none; cursor:pointer; font-weight:700; }
-    </style>
+    <link rel="stylesheet" href="../css/commandes-form.css">
     <script>
         function ajouterLigne() {
             const tbody = document.getElementById('lignes-body');

@@ -6,10 +6,10 @@
 <%
     // ── PROTECTION DE PAGE : vérifier que l'utilisateur est connecté ──────
     // (session_check.jsp sera inclus par B2 — pour l'instant on simule)
-    if (session.getAttribute("userId") == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
+    //if (session.getAttribute("userId") == null) {
+    //    response.sendRedirect("login.jsp");
+    //    return;
+    //}
 
     // ── LECTURE DU PARAMÈTRE DE FILTRE (ACTIF / BLOQUE / tous) ───────────
     // request.getParameter() retourne null si le paramètre n'existe pas dans l'URL
@@ -65,32 +65,13 @@
 <head>
     <meta charset="UTF-8">
     <title>One of One — Clients</title>
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/client.css">
+     <link rel="stylesheet" href="../css/clients.css">
+    
 </head>
-<body>
-
-<%-- ── SIDEBAR (navigation) ── sera stylée par B1 ──────────────────────── --%>
-<div class="sidebar">
-    <div class="sidebar-logo">
-        <h2>One of One</h2>
-        <small>Management Suite</small>
-    </div>
-    <nav>
-        <a href="dashboard-admin.jsp">🏠 Home</a>
-        <a href="stock-list.jsp">📦 Stock</a>
-        <a href="produit-list.jsp">🛍 Produits</a>
-        <a href="commande-list.jsp">🛒 Commandes</a>
-        <a href="livraison-list.jsp">🚚 Livraisons</a>
-        <a href="client-list.jsp" class="active">👥 Clients</a>
-        <a href="finance-list.jsp">💰 Finances</a>
-        <a href="salaire-list.jsp">💳 Salaires</a>
-        <a href="graphiques.jsp">📊 Graphiques</a>
-        <a href="ia.jsp">🤖 IA</a>
-        <a href="notification-list.jsp">🔔 Notifs</a>
-    </nav>
-    <a href="logout.jsp" class="sidebar-logout">Se déconnecter</a>
-</div>
+<body style="display: flex; margin: 0; min-height: 100vh;">
+<%@ include file="nav/navbar.jsp" %>
+<div style="flex: 1; display: flex; flex-direction: column;">
+<%@ include file="nav/header.jsp" %>
 
 <%-- ── CONTENU PRINCIPAL ──────────────────────────────────────────────── --%>
 <div class="main-content">
@@ -224,6 +205,6 @@
     </p>
 
 </div><%-- fin main-content --%>
-
+</div>
 </body>
 </html>

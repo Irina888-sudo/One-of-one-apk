@@ -2,6 +2,11 @@
 <%@ page import="dao.ProduitDAO, dao.CollectionDAO, dao.MatiereDAO" %>
 <%@ page import="model.Produit, model.Collection, model.Matiere" %>
 <%@ page import="java.util.List" %>
+<%!
+    private boolean isBlank(String value) {
+        return value == null || value.trim().isEmpty();
+    }
+%>
 <%
     ProduitDAO dao = new ProduitDAO();
     CollectionDAO colDao = new CollectionDAO();
@@ -12,7 +17,7 @@
 
     String idParam = request.getParameter("id");
     Produit p = null;
-    boolean isEdit = (idParam != null && !idParam.isBlank());
+    boolean isEdit = !isBlank(idParam);
 
     List<Matiere> matieresProduit = new java.util.ArrayList<>();
     if (isEdit) {
@@ -38,7 +43,7 @@
     <head>
         <meta charset="UTF-8">
         <title><%= titre %> – One of One</title>
-        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="../css/commandes-form.css">
         <script>
             function updateUnite(selectEl) {
                 const selectedOpt = selectEl.options[selectEl.selectedIndex];
@@ -83,35 +88,7 @@
             }
         </script>
     </head>
-    <style>
-        :root {
-            --sidebar-bg : #1a3631;
-            --accent-teal : #3ecfb2;
-            --accent-orange: #e8820c;
-            --bg-main : #f5f0ea;
-            --border : #e8e3dc;
-            --text-muted : #888;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg-main); min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px; }
-        .card { background: #fff; border-radius: 14px; border: 1px solid var(--border); padding: 36px 40px; width: 100%; max-width: 560px; }
-        .card h2 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-        .card .sub { color: var(--text-muted); font-size: 13px; margin-bottom: 28px; }
-        .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 18px; }
-        .form-group label { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
-        .form-group input,
-        .form-group select { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: #faf9f7; transition: border-color .15s; }
-        .form-group input:focus,
-        .form-group select:focus { border-color: var(--accent-teal); }
-        .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .btn-row { display: flex; gap: 10px; margin-top: 8px; }
-        .btn-primary { background: var(--accent-orange); color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-size: 14px; font-weight: 700; cursor: pointer; flex: 1; }
-        .btn-primary:hover { opacity: .9; }
-        .btn-secondary { background: #f0ede8; color: #555; border: none; border-radius: 8px; padding: 12px 18px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; }
-        .erreur { background: #fde8e8; color: #d94f4f; border: 1px solid #f5c0c0; border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-bottom: 18px; }
-        .action-small { border:none; color:var(--accent-orange); background:none; cursor:pointer; font-weight:700; font-size: 12px; }
-        .action-small:hover { text-decoration: underline; }
-</style>
+   
     <body>
         <div class="card">
             <h2><%= titre %></h2>
@@ -172,11 +149,11 @@
                 <div class="form-group">
                     <label>Image du produit</label>
                     <%
-    if (isEdit && p.getImage() != null && !p.getImage().isBlank()) {
+    if (isEdit && p.getImage() != null && !isBlank(p.getImage())) {
 
 %>
                     <div style="margin-bottom:8px;">
-                        <img src="<%= request.getContextPath() %>/assets/img/<%= p.getImage() %>" alt="Image actuelle"
+                        <img src="<%= request.getContextPath() %>/jsp/serve-image.jsp?name=<%= java.net.URLEncoder.encode(p.getImage(), "UTF-8") %>" alt="Image actuelle"
                         style="max-width:120px;max-height:120px;border-radius:8px;object-fit:cover;border:1px solid #ddd;">
                         <p style="font-size:11px;color:#888;margin-top:4px;">Image actuelle – choisissez un nouveau fichier pour la remplacer.</p>
                     </div>

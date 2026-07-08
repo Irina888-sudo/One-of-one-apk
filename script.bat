@@ -1,19 +1,18 @@
-javac -encoding UTF-8 -cp ".;WebContent/WEB-INF/lib/*" -d WebContent/WEB-INF/classes src\model\*.java src\dao\*.java src\util\*.java
-cd WebContent
-jar -cvf ..\One-of-one-apk.war .
-cd ..
-
-rmdir /s /q C:\xampp\tomcat\webapps\One-of-one-apk
-rmdir /s /q C:\xampp\tomcat\work\Catalina\localhost\One-of-one-apk
-
-copy One-of-one-apk.war C:\xampp\tomcat\webapps\
 @echo off
 setlocal enabledelayedexpansion
 
 :: ==============================================================================
 :: CONFIGURATION DES CHEMINS - MODIFIEZ CES CHEMINS SELON VOTRE CONFIGURATION
 :: ==============================================================================
-set "TOMCAT_DIR=C:\xampp\tomcat"  :: Chemin vers le dossier d'installation de Tomcat
+set "TOMCAT_DIR=C:\xampp\tomcat"
+
+:: Définir JAVA_HOME (si non défini)
+if "%JAVA_HOME%"=="" (
+    set "JAVA_HOME=C:\Program Files\Java\jdk-21"   :: À ajuster selon votre installation
+)
+:: Ajouter le JDK au PATH pour cette session
+set "PATH=%JAVA_HOME%\bin;%PATH%"
+
 :: ==============================================================================
 
 echo [1/4] Compilation des fichiers Java...
@@ -21,14 +20,14 @@ if not exist "WebContent\WEB-INF\classes" (
     mkdir "WebContent\WEB-INF\classes"
 )
 
-:: Generer la liste de tous les fichiers .java recursivement en les entourant de guillemets et en remplacant \ par /
+:: Générer la liste de tous les fichiers .java récursivement
 (for /f "delims=" %%i in ('dir /s /b src\*.java') do (
     set "filePath=%%i"
     set "filePath=!filePath:\=/!"
     echo "!filePath!"
 )) > sources.txt
 
-:: Compiler en utilisant la liste des fichiers et le classpath Windows (avec le separateur ';')
+:: Compilation
 javac -cp ".;WebContent\WEB-INF\lib\*" -d WebContent\WEB-INF\classes @sources.txt
 if %errorlevel% neq 0 (
     echo [ERREUR] La compilation a echoue !
@@ -41,11 +40,11 @@ echo Compilation reussie.
 
 echo.
 echo [2/4] Creation du fichier WAR...
+:: Supprimer l'ancien WAR local pour éviter une copie erronée
+if exist "One-of-one-apk.war" del /f /q "One-of-one-apk.war"
+
 cd WebContent
-set "JAR_CMD=jar"
-if exist "%JAVA_HOME%\bin\jar.exe" (
-    set "JAR_CMD=%JAVA_HOME%\bin\jar.exe"
-)
+set "JAR_CMD=%JAVA_HOME%\bin\jar.exe"
 "%JAR_CMD%" -cvf ..\One-of-one-apk.war .
 if %errorlevel% neq 0 (
     echo [ERREUR] La creation du fichier WAR a echoue !
@@ -58,7 +57,6 @@ echo Fichier WAR cree avec succes.
 
 echo.
 echo [3/4] Nettoyage du dossier Tomcat...
-:: Suppression de l'ancien fichier WAR et du dossier deploye s'ils existent
 if exist "%TOMCAT_DIR%\webapps\One-of-one-apk.war" (
     del /f /q "%TOMCAT_DIR%\webapps\One-of-one-apk.war"
 )
@@ -81,9 +79,8 @@ if exist "%TOMCAT_DIR%\webapps" (
     )
     echo Deploiement reussi !
 ) else (
-    echo [ATTENTION] Le dossier webapps de Tomcat n'a pas ete trouve a l'emplacement :
-    echo "%TOMCAT_DIR%\webapps"
-    echo Le fichier One-of-one-apk.war a ete genere localement mais n'a pas ete copie.
+    echo [ATTENTION] Le dossier webapps de Tomcat n'a pas ete trouve.
+    echo Le fichier WAR a ete genere localement mais n'a pas ete copie.
 )
 
 echo.

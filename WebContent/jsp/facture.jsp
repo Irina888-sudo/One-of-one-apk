@@ -2,15 +2,14 @@
 <%@ page import="model.Salaire, dao.SalaireDAO, dao.EmployeDAO" %>
 <!DOCTYPE html>
 <html lang="fr">
-  <link rel="stylesheet" href="../css/facture.css">
 <head>
     <meta charset="UTF-8">
     <title>Facture de Salaire - OneOfOne</title>
-    
+    <link rel="stylesheet" href="../css/facture.css">
 </head>
 <body>
 
-    <button class="btn-print" onclick="window.print()">🖨️ Imprimer / Enregistrer en PDF</button>
+  
 
     <div class="facture-container">
 
@@ -85,6 +84,10 @@
             </table>
 
         <% } %>
+
+
+          <button class="btn-print" onclick="window.print()">🖨️ Imprimer / Enregistrer en PDF</button>
+          <button class="btn-print" onclick="window.location.href='salaire-list.jsp'"> Annuler</button>
 
         <div class="facture-footer">
             Document généré automatiquement par OneOfOne — Ne nécessite pas de signature.

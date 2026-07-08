@@ -40,7 +40,9 @@ public class Livraison {
 
     public String getNumero() { return numero; }
 
-    public String getCommandeId() { return "#ORD-" + (commandeId); }
+    public int getCommandeIdValue() { return commandeId; }
+
+    public int getCommandeId() { return commandeId; }
 
     public Integer getEmployeId() { return employeId; }
 

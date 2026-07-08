@@ -7,9 +7,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Employés - OneOfOne</title>
-    <link rel="stylesheet" href="../css/employe.css">
+    <link rel="stylesheet" href="../css/employes.css">
 </head>
-<body>
+<body style="display: flex; margin: 0; min-height: 100vh;">
+    <%@ include file="nav/navbar.jsp" %>
+    <div style="flex: 1; display: flex; flex-direction: column;">
+        <%@ include file="nav/header.jsp" %>
 <%
     EmployeDAO employeDAO = new EmployeDAO();
     
@@ -276,5 +279,6 @@
         });
     });
 </script>
+    </div>
 </body>
 </html>

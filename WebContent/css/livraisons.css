@@ -1,0 +1,307 @@
+/* ==========================================================
+   One of One - Management Suite
+   CSS adapté à la maquette (hors sidebar verte)
+   ========================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background-color: #f7f1e8;
+    color: #2f2b26;
+}
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ---------- Zone principale ---------- */
+
+.main-content {
+    flex: 1;
+    padding: 30px 40px;
+    background-color: #f7f1e8;
+}
+
+/* ---------- Barre logo + recherche ---------- */
+
+.search-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.logo-area h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #2f2b26;
+}
+
+.search-wrapper input {
+    width: 320px;
+    padding: 10px 16px;
+    border: 1px solid #e6ddcf;
+    border-radius: 10px;
+    background-color: #ffffff;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-wrapper input:focus {
+    border-color: #ff8c42;
+}
+
+/* ---------- Titre + bouton ajouter ---------- */
+
+.header-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.title-section h1 {
+    margin: 0 0 6px 0;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+    color: #2f2b26;
+}
+
+.title-section p {
+    margin: 0;
+    color: #8a8378;
+    font-size: 14px;
+}
+
+.add-btn {
+    background-color: #ff8c42;
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255, 140, 66, 0.35);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.add-btn:hover {
+    background-color: #f5772a;
+    transform: translateY(-1px);
+}
+
+/* ---------- Barre de filtres ---------- */
+
+.filters-bar {
+    display: flex;
+    gap: 20px;
+    background-color: #ffffff;
+    padding: 18px 24px;
+    border-radius: 14px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 160px;
+}
+
+.filter-group label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #8a8378;
+}
+
+.filter-group select,
+.filter-group input {
+    padding: 9px 12px;
+    border: 1px solid #e6ddcf;
+    border-radius: 8px;
+    background-color: #fbf8f3;
+    font-size: 14px;
+    color: #2f2b26;
+    outline: none;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    border-color: #ff8c42;
+}
+
+/* ---------- Tableau ---------- */
+
+.table-container {
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 10px 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    color: #8a8378;
+    font-weight: 700;
+    padding: 14px 10px;
+    border-bottom: 1px solid #f0e9dd;
+}
+
+tbody td {
+    padding: 16px 10px;
+    font-size: 14px;
+    color: #2f2b26;
+    border-bottom: 1px solid #f5efe4;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: #fbf7ef;
+}
+
+/* Numéro de livraison / commande en couleur */
+tbody td:first-child,
+tbody td:nth-child(2) {
+    color: #d97a3d;
+    font-weight: 600;
+}
+
+/* ---------- Badges de statut ---------- */
+
+.statut-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.statut-livre {
+    background-color: #e3f6ea;
+    color: #2e9d5b;
+}
+
+.statut-en-cours {
+    background-color: #eaf1ff;
+    color: #3b7de0;
+}
+
+.statut-attente {
+    background-color: #fdeaea;
+    color: #d9534f;
+}
+
+/* ---------- Actions (modifier / supprimer) ---------- */
+
+.actions {
+    display: flex;
+    gap: 14px;
+}
+
+.actions a {
+    text-decoration: none;
+    color: #8a8378;
+    font-size: 13px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.actions a:first-child:hover {
+    background-color: #eaf1ff;
+    color: #3b7de0;
+}
+
+.actions a:last-child:hover {
+    background-color: #fdeaea;
+    color: #d9534f;
+}
+
+/* ==========================================================
+   Formulaire (livraison-form.jsp)
+   ========================================================== */
+
+.form-container {
+    max-width: 560px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 14px;
+    padding: 30px 34px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.form-container h1 {
+    font-size: 22px;
+    margin-bottom: 25px;
+    color: #2f2b26;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #8a8378;
+}
+
+.form-group input,
+.form-group select {
+    padding: 11px 14px;
+    border: 1px solid #e6ddcf;
+    border-radius: 8px;
+    background-color: #fbf8f3;
+    font-size: 14px;
+    color: #2f2b26;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #ff8c42;
+}
+
+.form-submit-btn {
+    width: 100%;
+    background-color: #ff8c42;
+    color: #ffffff;
+    border: none;
+    padding: 13px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255, 140, 66, 0.35);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.form-submit-btn:hover {
+    background-color: #f5772a;
+    transform: translateY(-1px);
+}

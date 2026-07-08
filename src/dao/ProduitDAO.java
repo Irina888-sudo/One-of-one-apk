@@ -217,11 +217,34 @@ public class ProduitDAO {
 
     // ── Supprimer ──────────────────────────────────────────
     public void supprimer(int id) throws SQLException {
-        String sql = "DELETE FROM produit WHERE id = ?";
-        try (Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ps.executeUpdate();
+        String deleteLignes = "DELETE FROM ligne_commande WHERE produit_id = ?";
+        String deleteProduit = "DELETE FROM produit WHERE id = ?";
+
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement psLignes = conn.prepareStatement(deleteLignes)) {
+                psLignes.setInt(1, id);
+                psLignes.executeUpdate();
+            }
+
+            try (PreparedStatement psProduit = conn.prepareStatement(deleteProduit)) {
+                psProduit.setInt(1, id);
+                psProduit.executeUpdate();
+            }
+
+            conn.commit();
+        } catch (SQLException e) {
+            if (conn != null) {
+                try { conn.rollback(); } catch (SQLException ex) { /* ignore */ }
+            }
+            throw e;
+        } finally {
+            if (conn != null) {
+                try { conn.close(); } catch (SQLException e) { /* ignore */ }
+            }
         }
     }
 

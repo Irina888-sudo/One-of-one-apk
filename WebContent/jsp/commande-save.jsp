@@ -6,11 +6,6 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%
-    if (session.getAttribute("userEmail") == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
-
     String idStr = request.getParameter("id");
     String numero = request.getParameter("numero");
     String clientIdStr = request.getParameter("clientId");
@@ -20,7 +15,7 @@
     String[] quantites = request.getParameterValues("quantite");
     String[] prixUnitaires = request.getParameterValues("prixUnitaire");
 
-    boolean isEdit = (idStr != null && !idStr.isBlank());
+    boolean isEdit = (idStr != null && !idStr.trim().isEmpty());
     String erreur = null;
     int clientId = 0;
     Timestamp dateCommande = null;
@@ -44,7 +39,11 @@
 
         if (erreur == null) {
             try {
-                dateCommande = Timestamp.valueOf(dateCommandeStr.replace('T', ' '));
+                String dateTime = dateCommandeStr.replace('T', ' ').trim();
+                if (dateTime.length() == 16) {
+                    dateTime += ":00"; // datetime-local fournit minutes seulement
+                }
+                dateCommande = Timestamp.valueOf(dateTime);
             } catch (IllegalArgumentException e) {
                 erreur = "Le format de la date de commande est invalide.";
             }

@@ -4,10 +4,7 @@
 
 <%
     // ── PROTECTION DE PAGE ────────────────────────────────────────────────
-    if (session.getAttribute("userId") == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
+    
 
     // ── DÉTERMINER LE MODE : AJOUT ou MODIFICATION ────────────────────────
     // Si ?id=X est dans l'URL → mode modification
@@ -95,32 +92,11 @@
 <head>
     <meta charset="UTF-8">
     <title>One of One — <%= titrePage %></title>
-    <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/client.css">
+    <link rel="stylesheet" href="../css/base.css">
 </head>
 <body>
 
-<%-- ── SIDEBAR ── --%>
-<div class="sidebar">
-    <div class="sidebar-logo">
-        <h2>One of One</h2>
-        <small>Management Suite</small>
-    </div>
-    <nav>
-        <a href="dashboard-admin.jsp">🏠 Home</a>
-        <a href="stock-list.jsp">📦 Stock</a>
-        <a href="produit-list.jsp">🛍 Produits</a>
-        <a href="commande-list.jsp">🛒 Commandes</a>
-        <a href="livraison-list.jsp">🚚 Livraisons</a>
-        <a href="client-list.jsp" class="active">👥 Clients</a>
-        <a href="finance-list.jsp">💰 Finances</a>
-        <a href="salaire-list.jsp">💳 Salaires</a>
-        <a href="graphiques.jsp">📊 Graphiques</a>
-        <a href="ia.jsp">🤖 IA</a>
-        <a href="notification-list.jsp">🔔 Notifs</a>
-    </nav>
-    <a href="logout.jsp" class="sidebar-logout">Se déconnecter</a>
-</div>
+<%@ include file="nav/navbar.jsp" %>
 
 <%-- ── CONTENU PRINCIPAL ── --%>
 <div class="main-content">

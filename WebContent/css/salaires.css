@@ -1,0 +1,129 @@
+/* PAGE */
+
+.container{
+    padding:35px;
+}
+
+/* TITRE */
+
+.container h1{
+    margin:0 0 25px;
+    font-size:36px;
+    font-weight:800;
+    text-transform:uppercase;
+}
+
+/* ALERTES */
+
+.alert{
+    padding:14px 18px;
+    border-radius:8px;
+    margin-bottom:20px;
+}
+
+.alert-error{
+    background:#fdeaea;
+    color:#d84a4a;
+}
+
+/* TABLE */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 5px 18px rgba(0,0,0,.05);
+}
+
+thead{
+    background:#faf8f5;
+}
+
+th{
+    padding:18px;
+    text-align:left;
+    font-size:13px;
+    color:#666;
+}
+
+td{
+    padding:18px;
+    border-top:1px solid #f1ece5;
+}
+
+tbody tr:hover{
+    background:#fcfaf8;
+}
+
+/* LIGNE PAYEE */
+
+.paid-row{
+    background:#f3fff9;
+}
+
+/* BADGES */
+
+.badge-paid{
+    background:#e8faf2;
+    color:#159b63;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:700;
+}
+
+.badge-wait{
+    background:#fff3db;
+    color:#b97b00;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:700;
+}
+
+/* BOUTONS */
+
+.btn{
+    display:inline-block;
+    margin:2px;
+    padding:8px 14px;
+    background:#f78b11;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.btn:hover{
+    background:#ea8209;
+}
+
+/* PAGINATION */
+
+.pagination{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    margin-top:25px;
+}
+
+.pagination a,
+.pagination span{
+    padding:10px 14px;
+    border-radius:8px;
+    text-decoration:none;
+}
+
+.pagination a{
+    background:white;
+    border:1px solid #e4ddd3;
+    color:#555;
+}
+
+.pagination .active{
+    background:#f78b11;
+    color:white;
+}

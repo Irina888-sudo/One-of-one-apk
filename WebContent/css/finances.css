@@ -1,0 +1,287 @@
+/* ==========================================================================
+   09-FINANCES.CSS
+   Page "Gestion des Finances" — 3 cartes KPI + filtres + tableau dépenses
+   ========================================================================== */
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #f5f0ea;
+    color: #111111;
+    min-height: 100vh;
+    display: flex;
+}
+
+.sidebar {
+    width: 240px;
+    background: #1a3631;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    min-height: 100vh;
+    flex-shrink: 0;
+}
+
+.sidebar-logo {
+    padding: 0 24px 24px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    margin-bottom: 16px;
+}
+
+.sidebar-logo h2 {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.sidebar-logo small {
+    font-size: 11px;
+    color: #7ca89c;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+    color: #b0ccc6;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.sidebar nav a.active,
+.sidebar nav a:hover {
+    background: #e8820c;
+    color: #fff;
+}
+
+.sidebar-logout {
+    margin-top: auto;
+    margin-left: 24px;
+    margin-right: 24px;
+    color: #f5c0c0;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.main-content {
+    flex: 1;
+    padding: 32px;
+    background: #f5f0ea;
+}
+
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.page-header p {
+    color: #76716a;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.kpi-grille {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.kpi-card {
+    background: #fff;
+    border: 1px solid #e6e1d9;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.03);
+}
+
+.kpi-icone {
+    font-size: 24px;
+    margin-bottom: 14px;
+}
+
+.kpi-contenu small {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: #76716a;
+    margin-bottom: 8px;
+}
+
+.kpi-contenu h2 {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.kpi-contenu p {
+    font-size: 13px;
+    color: #76716a;
+    line-height: 1.5;
+}
+
+.section-deux-colonnes {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.detail-depenses,
+.graphique-container,
+.recap-final,
+.section-commandes {
+    background: #fff;
+    border: 1px solid #e6e1d9;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.03);
+}
+
+.table-detail,
+.table-recap,
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table-detail th,
+.table-detail td,
+.table-recap th,
+.table-recap td,
+.table th,
+.table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #f0ece7;
+    text-align: left;
+}
+
+.table-detail thead th,
+.table-recap thead th,
+.table thead th {
+    color: #76716a;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.barre-progress {
+    width: 100%;
+    height: 8px;
+    background: #f0ece7;
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.barre-remplie {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.barre-salaires { background: #2D6A6A; }
+.barre-matieres { background: #F97316; }
+
+.point-couleur {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.point-salaires { background: #2D6A6A; }
+.point-matieres { background: #F97316; }
+
+.montant-positif { color: #10b981; }
+.montant-negatif { color: #dc2626; }
+
+.ligne-separateur td { border-top: 2px solid #f0ece7; }
+.ligne-marge-finale td { background: #fdf7f2; }
+
+.note-calcul,
+.lien-voir-tout,
+.vide {
+    font-size: 13px;
+    color: #76716a;
+    margin-top: 12px;
+}
+
+.lien-voir-tout a {
+    color: #e8820c;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.finance-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.finance-kpi-card { position: relative; }
+.finance-kpi-card .kpi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.finance-kpi-card .kpi-label {
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-muted);
+}
+.finance-kpi-card .kpi-icon { width: 20px; height: 20px; color: var(--text-muted); }
+.finance-kpi-card .kpi-value { font-size: 28px; font-weight: 800; margin-bottom: 10px; }
+.finance-kpi-card .kpi-value.positive { color: var(--status-success-text); }
+.finance-kpi-card .kpi-value.negative { color: #b45309; }
+.finance-kpi-card .kpi-value.profit   { color: var(--accent-orange); }
+.finance-kpi-card .kpi-sub { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
+.finance-kpi-card .kpi-sub.up   { color: var(--status-success-text); }
+.finance-kpi-card .kpi-sub.down { color: var(--status-error-text); }
+.finance-kpi-card .kpi-sub.ok   { color: var(--status-success-text); }
+
+/* -------------------- Filtres montant Min/Max -------------------- */
+.amount-range { display: flex; align-items: center; gap: 8px; }
+.amount-range input { width: 90px; min-width: unset; }
+.amount-range span { color: var(--text-muted); }
+
+/* -------------------- Icône type de dépense -------------------- */
+.expense-cell { display: flex; align-items: center; gap: 12px; }
+.expense-icon {
+    width: 40px; height: 40px; border-radius: 8px;
+    background: #f3ede3; color: var(--text-dark);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.expense-icon svg { width: 18px; height: 18px; }
+.expense-cell .expense-title { font-weight: 700; font-size: 14px; }
+.expense-cell .expense-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+.expense-type-tag {
+    display: inline-block; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600;
+}
+.expense-type-tag.fixe    { background: #efe9e0; color: var(--text-dark); }
+.expense-type-tag.variable{ background: var(--status-info-bg); color: var(--status-info-text); }
+
+.expense-amount { color: var(--status-error-text); font-weight: 700; }

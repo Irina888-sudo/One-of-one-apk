@@ -3,7 +3,7 @@
 <%@ page import="java.io.*" %>
 <%
     String idStr = request.getParameter("id");
-    String redirect = "salaire-liste.jsp";
+    String redirect = "salaire-list.jsp";
 
     if (idStr == null) {
         response.sendRedirect(redirect + "?error=" + java.net.URLEncoder.encode("ID manquant", "UTF-8"));
@@ -19,23 +19,25 @@
             return;
         }
 
-     
-        String cheminCsv = application.getRealPath("/") + "data" + File.separator + "historique_salaires_payes.csv";
-
         String nomEmploye = EmployeDAO.getNomEmployeById(salaire.getEmployeId());
         String role = EmployeDAO.getRoleById(salaire.getEmployeId());
         String mois = Salaire.formatMois(salaire.getMois());
-        String brut = salaire.getSalaireBrut().toString();
-        String net = salaire.getSalaireNet().toString();
+        String brut = salaire.getSalaireBrut() != null ? salaire.getSalaireBrut().toString() : "";
+        String net = salaire.getSalaireNet() != null ? salaire.getSalaireNet().toString() : "";
 
-       
-        boolean succes = exporterLigneVersCsv(cheminCsv, nomEmploye, role, mois, brut, net);
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"salaire-" + id + ".csv\"");
 
-        if (succes) {
-            response.sendRedirect(redirect + "?success=" + java.net.URLEncoder.encode("Ligne ajoutée au CSV", "UTF-8"));
-        } else {
-            response.sendRedirect(redirect + "?error=" + java.net.URLEncoder.encode("Export CSV non implémenté", "UTF-8"));
-        }
+        PrintWriter writer = response.getWriter();
+        writer.write("Employe,Role,Mois,SalaireBrut,SalaireNet,DateExport\n");
+        writer.write(
+                escapeCsv(nomEmploye) + "," +
+                escapeCsv(role) + "," +
+                escapeCsv(mois) + "," +
+                escapeCsv(brut) + "," +
+                escapeCsv(net) + "," +
+                java.time.LocalDate.now() + "\n");
+        writer.flush();
 
     } catch (Exception e) {
         e.printStackTrace();
@@ -48,16 +50,27 @@
     boolean exporterLigneVersCsv(String cheminCsv, String nomEmploye, String role, String mois, String brut, String net) {
         try {
             File fichier = new File(cheminCsv);
+            File dossier = fichier.getParentFile();
+            if (dossier != null && !dossier.exists()) {
+                dossier.mkdirs();
+            }
+
             boolean fichierExisteDeja = fichier.exists();
 
-            if (fichierExisteDeja == false) {
+            if (!fichierExisteDeja) {
                 FileWriter writer = new FileWriter(cheminCsv, true);
                 writer.write("Employe,Role,Mois,SalaireBrut,SalaireNet,DateExport\n");
                 writer.close();
             }
 
             FileWriter writer2 = new FileWriter(cheminCsv, true);
-            writer2.write(nomEmploye + "," + role + "," + mois + "," + brut + "," + net + "," + java.time.LocalDate.now() + "\n");
+            writer2.write(
+                    escapeCsv(nomEmploye) + "," +
+                    escapeCsv(role) + "," +
+                    escapeCsv(mois) + "," +
+                    escapeCsv(brut) + "," +
+                    escapeCsv(net) + "," +
+                    java.time.LocalDate.now() + "\n");
             writer2.close();
 
             return true;
@@ -66,5 +79,14 @@
             e.printStackTrace();
             return false;
         }
+    }
+
+    String escapeCsv(String value) {
+        if (value == null) return "";
+        String escaped = value.replace("\"", "\"\"");
+        if (escaped.contains(",") || escaped.contains("\n") || escaped.contains("\r") || escaped.contains("\"")) {
+            return "\"" + escaped + "\"";
+        }
+        return escaped;
     }
 %>

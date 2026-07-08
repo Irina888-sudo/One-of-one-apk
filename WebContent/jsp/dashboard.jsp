@@ -70,91 +70,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord – One of One</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root { --sidebar-bg:#1a3631; --sidebar-active:#e8820c; --accent-teal:#3ecfb2; --accent-orange:#e8820c; --bg-main:#f5f0ea; --bg-card:#ffffff; --text-dark:#111111; --text-muted:#76716a; --border:#e6e1d9; --status-error:#e05c5c; }
-        * { box-sizing:border-box; margin:0; padding:0; }
-        body { display:flex; font-family:'Inter',sans-serif; background:var(--bg-main); color:var(--text-dark); min-height:100vh; }
-        .sidebar { width:240px; background:var(--sidebar-bg); color:#fff; display:flex; flex-direction:column; padding:24px 0; min-height:100vh; }
-        .sidebar .brand { padding:0 24px 28px; border-bottom:1px solid rgba(255,255,255,.08); margin-bottom:16px; }
-        .sidebar .brand h1 { font-size:18px; font-weight:800; letter-spacing:2px; text-transform:uppercase; }
-        .sidebar .brand p { font-size:11px; color:#7ca89c; margin-top:2px; letter-spacing:1px; text-transform:uppercase; }
-        .sidebar nav { display:flex; flex-direction:column; gap:2px; }
-        .sidebar nav a { display:flex; align-items:center; gap:12px; padding:12px 24px; color:#b0ccc6; text-decoration:none; font-size:14px; font-weight:500; transition:all .2s ease; }
-        .sidebar nav a svg { width:18px; height:18px; flex-shrink:0; opacity:.85; }
-        .sidebar nav a:hover { background:rgba(255,255,255,.05); color:#fff; }
-        .sidebar nav a.active { background:var(--sidebar-active); color:#fff; font-weight:600; }
-        .sidebar .new-entry { margin:auto 16px 0; background:var(--accent-teal); color:#1a3631; border:none; border-radius:8px; padding:12px; font-size:13px; font-weight:700; text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .2s ease; text-transform:uppercase; letter-spacing:.5px; }
-        .sidebar .new-entry:hover { opacity:.9; transform:translateY(-1px); }
-        
-        .main { flex:1; display:flex; flex-direction:column; height: 100vh; overflow-y: auto;}
-        .topbar { background:#fff; padding:16px 32px; display:flex; align-items:center; gap:20px; border-bottom:1px solid var(--border); }
-        .topbar .user { margin-left:auto; font-size:13px; display:flex; align-items:center; gap:12px; }
-        .topbar .user-name { font-weight:600; font-size:14px; }
-        .topbar .user-role { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.5px; }
-        .topbar .avatar { width:38px; height:38px; border-radius:50%; background:var(--accent-teal); color:#1a3631; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; border:2px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,.1); }
-        
-        .content { padding:28px 32px; flex:1; }
-        .page-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:24px; }
-        .page-header h2 { font-size:26px; font-weight:800; letter-spacing:-.5px; }
-        .page-header p { color:var(--text-muted); font-size:13px; margin-top:4px; }
-        
-        /* Dashboard Specific Styles */
-        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 24px; }
-        .stat-card { background: var(--bg-card); border-radius: 12px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        .stat-card-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-        .icon-green { background: #e6f9f5; color: #1db899; }
-        .icon-red { background: #fde8e8; color: #e05c5c; }
-        .icon-blue { background: #e8f0fe; color: #4285f4; }
-        .stat-card-title { font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-        .stat-card-value { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; color: var(--text-dark); margin-bottom: 8px;}
-        .stat-card-subtitle { font-size: 12px; color: var(--text-muted); }
-
-        .charts-grid-main { margin-bottom: 24px; }
-        .charts-grid-secondary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 24px; }
-        .chart-card { background: var(--bg-card); border-radius: 12px; padding: 24px; border: 1px solid var(--border); box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .chart-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-dark); }
-        .chart-container { position: relative; height: 300px; width: 100%; }
-        .chart-container-small { position: relative; height: 250px; width: 100%; }
-
-    </style>
+    
+   
 </head>
 <body>
-    <div class="sidebar">
-        <div class="brand"><h1>One of One</h1><p>Management Suite</p></div>
-        <nav>
-            <a href="dashboard.jsp" class="active">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg> Tableau de bord
-            </a>
-            <a href="stock-list.jsp">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/></svg> Stock
-            </a>
-            <a href="commandes.jsp">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M7 7v10m10-10v10m-5 0h4a2 2 0 002-2v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4a2 2 0 002 2z"/></svg> Commandes
-            </a>
-            <a href="livraison-list.jsp">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10M13 16h3.586a1 1 0 00.707-.293l2.414-2.414a1 1 0 00.293-.707V11h-7M13 16H9m4 0V9"/></svg> Livraisons
-            </a>
-            <a href="client-list.jsp">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg> Clients
-            </a>
-            <a href="employe-list.jsp">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Employés
-            </a>
-            <a href="salaire-list.jsp">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg> Salaires
-            </a>
-            <a href="login.jsp?logout=true" style="margin-top:auto;color:#f5c0c0;">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                Déconnexion
-            </a>
-        </nav>
-    </div>
+  <%@ include file="nav/navbar.jsp" %>
     <div class="main">
         <div class="topbar">
             <div class="user">

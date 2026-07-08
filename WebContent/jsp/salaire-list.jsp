@@ -8,9 +8,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion des Salaires - OneOfOne</title>
-    <link rel="stylesheet" href="../css/salaire.css">
+    <link rel="stylesheet" href="../css/salaires.css">
 </head>
-<body>
+<body style="display: flex; margin: 0; min-height: 100vh;">
+
+<%@ include file="nav/navbar.jsp" %>
+<div style="flex: 1; display: flex; flex-direction: column;">
+<%@ include file="nav/header.jsp" %>
+
 <div class="container">
     <h1>Liste des Salaires</h1>
     
@@ -57,11 +62,7 @@
         <div class="alert alert-error" style="margin:10px; padding:10px;"> <strong>Erreur :</strong> <%= errorMessage %> </div>
     <% } %>
     
-    <style>
-        .badge-paid { background:#4caf50; color:#fff; padding:3px 6px; border-radius:4px; font-weight:600; }
-        .badge-wait { background:#ff9800; color:#fff; padding:3px 6px; border-radius:4px; font-weight:600; }
-        .paid-row { background: #f1fff5; }
-    </style>
+   
 
     <table>
         <thead>
@@ -113,11 +114,11 @@
                     <br/>
                     <a href="salaire-status.jsp?id=<%= salaire.getId() %>&statut=PAYE" class="btn" style="margin-top:6px; display:inline-block;">Marquer PAYE</a>
                     <a href="salaire-status.jsp?id=<%= salaire.getId() %>&statut=ATTENTE" class="btn" style="margin-top:6px; display:inline-block;">Marquer ATTENTE</a>
+                    <br/>
                     <% if ("PAYE".equals(statut)) { %>
-                        <br/>
-                        <a href="facture.jsp?id=<%= salaire.getId() %>" class="btn" target="_blank" style="margin-top:6px; display:inline-block;">📄 Facture</a>
-                        <a href="salaire-export-csv.jsp?id=<%= salaire.getId() %>" class="btn" style="margin-top:6px; display:inline-block;">📊 Exporter CSV</a>
+                        <a href="facture.jsp?id=<%= salaire.getId() %>" class="btn"  style="margin-top:6px; display:inline-block;">📄 Facture</a>
                     <% } %>
+                    <a href="salaire-export-csv.jsp?id=<%= salaire.getId() %>" class="btn" style="margin-top:6px; display:inline-block;">📊 Exporter CSV</a>
                 </td>
             </tr>
             <%   }
@@ -161,3 +162,7 @@
             <% } %>
         </div>
     <% } %>
+</div>
+</div>
+</body>
+</html>

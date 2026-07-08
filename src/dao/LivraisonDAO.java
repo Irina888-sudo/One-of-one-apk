@@ -147,23 +147,36 @@ public void insert(Livraison l) {
     try {
         Connection conn = DBConnection.getConnection();
 
-        String sql = "INSERT INTO livraison (commande_id, employe_id, livreur, lieu, frais, statut, date_livraison) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, CURRENT_DATE)";
+        String numero = l.getNumero();
+        if (numero == null || numero.trim().isEmpty()) {
+            numero = "LIV-" + System.currentTimeMillis();
+        }
+
+        String statut = l.getStatut();
+        if (statut == null || statut.trim().isEmpty()) {
+            statut = "ATTENTE";
+        } else if ("LIVRE".equalsIgnoreCase(statut)) {
+            statut = "LIVREE";
+        }
+
+        String sql = "INSERT INTO livraison (numero, commande_id, employe_id, livreur, lieu, frais, statut, date_livraison) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_DATE)";
 
         PreparedStatement ps = conn.prepareStatement(sql);
 
-        ps.setInt(1, Integer.parseInt(l.getCommandeId()));
+        ps.setString(1, numero);
+        ps.setInt(2, l.getCommandeId());
 
         if (l.getEmployeId() == null) {
-            ps.setNull(2, java.sql.Types.INTEGER);
+            ps.setNull(3, java.sql.Types.INTEGER);
         } else {
-            ps.setInt(2, l.getEmployeId());
+            ps.setInt(3, l.getEmployeId());
         }
 
-        ps.setString(3, l.getLivreur());
-        ps.setString(4, l.getLieu());
-        ps.setDouble(5, l.getFrais());
-        ps.setString(6, l.getStatut());
+        ps.setString(4, l.getLivreur());
+        ps.setString(5, l.getLieu());
+        ps.setDouble(6, l.getFrais());
+        ps.setString(7, statut);
 
         ps.executeUpdate();
 
@@ -179,7 +192,15 @@ public void update(Livraison l) {
     try {
         Connection conn = DBConnection.getConnection();
 
+        String statut = l.getStatut();
+        if (statut == null || statut.trim().isEmpty()) {
+            statut = "ATTENTE";
+        } else if ("LIVRE".equalsIgnoreCase(statut)) {
+            statut = "LIVREE";
+        }
+
         String sql = "UPDATE livraison SET " +
+                     "numero = ?, " +
                      "commande_id = ?, " +
                      "employe_id = ?, " +
                      "livreur = ?, " +
@@ -191,21 +212,22 @@ public void update(Livraison l) {
 
         PreparedStatement ps = conn.prepareStatement(sql);
 
-        ps.setInt(1, Integer.parseInt(l.getCommandeId()));
+        ps.setString(1, l.getNumero() != null ? l.getNumero() : "LIV-" + System.currentTimeMillis());
+        ps.setInt(2, l.getCommandeId());
 
         if (l.getEmployeId() == null) {
-            ps.setNull(2, java.sql.Types.INTEGER);
+            ps.setNull(3, java.sql.Types.INTEGER);
         } else {
-            ps.setInt(2, l.getEmployeId());
+            ps.setInt(3, l.getEmployeId());
         }
 
-        ps.setString(3, l.getLivreur());
-        ps.setString(4, l.getLieu());
-        ps.setDouble(5, l.getFrais());
-        ps.setString(6, l.getStatut());
-        ps.setDate(7, l.getDateLivraison());
+        ps.setString(4, l.getLivreur());
+        ps.setString(5, l.getLieu());
+        ps.setDouble(6, l.getFrais());
+        ps.setString(7, statut);
+        ps.setDate(8, l.getDateLivraison());
 
-        ps.setInt(8, l.getId());
+        ps.setInt(9, l.getId());
 
         ps.executeUpdate();
 

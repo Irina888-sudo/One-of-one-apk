@@ -61,30 +61,13 @@
 <head>
     <meta charset="UTF-8">
     <title>One of One — Matières</title>
-    <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/stock.css">
 </head>
-<body>
+<body style="display: flex; margin: 0; min-height: 100vh;">
 
-<div class="sidebar">
-    <div class="sidebar-logo">
-        <h2>One of One</h2>
-        <small>Management Suite</small>
-    </div>
-    <nav>
-        <a href="dashboard-admin.jsp">🏠 Home</a>
-        <a href="stock-list.jsp" class="active">📦 Stock</a>
-        <a href="produit-list.jsp">🛍 Produits</a>
-        <a href="commande-list.jsp">🛒 Commandes</a>
-        <a href="livraison-list.jsp">🚚 Livraisons</a>
-        <a href="client-list.jsp">👥 Clients</a>
-        <a href="finance-list.jsp">💰 Finances</a>
-        <a href="salaire-list.jsp">💳 Salaires</a>
-        <a href="graphiques.jsp">📊 Graphiques</a>
-        <a href="ia.jsp">🤖 IA</a>
-    </nav>
-    <a href="logout.jsp" class="sidebar-logout">Se déconnecter</a>
-</div>
+<%@ include file="nav/navbar.jsp" %>
+<div style="flex: 1; display: flex; flex-direction: column;">
+<%@ include file="nav/header.jsp" %>
 
 <div class="main-content">
     <div class="page-header">
@@ -183,6 +166,7 @@
         Affichage de <%= (totalMatieres == 0 ? 0 : debut + 1) %> à <%= fin %> sur <%= totalMatieres %> matière(s)
     </p>
 </div>
-
+</div>
+</div>
 </body>
 </html>
