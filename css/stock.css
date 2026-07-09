@@ -5,8 +5,8 @@
 body{
     margin:0;
     font-family:'Inter',sans-serif;
-    background:#f8f5ef;
-    color:#2d2d2d;
+    background:#f5f0ea;                     /* ← BEIGE */
+    color:#1a1a1a;                          /* ← NOIR */
 }
 
 /*==================================================
@@ -31,19 +31,20 @@ body{
 .page-header h1{
     margin:0;
     font-size:38px;
-    font-weight:800;
-    letter-spacing:-1px;
+    font-weight:900;                        /* ← PLUS GRAS */
+    letter-spacing:-0.12em;                 /* ← AJOUTÉ */
     text-transform:uppercase;
+    color:#1a1a1a;
 }
 
 .page-header p{
     margin-top:8px;
-    color:#777;
+    color:#888;                             /* ← GRIS */
     font-size:14px;
 }
 
 /*==================================================
-    BOUTON
+    BOUTON AJOUTER — ROUGE
 ==================================================*/
 
 .btn-primary{
@@ -54,20 +55,21 @@ body{
 
     padding:14px 22px;
 
-    background:#f78b11;
+    background:#ff1401;                     /* ← ROUGE */
     color:#fff;
 
     text-decoration:none;
-    border-radius:8px;
+    border-radius:0;                        /* ← RECTANGLE */
 
     font-size:14px;
     font-weight:700;
 
     transition:.2s;
+    box-shadow:0 4px 20px rgba(255,20,1,0.25);
 }
 
 .btn-primary:hover{
-    background:#eb820d;
+    background:#cc1201;                     /* ← ROUGE FONCÉ */
 }
 
 /*==================================================
@@ -91,7 +93,7 @@ body{
 
     padding:10px 18px;
 
-    border:1px solid #e6dfd4;
+    border:1px solid #e8e3dc;
 
     background:white;
 
@@ -99,7 +101,7 @@ body{
 
     text-decoration:none;
 
-    border-radius:8px;
+    border-radius:0;                        /* ← RECTANGLE */
 
     font-size:13px;
 
@@ -108,16 +110,18 @@ body{
 
 .btn-filtre:hover{
 
-    background:#f4f1eb;
+    background:#fce6e6;                     /* ← ROUGE CLAIR */
+    border-color:#ff1401;
+    color:#cc1201;
 }
 
 .btn-filtre.actif{
 
-    background:#0f7468;
+    background:#ff1401;                     /* ← ROUGE */
 
     color:white;
 
-    border-color:#0f7468;
+    border-color:#ff1401;
 }
 
 /*==================================================
@@ -139,11 +143,18 @@ body{
 
     padding:0 15px;
 
-    border:1px solid #e2ddd5;
+    border:1px solid #e8e3dc;
 
-    border-radius:8px 0 0 8px;
+    border-radius:0;                        /* ← RECTANGLE */
 
     outline:none;
+    background:#fcfaf7;
+    color:#1a1a1a;
+}
+
+.form-recherche input:focus{
+
+    border-color:#ff1401;
 }
 
 .form-recherche button{
@@ -152,13 +163,18 @@ body{
 
     border:none;
 
-    background:#f78b11;
+    background:#ff1401;                     /* ← ROUGE */
 
     color:white;
 
-    border-radius:0 8px 8px 0;
+    border-radius:0;                        /* ← RECTANGLE */
 
     cursor:pointer;
+}
+
+.form-recherche button:hover{
+
+    background:#cc1201;
 }
 
 /*==================================================
@@ -171,13 +187,13 @@ body{
 
     padding:14px;
 
-    background:#e8fff6;
+    background:#fce6e6;                     /* ← ROUGE CLAIR */
 
-    color:#14835d;
+    color:#cc1201;                          /* ← ROUGE FONCÉ */
 
-    border-left:5px solid #17b37c;
+    border-left:5px solid #ff1401;          /* ← ROUGE */
 
-    border-radius:8px;
+    border-radius:0;                        /* ← RECTANGLE */
 }
 
 /*==================================================
@@ -188,11 +204,12 @@ body{
 
     background:white;
 
-    border-radius:12px;
+    border-radius:0;                        /* ← RECTANGLE */
 
     overflow:hidden;
 
-    box-shadow:0 5px 18px rgba(0,0,0,.05);
+    box-shadow:0 4px 24px rgba(0,0,0,0.06);
+    border:1px solid #e8e3dc;
 }
 
 .table{
@@ -204,7 +221,7 @@ body{
 
 .table thead{
 
-    background:#faf8f5;
+    background:#ff1401;                     /* ← ROUGE */
 }
 
 .table th{
@@ -213,24 +230,27 @@ body{
 
     padding:18px;
 
-    font-size:13px;
+    font-size:12px;
 
     font-weight:700;
 
-    color:#666;
+    color:#ffffff;                          /* ← BLANC */
 
-    border-bottom:1px solid #ece6dd;
+    border-bottom:none;
+    text-transform:uppercase;
+    letter-spacing:0.8px;
 }
 
 .table td{
 
     padding:18px;
 
-    border-bottom:1px solid #f1ede8;
+    border-bottom:1px solid #f1ece5;
 
     font-size:14px;
 
     vertical-align:middle;
+    color:#1a1a1a;
 }
 
 .table tbody tr{
@@ -240,7 +260,7 @@ body{
 
 .table tbody tr:hover{
 
-    background:#fcfaf8;
+    background:#fce6e6;                     /* ← ROUGE CLAIR */
 }
 
 /*==================================================
@@ -253,7 +273,7 @@ body{
 
     padding:6px 12px;
 
-    border-radius:20px;
+    border-radius:0;                        /* ← RECTANGLE */
 
     font-size:11px;
 
@@ -264,16 +284,18 @@ body{
 
 .badge-actif{
 
-    background:#e9fbf4;
+    background:#fce6e6;                     /* ← ROUGE CLAIR */
 
-    color:#18a36f;
+    color:#ff1401;                          /* ← ROUGE */
+    border:1px solid #ff1401;
 }
 
 .badge-bloque{
 
-    background:#fdeaea;
+    background:#fff3db;
 
-    color:#d94f4f;
+    color:#b97b00;
+    border:1px solid #b97b00;
 }
 
 /*==================================================
@@ -294,11 +316,12 @@ body{
 
     text-decoration:none;
 
-    border-radius:8px;
+    border-radius:0;                        /* ← RECTANGLE */
 
-    background:#f6f4f1;
+    background:transparent;
+    border:1px solid #e8e3dc;
 
-    color:#444;
+    color:#888;
 
     margin-right:6px;
 
@@ -307,12 +330,21 @@ body{
 
 .btn-action:hover{
 
-    background:#ece7e1;
+    background:#fce6e6;                     /* ← ROUGE CLAIR */
+    border-color:#ff1401;
+    color:#ff1401;
 }
 
 .btn-danger{
 
-    color:#d43e3e;
+    color:#d94f4f;
+}
+
+.btn-danger:hover{
+
+    background:#fde8e8;
+    border-color:#d94f4f;
+    color:#b71c1c;
 }
 
 /*==================================================
@@ -338,25 +370,27 @@ body{
 
     padding:10px 15px;
 
-    border-radius:8px;
+    border-radius:0;                        /* ← RECTANGLE */
 
-    border:1px solid #e4ddd3;
+    border:1px solid #e8e3dc;
 
     background:white;
 }
 
 .btn-page:hover{
 
-    background:#f7f5f2;
+    background:#fce6e6;                     /* ← ROUGE CLAIR */
+    border-color:#ff1401;
+    color:#cc1201;
 }
 
 .btn-page-actif{
 
-    background:#f78b11;
+    background:#ff1401;                     /* ← ROUGE */
 
     color:white;
 
-    border-color:#f78b11;
+    border-color:#ff1401;
 }
 
 .pagination-info{

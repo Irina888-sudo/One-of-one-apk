@@ -4,11 +4,11 @@ setlocal enabledelayedexpansion
 :: ==============================================================================
 :: CONFIGURATION DES CHEMINS - MODIFIEZ CES CHEMINS SELON VOTRE CONFIGURATION
 :: ==============================================================================
-set "TOMCAT_DIR=C:\xampp\tomcat"
+set "TOMCAT_DIR=C:\Program Files\Apache Software Foundation\Tomcat 10.1"
 
 :: Définir JAVA_HOME (si non défini)
 if "%JAVA_HOME%"=="" (
-    set "JAVA_HOME=C:\Program Files\Java\jdk-21"
+    set "JAVA_HOME=C:\Program Files\Java\jdk-17"
 )
 :: Ajouter le JDK au PATH pour cette session
 set "PATH=%JAVA_HOME%\bin;%PATH%"

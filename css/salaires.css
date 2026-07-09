@@ -1,0 +1,443 @@
+/* ==========================================================
+   PAGE — FOND BEIGE
+   ========================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #f5f0ea;
+    font-family: 'Inter', sans-serif;
+    color: #1a1a1a;
+}
+
+.container {
+    padding: 35px;
+    background: #f5f0ea;
+    min-height: 100vh;
+}
+
+/* ==========================================================
+   EN-TÊTE — TITRE + BOUTON
+   ========================================================== */
+
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.container h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 900;
+    text-transform: uppercase;
+    font-family: 'Inter', sans-serif;
+    color: #1a1a1a;
+    letter-spacing: -0.5px;
+}
+
+.header-row .subtitle {
+    font-size: 14px;
+    color: #888;
+    font-weight: 400;
+}
+
+/* ==========================================================
+   BOUTON AJOUTER — ROUGE
+   ========================================================== */
+
+.btn-add {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #ff1401;
+    color: #ffffff;
+    border: none;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 4px 20px rgba(255, 20, 1, 0.25);
+}
+
+.btn-add:hover {
+    background: #cc1201;
+    transform: translateY(-2px);
+}
+
+.btn-add svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ==========================================================
+   STATS — PETITES CARTES
+   ========================================================== */
+
+.stats-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: #ffffff;
+    padding: 16px 24px;
+    border: 1px solid #e8e3dc;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    flex: 1;
+    min-width: 120px;
+}
+
+.stat-card .stat-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.stat-card .stat-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-top: 4px;
+}
+
+.stat-card .stat-value .highlight {
+    color: #ff1401;
+}
+
+.stat-card .stat-change {
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.stat-card .stat-change.up {
+    color: #2e7d32;
+}
+
+.stat-card .stat-change.down {
+    color: #d94f4f;
+}
+
+/* ==========================================================
+   TABLEAU — LIGNES SÉPARÉES
+   ========================================================== */
+
+.table-container {
+    background: transparent;                /* ← FOND TRANSPARENT */
+    overflow-x: auto;
+    border-radius: 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;              /* ← SÉPARÉ */
+    border-spacing: 0 8px;                  /* ← ESPACE ENTRE LES LIGNES */
+    background: transparent;
+    min-width: 800px;
+}
+
+/* ==========================================================
+   EN-TÊTE DU TABLEAU — ROUGE
+   ========================================================== */
+
+thead {
+    background: transparent;
+}
+
+thead th {
+    padding: 12px 18px;
+    text-align: left;
+    font-size: 11px;
+    color: #888;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: none;
+    background: transparent;
+}
+
+/* ==========================================================
+   CORPS DU TABLEAU — LIGNES SÉPARÉES
+   ========================================================== */
+
+tbody tr {
+    background: #ffffff;
+    border-radius: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+tbody tr:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+tbody td {
+    padding: 14px 18px;
+    font-size: 14px;
+    color: #1a1a1a;
+    border-bottom: none;
+    vertical-align: middle;
+    background: #ffffff;
+}
+
+/* Première cellule (arrondi à gauche) */
+tbody td:first-child {
+    border-radius: 0;
+}
+
+/* Dernière cellule (arrondi à droite) */
+tbody td:last-child {
+    border-radius: 0;
+}
+
+/* ==========================================================
+   LIGNE PAYÉE — fond légèrement différent
+   ========================================================== */
+
+tr.paid-row {
+    background: #ffffff;
+}
+
+tr.paid-row td {
+    background: #ffffff;
+}
+
+/* ==========================================================
+   BADGE STATUT — PAYE en VERT, ATTENTE en ORANGE
+   ========================================================== */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 0;
+}
+
+.badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* PAYE — VERT */
+.badge-paid {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.badge-paid .dot {
+    background: #2e7d32;
+}
+
+/* ATTENTE — ORANGE */
+.badge-wait {
+    background: #fff3db;
+    color: #b97b00;
+}
+
+.badge-wait .dot {
+    background: #b97b00;
+}
+
+/* ==========================================================
+   BOUTONS D'ACTION — ICÔNES SEULEMENT
+   ========================================================== */
+
+.actions-group {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.action-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    background: transparent;
+    border: 1px solid #e8e3dc;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    color: #888;
+    text-decoration: none;
+    border-radius: 0;
+}
+
+.action-icon:hover {
+    background: #fce6e6;
+    border-color: #ff1401;
+    color: #ff1401;
+}
+
+.action-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Couleurs spécifiques pour chaque action */
+.action-icon.action-edit {
+    color: #3b7de0;
+}
+.action-icon.action-edit:hover {
+    background: #eaf1ff;
+    color: #1a5bb5;
+}
+
+.action-icon.action-pay {
+    color: #ff1401;
+}
+.action-icon.action-pay:hover {
+    background: #fce6e6;
+    color: #cc1201;
+}
+
+.action-icon.action-invoice {
+    color: #2e7d32;
+}
+.action-icon.action-invoice:hover {
+    background: #e8f5e9;
+    color: #1b5e20;
+}
+
+.action-icon.action-export {
+    color: #b97b00;
+}
+.action-icon.action-export:hover {
+    background: #fff3db;
+    color: #8a5e00;
+}
+
+.action-icon.action-email {
+    color: #6c3b9e;
+}
+.action-icon.action-email:hover {
+    background: #f3e8ff;
+    color: #4a1a7a;
+}
+
+/* ==========================================================
+   ALERTES
+   ========================================================== */
+
+.alert {
+    padding: 14px 18px;
+    border-radius: 0;
+    margin-bottom: 20px;
+}
+
+.alert-error {
+    background: #fdeaea;
+    color: #d84a4a;
+    border: 1px solid #d84a4a;
+}
+
+.alert-success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #2e7d32;
+}
+
+/* ==========================================================
+   PAGINATION
+   ========================================================== */
+
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.pagination .info {
+    font-size: 13px;
+    color: #888;
+    margin-right: auto;
+}
+
+.pagination a,
+.pagination span {
+    padding: 8px 14px;
+    border: 1px solid #e8e3dc;
+    background: #ffffff;
+    color: #1a1a1a;
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.2s ease, border-color 0.2s ease;
+    border-radius: 0;
+}
+
+.pagination a:hover {
+    background: #fce6e6;
+    border-color: #ff1401;
+}
+
+.pagination .active {
+    background: #ff1401;
+    color: #ffffff;
+    border-color: #ff1401;
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 768px) {
+    .stats-row {
+        flex-direction: column;
+    }
+    
+    .header-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    table {
+        border-spacing: 0 4px;
+    }
+    
+    tbody td {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+}

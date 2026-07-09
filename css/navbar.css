@@ -1,0 +1,439 @@
+:root {
+    --sidebar-bg: #1a3631;              /* On garde la sidebar verte */
+    --sidebar-active: #ff1401;          /* ← MODIFIÉ: rouge */
+    --accent-teal: #ff1401;             /* ← MODIFIÉ: rouge */
+    --accent-orange: #ff1401;           /* ← MODIFIÉ: rouge */
+    --bg-main: #ffffff;                 /* ← MODIFIÉ: blanc pur */
+    --bg-card: #ffffff;                 /* ← MODIFIÉ: blanc pur */
+    --text-dark: #000000;               /* ← MODIFIÉ: noir */
+    --text-muted: #000000;              /* ← MODIFIÉ: noir (avec opacité sur les éléments) */
+    --border: #e8e4e0;                  /* ← MODIFIÉ: gris clair (neutre) */
+    --status-error: #ff1401;            /* ← MODIFIÉ: rouge */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-main);
+    color: var(--text-dark);
+    min-height: 100vh;
+}
+
+/* ========================================
+   SIDEBAR - STRUCTURE & BASE STYLES
+   ======================================== */
+
+.sidebar {
+    width: 80px;
+    transition: width 0.3s ease, padding 0.3s ease;
+    background: var(--sidebar-bg);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar:not(.collapsed) {
+    width: 240px;
+    transition: .3s;
+}
+
+/* ========================================
+   STATE CHANGE: Collapsed Class
+   ======================================== */
+
+.sidebar.collapsed {
+    width: 80px;
+}
+
+/* ========================================
+   TEXT & ICONS - OPACITY & VISIBILITY
+   Animation pour l'apparition/disparition du texte
+   ======================================== */
+
+.sidebar .brand h1,
+.sidebar .brand p,
+.sidebar a span {
+    opacity: 0;
+    transition: opacity 0.3s ease 0.05s;
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* État COLLAPSED - Texte caché */
+.sidebar.collapsed .brand h1,
+.sidebar.collapsed .brand p,
+.sidebar.collapsed a span {
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+}
+
+/* État EXPANDED - Texte visible */
+.sidebar:not(.collapsed) .brand h1,
+.sidebar:not(.collapsed) .brand p,
+.sidebar:not(.collapsed) a span {
+    opacity: 1;
+    max-width: 200px;
+}
+
+/* ========================================
+   BRAND SECTION - LOGO & TITLE
+   ======================================== */
+
+.sidebar .brand {
+    padding: 0 20px 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 60px;
+    transition: padding 0.3s ease;
+}
+
+/* État COLLAPSED - Logo centré */
+.sidebar.collapsed .brand {
+    justify-content: center;
+}
+
+/* État EXPANDED - Logo à gauche */
+.sidebar:not(.collapsed) .brand {
+    justify-content: flex-start;
+}
+
+.brand-logo {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    flex-shrink: 0;
+}
+
+.brand-text {
+    white-space: nowrap;
+}
+
+.sidebar .brand h1 {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.sidebar .brand p {
+    font-size: 11px;
+    color: #7ca89c;
+    margin-top: 2px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* ========================================
+   NAVIGATION - ITEMS & LINKS
+   ======================================== */
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar nav a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #b0ccc6;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all .2s ease;
+    min-height: 44px;
+}
+
+/* État COLLAPSED - Icônes/texte centrés */
+.sidebar.collapsed nav a {
+    justify-content: center;
+}
+
+/* Survol du panneau réduit : ouverture temporaire */
+.sidebar.collapsed:hover {
+    width: 240px;
+}
+
+.sidebar.collapsed:hover .brand {
+    justify-content: flex-start;
+}
+
+.sidebar.collapsed:hover .brand h1,
+.sidebar.collapsed:hover .brand p,
+.sidebar.collapsed:hover a span {
+    opacity: 1;
+    max-width: 200px;
+}
+
+.sidebar.collapsed:hover nav a {
+    justify-content: flex-start;
+}
+
+/* État EXPANDED - Icônes/texte à gauche */
+.sidebar:not(.collapsed) nav a {
+    justify-content: flex-start;
+}
+
+.sidebar nav a svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    opacity: .85;
+}
+
+.sidebar nav a:hover {
+    background: rgba(255, 255, 255, .05);
+    color: #fff;
+}
+
+/* COMMENTÉ - État ACTIF (clic)
+   Remplacé par le hover uniquement
+.sidebar nav a.active {
+    background: var(--sidebar-active);
+    color: #fff;
+    font-weight: 600;
+}
+*/
+
+.sidebar .new-entry {
+    margin: auto 16px 0;
+    background: #ff1401;                /* ← MODIFIÉ: rouge */
+    color: #ffffff;                     /* ← MODIFIÉ: blanc */
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all .2s ease;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    min-height: 44px;
+}
+
+.sidebar:hover .new-entry {
+    padding: 12px 16px;
+}
+
+.sidebar .new-entry:hover {
+    background: #cc1201;                /* ← MODIFIÉ: rouge foncé */
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+/* ========================================
+   MAIN LAYOUT SECTIONS
+   ======================================== */
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.topbar {
+    background: #ffffff;               /* ← MODIFIÉ: blanc */
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 2px solid #ff1401;   /* ← MODIFIÉ: rouge */
+}
+
+.topbar .user {
+    margin-left: auto;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.topbar .user-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #000000;                     /* ← MODIFIÉ: noir */
+}
+
+.topbar .user-role {
+    font-size: 11px;
+    color: #000000;                     /* ← MODIFIÉ: noir */
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    opacity: 0.7;                       /* ← AJOUTÉ: pour adoucir */
+}
+
+.topbar .avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #ff1401;                /* ← MODIFIÉ: rouge */
+    color: #ffffff;                     /* ← MODIFIÉ: blanc */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
+}
+
+.content {
+    padding: 28px 32px;
+    flex: 1;
+}
+
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.page-header h2 {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+    color: #000000;                     /* ← MODIFIÉ: noir */
+}
+
+.page-header p {
+    color: #000000;                     /* ← MODIFIÉ: noir */
+    font-size: 13px;
+    margin-top: 4px;
+    opacity: 0.7;                       /* ← AJOUTÉ: pour adoucir */
+}
+
+/* Dashboard Specific Styles */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.stat-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.icon-green {
+    background: #e6f9f5;
+    color: #1db899;
+}
+
+.icon-red {
+    background: #fce6e6;                /* ← MODIFIÉ: rouge clair */
+    color: #ff1401;                     /* ← MODIFIÉ: rouge */
+}
+
+.icon-blue {
+    background: #e8f0fe;
+    color: #4285f4;
+}
+
+.stat-card-title {
+    font-size: 11px;
+    color: #000000;                     /* ← MODIFIÉ: noir */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    opacity: 0.7;
+}
+
+.stat-card-value {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #000000;                     /* ← MODIFIÉ: noir */
+    margin-bottom: 8px;
+}
+
+.stat-card-subtitle {
+    font-size: 12px;
+    color: #000000;                     /* ← MODIFIÉ: noir */
+    opacity: 0.6;
+}
+
+.charts-grid-main {
+    margin-bottom: 24px;
+}
+
+.charts-grid-secondary {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.chart-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+}
+
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.chart-title {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #000000;                     /* ← MODIFIÉ: noir */
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
+}
+
+.chart-container-small {
+    position: relative;
+    height: 250px;
+    width: 100%;
+}
