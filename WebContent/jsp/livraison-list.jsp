@@ -58,7 +58,7 @@
     <link rel="stylesheet" href="../css/livraisons.css">
 </head>
 <body>
-<div class="app-container">
+<div class="app-container livraison-page">
     <%@ include file="nav/navbar.jsp" %>
 
     <!-- Contenu principal -->

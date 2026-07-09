@@ -17,7 +17,10 @@
 <%@ include file="nav/header.jsp" %>
 
 <div class="container">
-    <h1>Liste des Salaires</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>Liste des Salaires</h1>
+        <a href="salaire-form.jsp" class="btn" style="background-color: #3ecfb2; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 600;">+ Nouveau Paiement</a>
+    </div>
     
     <% 
         List<Salaire> salaires = new ArrayList<>();
@@ -119,6 +122,8 @@
                         <a href="facture.jsp?id=<%= salaire.getId() %>" class="btn"  style="margin-top:6px; display:inline-block;">📄 Facture</a>
                     <% } %>
                     <a href="salaire-export-csv.jsp?id=<%= salaire.getId() %>" class="btn" style="margin-top:6px; display:inline-block;">📊 Exporter CSV</a>
+                    <br/>
+                    <button onclick="envoyerEmailSalaire(<%= salaire.getId() %>, '<%= EmployeDAO.getNomEmployeById(salaire.getEmployeId()) %>')" class="btn" style="margin-top:6px; background-color: #e8820c; color: white;">📧 Envoyer Email</button>
                 </td>
             </tr>
             <%   }
@@ -165,4 +170,23 @@
 </div>
 </div>
 </body>
+<script>
+function envoyerEmailSalaire(salaireId, employeName) {
+    fetch('send-email.jsp?id=' + salaireId, {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Succes: ' + data.message);
+        } else {
+            alert('Erreur: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert('Erreur lors de l\'envoi de l\'email');
+    });
+}
+</script>
 </html>

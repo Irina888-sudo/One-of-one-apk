@@ -24,6 +24,9 @@
     </servlet-mapping>
 
 
+    <!-- SendSalaireEmailServlet -->
+    <!-- DESACTIVED - JSP Only: utilisez send-email.jsp directement -->
+
     <!-- Configuration du compilateur JSP pour accepter Java 8+ -->
 <servlet>
     <servlet-name>jsp</servlet-name>

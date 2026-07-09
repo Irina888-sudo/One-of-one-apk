@@ -1,118 +1,129 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="model.Salaire, dao.SalaireDAO, dao.EmployeDAO, model.Employe, java.math.BigDecimal, java.time.LocalDate, java.sql.Date, java.util.List" %>
+<%@ page import="model.Salaire, dao.SalaireDAO, dao.EmployeDAO, model.Employe, java.math.BigDecimal, java.time.LocalDate, java.sql.Date, java.util.List, util.DBConnection, java.sql.Connection" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire Employé - OneOfOne</title>
+    <title>Formulaire Salaire - OneOfOne</title>
     <link rel="stylesheet" href="../css/base.css">
 </head>
 <body>
     <%@ include file="nav/navbar.jsp" %>
 <%
-    // DAOs
-    dao.SalaireDAO salaireDAO = null;
-    dao.EmployeDAO employeDAO = new EmployeDAO();
-
+    Connection conn = null;
+    SalaireDAO salaireDAO = null;
+    EmployeDAO employeDAO = new EmployeDAO();
     Salaire salaire = null;
     int id = 0;
     String errorMsg = null;
 
     try {
-        // SalaireDAO in codebase accepts a Connection in constructor; try to use default if available
-        salaireDAO = new SalaireDAO(null);
+        conn = DBConnection.getConnection();
+        salaireDAO = new SalaireDAO(conn);
     } catch (Exception e) {
-        // fallback: create without connection if no ctor available
+        errorMsg = "Erreur de connexion à la base de données: " + e.getMessage();
     }
 
-    if (request.getParameter("id") != null) {
+    // Récupérer le salaire s'il y a un ID
+    if (request.getParameter("id") != null && !request.getParameter("id").isEmpty()) {
         try {
             id = Integer.parseInt(request.getParameter("id"));
-            // try both method names used in codebase
-            try { salaire = salaireDAO.findById(id); } catch (Exception ex) { salaire = null; }
-        } catch (Exception ignored) {}
-    }
-
-    if ("POST".equalsIgnoreCase(request.getMethod())) {
-        String employeIdStr = request.getParameter("employe_id");
-        String moisStr = request.getParameter("mois");
-        String salaireBrutStr = request.getParameter("salaire_brut");
-        String statut = request.getParameter("statut");
-
-        boolean hasError = false;
-
-        Integer employeId = null;
-        if (employeIdStr == null || employeIdStr.isEmpty()) {
-            errorMsg = "Veuillez sélectionner un employé.";
-            hasError = true;
-        } else {
-            try { employeId = Integer.parseInt(employeIdStr); } catch (Exception e) { hasError = true; errorMsg = "Identifiant employé invalide."; }
-        }
-
-        java.time.LocalDate mois = null;
-        if (moisStr != null && !moisStr.isEmpty()) {
-            try { mois = java.time.LocalDate.parse(moisStr + "-01"); } catch (Exception e) { hasError = true; errorMsg = "Mois invalide."; }
-        }
-
-        java.math.BigDecimal salaireBrut = null;
-        try {
-            salaireBrut = new java.math.BigDecimal(salaireBrutStr);
-            if (salaireBrut.compareTo(java.math.BigDecimal.ZERO) < 0) { errorMsg = "Le salaire doit être supérieur à 0."; hasError = true; }
+            salaire = salaireDAO.findById(id);
+            if (salaire == null) {
+                errorMsg = "Salaire non trouvé";
+            }
         } catch (Exception e) {
-            if (!hasError) { errorMsg = "Salaire invalide."; hasError = true; }
-        }
-
-        if (!hasError) {
-            if (salaire == null) salaire = new Salaire();
-
-            salaire.setEmployeId(employeId);
-            salaire.setMois(mois);
-            salaire.setSalaireBrut(salaireBrut);
-            salaire.setStatut(statut);
-
-            boolean success = false;
-            try {
-                if (id > 0) {
-                    // try update or update(Salaire)
-                    try { success = salaireDAO.update(salaire); } catch (Exception ex) { success = false; }
-                } else {
-                    try { Salaire created = salaireDAO.create(salaire); success = created != null; } catch (Exception ex) { success = false; }
-                }
-            } catch (Exception e) {
-                success = false;
-            }
-
-            if (success) {
-                String message = id > 0 ? "Salaire modifié avec succès !" : "Salaire ajouté avec succès !";
-                response.sendRedirect("salaire-list.jsp?success=" + java.net.URLEncoder.encode(message, "UTF-8"));
-                return;
-            } else {
-                errorMsg = "Erreur lors de l'enregistrement.";
-            }
+            errorMsg = "Erreur: " + e.getMessage();
         }
     }
 
-    // load employees for dropdown
-    java.util.List<Employe> employes = employeDAO.getAllEmployes(null, null, null, null, null, 0, 1000);
+    // Traiter le formulaire POST
+    if ("POST".equalsIgnoreCase(request.getMethod()) && errorMsg == null) {
+        try {
+            String employeIdStr = request.getParameter("employe_id");
+            String moisStr = request.getParameter("mois");
+            String salaireBrutStr = request.getParameter("salaire_brut");
+            String salaireNetStr = request.getParameter("salaire_net");
+            String statut = request.getParameter("statut");
+
+            // Validation
+            if (employeIdStr == null || employeIdStr.isEmpty()) {
+                errorMsg = "Veuillez sélectionner un employé.";
+            } else if (moisStr == null || moisStr.isEmpty()) {
+                errorMsg = "Veuillez saisir un mois.";
+            } else if (salaireBrutStr == null || salaireBrutStr.isEmpty()) {
+                errorMsg = "Veuillez saisir le salaire brut.";
+            } else {
+                // Parser les données
+                Integer employeId = Integer.parseInt(employeIdStr);
+                LocalDate mois = LocalDate.parse(moisStr + "-01");
+                BigDecimal salaireBrut = new BigDecimal(salaireBrutStr);
+                BigDecimal salairNet = !salaireNetStr.isEmpty() ? new BigDecimal(salaireNetStr) : salaireBrut;
+
+                if (salaireBrut.compareTo(BigDecimal.ZERO) <= 0) {
+                    errorMsg = "Le salaire brut doit être supérieur à 0.";
+                } else if (id > 0) {
+                    // Modification
+                    salaire = new Salaire();
+                    salaire.setId(id);
+                    salaire.setEmployeId(employeId);
+                    salaire.setMois(mois);
+                    salaire.setSalaireBrut(salaireBrut);
+                    salaire.setSalaireNet(salairNet);
+                    salaire.setStatut(statut != null ? statut : "ATTENTE");
+
+                    boolean success = salaireDAO.update(salaire);
+                    if (success) {
+                        response.sendRedirect("salaire-list.jsp?success=Salaire modifié avec succès");
+                        return;
+                    } else {
+                        errorMsg = "Erreur lors de la modification du salaire.";
+                    }
+                } else {
+                    // Création
+                    salaire = new Salaire();
+                    salaire.setEmployeId(employeId);
+                    salaire.setMois(mois);
+                    salaire.setSalaireBrut(salaireBrut);
+                    salaire.setSalaireNet(salairNet);
+                    salaire.setStatut(statut != null ? statut : "ATTENTE");
+
+                    Salaire created = salaireDAO.create(salaire);
+                    if (created != null) {
+                        response.sendRedirect("salaire-list.jsp?success=Salaire ajouté avec succès");
+                        return;
+                    } else {
+                        errorMsg = "Erreur lors de la création du salaire.";
+                    }
+                }
+            }
+        } catch (NumberFormatException e) {
+            errorMsg = "Erreur de format: " + e.getMessage();
+        } catch (Exception e) {
+            errorMsg = "Erreur: " + e.getMessage();
+            e.printStackTrace();
+        }
+    }
+
+    // Charger la liste des employés
+    List<Employe> employes = employeDAO.getAllEmployes(null, null, null, null, null, 0, 1000);
 %>
 
 <div class="container">
     <div class="header">
-        <h1><%= id > 0 ? " Modifier le salaire" : " Ajouter un salaire" %></h1>
+        <h1><%= id > 0 ? "Modifier un salaire" : "Ajouter un salaire" %></h1>
         <p>OneOfOne - Gestion RH</p>
     </div>
     
-    
-    
     <% if (errorMsg != null) { %>
-        <div class="alert alert-error">
-            Erreur <%= errorMsg %>
+        <div class="alert alert-error" style="margin:10px; padding:10px;"> 
+            Erreur: <%= errorMsg %> 
         </div>
     <% } %>
     
     <div class="form-container">
-        <form method="post" action="Salaire-form.jsp<%= id > 0 ? "?id=" + id : "" %>" class="form">
+        <form method="post" action="salaire-form.jsp<%= id > 0 ? "?id=" + id : "" %>" class="form">
             <% if (id > 0) { %>
                 <input type="hidden" name="id" value="<%= id %>">
             <% } %>
@@ -120,10 +131,15 @@
             <div class="form-group">
                 <label>Employé *</label>
                 <select name="employe_id" required>
-                    <option value="">Sélectionner un employé</option>
-                    <% for (Employe e : employes) { %>
-                        <option value="<%= e.getId() %>" <%= salaire != null && salaire.getEmployeId() != null && salaire.getEmployeId().equals(e.getId()) ? "selected" : "" %>><%= e.getNom() %> (<%= e.getEmail() %>)</option>
-                    <% } %>
+                    <option value="">-- Sélectionner un employé --</option>
+                    <% if (employes != null) {
+                        for (Employe e : employes) { %>
+                        <option value="<%= e.getId() %>" 
+                            <%= salaire != null && salaire.getEmployeId() != null && salaire.getEmployeId().equals(e.getId()) ? "selected" : "" %>>
+                            <%= e.getNom() %> (<%= e.getEmail() %>)
+                        </option>
+                    <% } 
+                    } %>
                 </select>
             </div>
 
@@ -133,21 +149,26 @@
             </div>
 
             <div class="form-group">
-                <label>Salaire brut (€) *</label>
+                <label>Salaire Brut (Ariary) *</label>
                 <input type="number" step="0.01" name="salaire_brut" required value="<%= salaire != null && salaire.getSalaireBrut() != null ? salaire.getSalaireBrut() : "" %>">
+            </div>
+
+            <div class="form-group">
+                <label>Salaire Net (Ariary)</label>
+                <input type="number" step="0.01" name="salaire_net" value="<%= salaire != null && salaire.getSalaireNet() != null ? salaire.getSalaireNet() : "" %>">
             </div>
 
             <div class="form-group">
                 <label>Statut</label>
                 <select name="statut">
-                    <option value="ACTIF" <%= salaire != null && "ACTIF".equals(salaire.getStatut()) ? "selected" : "" %>>ACTIF</option>
-                    <option value="INACTIF" <%= salaire != null && "INACTIF".equals(salaire.getStatut()) ? "selected" : "" %>>INACTIF</option>
+                    <option value="ATTENTE" <%= salaire != null && "ATTENTE".equals(salaire.getStatut()) ? "selected" : "" %>>ATTENTE</option>
+                    <option value="PAYE" <%= salaire != null && "PAYE".equals(salaire.getStatut()) ? "selected" : "" %>>PAYE</option>
                 </select>
             </div>
             
             <div class="form-actions">
-                <button type="submit" class="btn btn-success"> Enregistrer</button>
-                <a href="Salaire-list.jsp" class="btn btn-warning">Annuler</a>
+                <button type="submit" class="btn btn-success">💾 Enregistrer</button>
+                <a href="salaire-list.jsp" class="btn btn-warning">❌ Annuler</a>
             </div>
         </form>
     </div>

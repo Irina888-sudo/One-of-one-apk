@@ -8,10 +8,14 @@ set "TOMCAT_DIR=C:\xampp\tomcat"
 
 :: Définir JAVA_HOME (si non défini)
 if "%JAVA_HOME%"=="" (
-    set "JAVA_HOME=C:\Program Files\Java\jdk-21"   :: À ajuster selon votre installation
+    set "JAVA_HOME=C:\Program Files\Java\jdk-21"
 )
 :: Ajouter le JDK au PATH pour cette session
 set "PATH=%JAVA_HOME%\bin;%PATH%"
+
+echo JAVA_HOME: %JAVA_HOME%
+echo Java version:
+%JAVA_HOME%\bin\java -version
 
 :: ==============================================================================
 
@@ -27,8 +31,8 @@ if not exist "WebContent\WEB-INF\classes" (
     echo "!filePath!"
 )) > sources.txt
 
-:: Compilation
-javac -cp ".;WebContent\WEB-INF\lib\*" -d WebContent\WEB-INF\classes @sources.txt
+:: Compilation (cible Java 17 pour rester compatible avec Tomcat 8.5.x)
+javac --release 17 -cp ".;WebContent\WEB-INF\lib\*" -d WebContent\WEB-INF\classes @sources.txt
 if %errorlevel% neq 0 (
     echo [ERREUR] La compilation a echoue !
     del sources.txt

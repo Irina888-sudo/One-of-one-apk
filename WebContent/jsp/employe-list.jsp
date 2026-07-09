@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, java.math.BigDecimal, model.Employe, dao.EmployeDAO" %>
+<%@ page import="java.util.*, java.math.BigDecimal, model.Employe, model.Salaire, dao.EmployeDAO, dao.SalaireDAO" %>
 <%@ page import="java.sql.Date" %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -15,6 +15,7 @@
         <%@ include file="nav/header.jsp" %>
 <%
     EmployeDAO employeDAO = new EmployeDAO();
+    SalaireDAO salaireDAO = new SalaireDAO();
     
     String statut = request.getParameter("statut");
     String role = request.getParameter("role");
@@ -221,6 +222,19 @@
                             <td><%= e.getDateEmbauche() != null ? e.getDateEmbauche() : "-" %></td>
                             <td class="actions">
                                 <a href="<%= basePath %>employe-form.jsp?id=<%= e.getId() %>" class="btn btn-primary btn-small"> Modifier</a>
+                                <%
+                                    Salaire latestSalaire = null;
+                                    try {
+                                        latestSalaire = salaireDAO.findLatestByEmployeId(e.getId());
+                                    } catch (Exception ex) {
+                                        latestSalaire = null;
+                                    }
+                                %>
+                                <% if (latestSalaire != null) { %>
+                                    <a href="<%= basePath %>facture.jsp?id=<%= latestSalaire.getId() %>" class="btn btn-small" style="background:#2e7d32;color:#fff;">📄 Facture</a>
+                                <% } else { %>
+                                    <span class="btn btn-small" style="background:#9e9e9e;color:#fff;cursor:not-allowed;pointer-events:none;">📄 Facture</span>
+                                <% } %>
                                 <a href="<%= basePath %>employe-delete.jsp?id=<%= e.getId() %>" class="btn btn-danger btn-small" 
                                    onclick="return confirm('Êtes-vous sûr de vouloir désactiver cet employé ?')"> Désactiver</a>
                             </td>

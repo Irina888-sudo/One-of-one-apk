@@ -182,6 +182,38 @@ public class SalaireDAO {
         return null;
     }
 
+    public Salaire findLatestByEmployeId(int employeId) throws SQLException {
+        String sql = "SELECT * FROM salaire WHERE employe_id = ? ORDER BY mois DESC, id DESC LIMIT 1";
+        boolean externalConn = this.connection != null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            conn = externalConn ? this.connection : DBConnection.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, employeId);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Salaire s = new Salaire();
+                s.setId(rs.getInt("id"));
+                s.setEmployeId(rs.getInt("employe_id"));
+                java.sql.Date moisDate = rs.getDate("mois");
+                if (moisDate != null) s.setMois(moisDate.toLocalDate());
+                s.setSalaireBrut(rs.getBigDecimal("salaire_brut"));
+                s.setStatut(rs.getString("statut"));
+                try { s.setSalaireNet(rs.getBigDecimal("salaire_net")); } catch (Exception ignored) {}
+                return s;
+            }
+        } finally {
+            try { if (rs != null) rs.close(); } catch (SQLException ignored) {}
+            try { if (pstmt != null) pstmt.close(); } catch (SQLException ignored) {}
+            if (!externalConn) {
+                try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
+            }
+        }
+        return null;
+    }
+
     public Salaire create(Salaire s) throws SQLException {
         String sql = "INSERT INTO salaire (employe_id, mois, salaire_brut, salaire_net, statut) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {

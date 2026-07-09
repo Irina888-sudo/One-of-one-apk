@@ -1,0 +1,34 @@
+HTTP/1.1 500 
+Content-Type: text/html;charset=utf-8
+Content-Language: fr
+Content-Length: 2534
+Date: Thu, 09 Jul 2026 08:02:53 GMT
+Connection: close
+
+<!doctype html><html lang="fr"><head><title>État HTTP 500 – Erreur interne du serveur</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>État HTTP 500 – Erreur interne du serveur</h1><hr class="line" /><p><b>Type</b> Rapport d'exception</p><p><b>message</b> Impossible de compiler la classe pour la JSP: </p><p><b>description</b> Le serveur a rencontré une erreur interne qui l'a empêché de satisfaire la requête.</p><p><b>exception</b></p><pre>org.apache.jasper.JasperException: Impossible de compiler la classe pour la JSP: 
+
+Une erreur s&#39;est produite à la ligne : [62] dans le fichier jsp : [&#47;jsp&#47;send-email.jsp]
+System.out cannot be resolved to a type
+59:     Transport.send(message);
+60:     out.print(&quot;{\&quot;success\&quot;:true,\&quot;message\&quot;:\&quot;Email envoyÃ©\&quot;}&quot;);
+61: } catch (Exception ex) {
+62:     System.out.println(&quot;EMAIL JSP ERROR: &quot; + ex.getMessage());
+63:     ex.printStackTrace();
+64:     out.print(&quot;{\&quot;success\&quot;:false,\&quot;message\&quot;:\&quot;Erreur: &quot; + ex.getMessage().replace(&quot;\&quot;&quot;, &quot;&#39;&quot;) + &quot;\&quot;}&quot;);
+65: } finally {
+
+
+Stacktrace:
+	org.apache.jasper.compiler.DefaultErrorHandler.javacError(DefaultErrorHandler.java:102)
+	org.apache.jasper.compiler.ErrorDispatcher.javacError(ErrorDispatcher.java:214)
+	org.apache.jasper.compiler.JDTCompiler.generateClass(JDTCompiler.java:600)
+	org.apache.jasper.compiler.Compiler.compile(Compiler.java:381)
+	org.apache.jasper.compiler.Compiler.compile(Compiler.java:351)
+	org.apache.jasper.compiler.Compiler.compile(Compiler.java:335)
+	org.apache.jasper.JspCompilationContext.compile(JspCompilationContext.java:597)
+	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:398)
+	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:383)
+	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:331)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:583)
+	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+</pre><p><b>note</b> La trace complète de la cause mère de cette erreur est disponible dans les fichiers journaux de ce serveur.</p><hr class="line" /><h3>Apache Tomcat/8.5.96</h3></body></html>
