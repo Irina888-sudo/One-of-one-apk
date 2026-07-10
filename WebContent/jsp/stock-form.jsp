@@ -97,7 +97,6 @@
 <head>
     <meta charset="UTF-8">
     <title>One of One — <%= titrePage %></title>
-    <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/stock.css">
 </head>
 <body>
