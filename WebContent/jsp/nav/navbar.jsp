@@ -1,28 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/navbar.css">
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Appliquer l'état de la sidebar IMMÉDIATEMENT avant le rendu
+    const sidebarState = localStorage.getItem("sidebar") || "collapsed";
+    if(sidebarState === "collapsed"){
+        document.documentElement.setAttribute("data-sidebar-collapsed", "true");
+    }
+</script>
 
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="../css/navbar.css">
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Appliquer l'état de la sidebar IMMÉDIATEMENT avant le rendu
-        const sidebarState = localStorage.getItem("sidebar") || "collapsed";
-        if(sidebarState === "collapsed"){
-            document.documentElement.setAttribute("data-sidebar-collapsed", "true");
-        }
-    </script>
-    
-</head>
-<body>
-   
-    <div class="sidebar" id="sidebar">
+<div class="sidebar" id="sidebar">
     
 <div class="brand" id="toggleSidebar">
     <img src="../svg/logo2.svg" class="brand-logo" style="color: #fff;" alt="Logo">
@@ -71,8 +61,6 @@
             </a>
         </nav>
     </div>
-</div>
-</body>
 <script>
 
 const sidebar = document.getElementById("sidebar");
@@ -95,7 +83,17 @@ toggle.addEventListener("click", () => {
 
 });
 
-</script>
+// Marquer la page active dans la sidebar
+(function () {
+    const current = location.pathname.split("/").pop().toLowerCase();
+    document.querySelectorAll(".sidebar nav a").forEach(link => {
+        const href = (link.getAttribute("href") || "").toLowerCase();
+        const page = href.split("/").pop().split("?")[0];
+        const isLogout = href.indexOf("logout") !== -1;
+        if (!isLogout && page && page === current) {
+            link.classList.add("active");
+        }
+    });
+})();
 
-
-</html> 
+</script> 

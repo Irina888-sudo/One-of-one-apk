@@ -71,7 +71,7 @@
                 <div class="flash <%= flashType != null ? flashType : "success" %>"><%= flash %></div>
             <% } %>
             <div class="page-header">
-                <div><h2>COMMANDES</h2><p>Gérez les commandes clients avec suivi de statut et montant total.</p></div>
+                <div><h1>COMMANDES</h1><p>Gérez les commandes clients avec suivi de statut et montant total.</p></div>
                 <a href="commande-form.jsp" class="btn-primary">+ Nouvelle commande</a>
             </div>
             <form action="commandes.jsp" method="get" class="filters">

@@ -1,107 +1,103 @@
 /* ==========================================================================
-   EMPLOYES.CSS
-   Page "Gestion des Employés" — filtres, tableau, tri, pagination
-   Basé sur CLIENTS.CSS mais adapté au JSP employé-list.jsp
+   COMMANDES.CSS
+   Page "Commandes" — filtres, tableau, statuts, actions
+   Style réaliste / brutaliste, aligné sur clients.css
    ========================================================================== */
 
-/* ─────────────────────────────────────────────
-   CONTENEUR PRINCIPAL
-───────────────────────────────────────────── */
-.container {
+:root {
+    --bg-main-cmd: #fbf2f2;
+    --text-dark-cmd: #111111;
+    --text-muted-cmd: #6f4c4c;
+    --accent-red-cmd: #c30000;
+    --accent-soft-cmd: rgba(195, 0, 0, 0.08);
+    --border-cmd: rgba(195, 0, 0, 0.16);
+    --card-bg-cmd: #ffffff;
+}
+
+.content {
+    padding: 42px 32px;
     flex: 1;
-    padding: 28px 32px;
-    background: #f8f7f4;
+    background: var(--bg-main-cmd);
 }
 
-/* ─────────────────────────────────────────────
-   HEADER PAGE
-───────────────────────────────────────────── */
-.header {
-    margin-bottom: 20px;
-}
-
-.header h1 {
-    font-size: 26px;
-    font-weight: 800;
-    margin: 0;
-    color: var(--text-dark);
-}
-
-.header p {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 4px;
-}
-
-/* ─────────────────────────────────────────────
-   NAVIGATION TOP (Accueil / Ajout / compteur)
-───────────────────────────────────────────── */
-.nav {
+/* ── Header page ── */
+.page-header {
     display: flex;
+    align-items: flex-start;
     justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.page-header h1 {
+    font-size: clamp(5rem, 9vw, 7rem);
+    line-height: 0.88;
+    margin: 0;
+    color: var(--text-dark-cmd);
+    text-transform: uppercase;
+    letter-spacing: -0.10em;
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
+.page-header p {
+    color: var(--text-muted-cmd);
+    font-size: 13px;
+    margin-top: 6px;
+    max-width: 520px;
+}
+
+/* ── Flash messages ── */
+.flash {
+    border-radius: 0;
+    padding: 14px 20px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    font-weight: 700;
+    border: 2px solid;
+}
+
+.flash.success {
+    background: rgba(195, 0, 0, 0.08);
+    color: var(--accent-red-cmd);
+    border-color: rgba(195, 0, 0, 0.18);
+}
+
+.flash.error {
+    background: rgba(195, 0, 0, 0.12);
+    color: #951111;
+    border-color: rgba(195, 0, 0, 0.24);
+}
+
+/* ── Bouton primaire ── */
+.btn-primary {
+    background: var(--accent-red-cmd);
+    color: #ffffff;
+    border-radius: 0;
+    padding: 12px 22px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
     align-items: center;
-    margin: 18px 0 22px;
-    flex-wrap: wrap;
     gap: 10px;
-}
-
-.nav-links a {
-    margin-right: 10px;
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--text-dark);
-    padding: 8px 12px;
-    border-radius: 6px;
-    background: #fff;
-    border: 1px solid var(--border);
-    transition: 0.15s;
+    border: 2px solid var(--accent-red-cmd);
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.nav-links a:hover {
-    background: var(--accent-teal);
-    color: #fff;
-    border-color: var(--accent-teal);
+.btn-primary:hover {
+    background: #9b0000;
+    border-color: #9b0000;
+    transform: translateY(-2px);
 }
 
-/* ─────────────────────────────────────────────
-   ALERTES (SUCCESS / ERROR)
-───────────────────────────────────────────── */
-.alert {
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.alert-success {
-    background: #e6f9f5;
-    color: #1db899;
-    border: 1px solid #b0eada;
-}
-
-.alert-error {
-    background: #fde8e8;
-    color: var(--status-error);
-    border: 1px solid #f5b5b5;
-}
-
-/* ─────────────────────────────────────────────
-   FILTRES
-───────────────────────────────────────────── */
+/* ── Filtres ── */
 .filters {
-    background: #fff;
-    padding: 16px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 16px;
-}
-
-.filter-form {
     display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
-    gap: 12px;
     align-items: flex-end;
 }
 
@@ -113,78 +109,56 @@
 
 .filter-group label {
     font-size: 12px;
-    color: var(--text-muted);
+    color: var(--text-muted-cmd);
     margin-bottom: 4px;
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
-.filter-group input,
-.filter-group select {
-    padding: 8px 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
+.filter-group select,
+.filter-group input {
+    padding: 10px 14px;
+    border: 2px solid rgba(195, 0, 0, 0.16);
+    border-radius: 0;
     font-size: 13px;
+    font-weight: 600;
     outline: none;
+    background: #ffffff;
+    color: var(--text-dark-cmd);
+    transition: border-color 0.2s ease;
 }
 
-/* ─────────────────────────────────────────────
-   BOUTONS
-───────────────────────────────────────────── */
-.btn {
+.filter-group select:focus,
+.filter-group input:focus {
+    border-color: var(--accent-red-cmd);
+}
+
+.btn-filter {
     display: inline-block;
-    padding: 9px 14px;
-    border-radius: 6px;
+    padding: 10px 18px;
+    border: 2px solid rgba(195, 0, 0, 0.16);
+    border-radius: 0;
     font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
+    font-weight: 700;
+    color: var(--text-dark-cmd);
     text-decoration: none;
-    border: none;
-    transition: 0.15s;
+    background: #ffffff;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.btn-primary {
-    background: var(--accent-orange);
-    color: #fff;
+.btn-filter:hover {
+    background: rgba(195, 0, 0, 0.06);
+    border-color: rgba(195, 0, 0, 0.26);
 }
 
-.btn-primary:hover {
-    opacity: 0.9;
-}
-
-.btn-danger {
-    background: #fff;
-    color: var(--status-error);
-    border: 1px solid #f5b5b5;
-}
-
-.btn-danger:hover {
-    background: #fde8e8;
-}
-
-.btn-warning {
-    background: #fff;
-    color: #b7791f;
-    border: 1px solid #f6d58a;
-}
-
-.btn-warning:hover {
-    background: #fff6db;
-}
-
-/* petits boutons actions */
-.btn-small {
-    padding: 6px 10px;
-    font-size: 12px;
-}
-
-/* ─────────────────────────────────────────────
-   TABLE
-───────────────────────────────────────────── */
-.table-container {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 12px;
+/* ── Table ── */
+.table-wrap {
+    background: var(--card-bg-cmd);
+    border-radius: 0;
+    border: 2px solid rgba(195, 0, 0, 0.16);
     overflow: hidden;
+    box-shadow: 0 24px 60px rgba(195, 0, 0, 0.08);
 }
 
 table {
@@ -193,142 +167,187 @@ table {
 }
 
 thead th {
-    background: #faf9f6;
+    padding: 16px 18px;
+    text-align: left;
     font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: var(--text-muted);
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
+    color: var(--text-muted-cmd);
+    background: rgba(195, 0, 0, 0.06);
+    border-bottom: 2px solid rgba(195, 0, 0, 0.12);
 }
 
-tbody td {
-    padding: 12px;
-    font-size: 14px;
-    border-bottom: 1px solid var(--border);
+tbody tr {
+    border-bottom: 1px solid rgba(195, 0, 0, 0.08);
+    transition: background 0.15s ease;
+}
+
+tbody tr:last-child {
+    border-bottom: none;
 }
 
 tbody tr:hover {
-    background: #f9f7f4;
+    background: rgba(195, 0, 0, 0.04);
 }
 
-.empty-row td {
-    text-align: center;
-    color: var(--text-muted);
+tbody td {
+    padding: 16px 18px;
+    font-size: 14px;
+    vertical-align: middle;
+    color: var(--text-dark-cmd);
 }
 
-/* ─────────────────────────────────────────────
-   BADGES STATUT
-───────────────────────────────────────────── */
-.badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
+/* ── Numéro de commande ── */
+.commande-num {
     font-weight: 700;
+    color: var(--accent-red-cmd);
+    font-size: 14px;
 }
 
-.badge-success {
+/* ── Statuts ── */
+.statut {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 2px solid transparent;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.statut.ATTENTE {
+    background: rgba(195, 0, 0, 0.08);
+    color: var(--accent-red-cmd);
+    border-color: rgba(195, 0, 0, 0.18);
+}
+
+.statut.PRODUCTION {
+    background: #fff1d6;
+    color: #b7791f;
+    border-color: #f6d58a;
+}
+
+.statut.LIVREE {
     background: #e6f9f5;
     color: #1db899;
+    border-color: #b0eada;
 }
 
-.badge-danger {
-    background: #fde8e8;
-    color: var(--status-error);
+.statut.ANNULEE {
+    background: rgba(195, 0, 0, 0.18);
+    color: #951111;
+    border-color: rgba(195, 0, 0, 0.28);
 }
 
-/* ─────────────────────────────────────────────
-   ACTIONS
-───────────────────────────────────────────── */
+/* ── Actions ── */
 .actions {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     align-items: center;
 }
 
-/* ─────────────────────────────────────────────
-   TRI INFO
-───────────────────────────────────────────── */
-.sort-info {
-    font-size: 13px;
-    color: var(--text-dark);
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 0;
+    background: rgba(195, 0, 0, 0.06);
+    border: 2px solid rgba(195, 0, 0, 0.14);
+    text-decoration: none;
+    color: var(--text-dark-cmd);
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
-/* ─────────────────────────────────────────────
-   PAGINATION
-───────────────────────────────────────────── */
+.btn-icon:hover {
+    background: rgba(195, 0, 0, 0.14);
+    color: var(--accent-red-cmd);
+}
+
+.btn-icon.del:hover {
+    background: rgba(195, 0, 0, 0.2);
+    color: #951111;
+}
+
+/* ── Pagination ── */
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 6px;
-    margin-top: 20px;
+    gap: 8px;
+    margin-top: 28px;
     flex-wrap: wrap;
 }
 
-.pagination a,
-.pagination span {
-    padding: 6px 10px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
+.btn-page {
+    display: inline-block;
+    padding: 9px 16px;
+    border: 2px solid rgba(195, 0, 0, 0.16);
+    border-radius: 0;
+    background: #ffffff;
+    color: var(--text-dark-cmd);
     font-size: 13px;
+    font-weight: 700;
     text-decoration: none;
-    color: var(--text-dark);
-    background: #fff;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.pagination a:hover {
-    background: #f0ede8;
+.btn-page:hover {
+    background: rgba(195, 0, 0, 0.04);
+    border-color: rgba(195, 0, 0, 0.26);
 }
 
-.pagination .active {
-    background: var(--accent-teal);
-    color: #fff;
-    border-color: var(--accent-teal);
+.btn-page-actif {
+    background: var(--accent-red-cmd);
+    border-color: var(--accent-red-cmd);
+    color: #ffffff;
 }
 
-/* ─────────────────────────────────────────────
-   RESPONSIVE
-───────────────────────────────────────────── */
+.btn-page-actif:hover {
+    opacity: 0.95;
+}
+
+.pagination-info {
+    text-align: center;
+    color: var(--text-muted-cmd);
+    font-size: 13px;
+    margin-top: 12px;
+}
+
+/* ── Responsive ── */
 @media (max-width: 768px) {
-
-    .container {
+    .content {
         padding: 16px;
     }
 
-    .filter-form {
+    .page-header {
         flex-direction: column;
+        gap: 12px;
+    }
+
+    .table-wrap {
+        overflow-x: auto;
+    }
+
+    table td,
+    table th {
+        padding: 10px 12px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .filters {
+        gap: 6px;
     }
 
     .filter-group {
-        width: 100%;
+        min-width: 120px;
     }
 
-    .nav {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    table {
+    .btn-filter {
+        padding: 6px 14px;
         font-size: 12px;
-    }
-
-    thead {
-        display: none;
-    }
-
-    tbody td {
-        display: block;
-        width: 100%;
-    }
-
-    tbody tr {
-        display: block;
-        margin-bottom: 10px;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 8px;
     }
 }

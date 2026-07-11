@@ -109,21 +109,32 @@
                 <td><%= (salaire.getSalaireBrut() != null ? String.format("%,.2f", salaire.getSalaireBrut()) + " Ariary" : "-") %></td>
                 <td><%= (salaire.getSalaireNet() != null ? String.format("%,.2f", salaire.getSalaireNet()) + " Ariary" : "-" ) %></td>
                 <td>
-                    <a href="salaire-form.jsp?id=<%= salaire.getId() %>" class="btn">Modifier</a>
+                    <div class="actions">
+                        <a href="salaire-form.jsp?id=<%= salaire.getId() %>" class="icon-btn" data-tip="Modifier" aria-label="Modifier">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-5m-1.414-9.586a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                        </a>
+                        <a href="salaire-status.jsp?id=<%= salaire.getId() %>&statut=PAYE" class="icon-btn" data-tip="Marquer PAYE" aria-label="Marquer PAYE">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        </a>
+                        <a href="salaire-status.jsp?id=<%= salaire.getId() %>&statut=ATTENTE" class="icon-btn" data-tip="Marquer ATTENTE" aria-label="Marquer ATTENTE">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </a>
+                        <% if ("PAYE".equals(salaire.getStatut())) { %>
+                            <a href="facture.jsp?id=<%= salaire.getId() %>" class="icon-btn" data-tip="Facture" aria-label="Facture">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/></svg>
+                            </a>
+                        <% } %>
+                        <a href="salaire-export-csv.jsp?id=<%= salaire.getId() %>" class="icon-btn" data-tip="Exporter CSV" aria-label="Exporter CSV">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/></svg>
+                        </a>
+                        <button type="button" onclick="envoyerEmailSalaire(<%= salaire.getId() %>, '<%= EmployeDAO.getNomEmployeById(salaire.getEmployeId()) %>')" class="icon-btn" data-tip="Envoyer Email" aria-label="Envoyer Email">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </button>
+                    </div>
                 </td>
                 <td>
                     <% String statut = salaire.getStatut() != null ? salaire.getStatut() : "-"; %>
                     <span class="<%= "PAYE".equals(statut) ? "badge-paid" : "badge-wait" %>"><%= statut %></span>
-                    <br/>
-                    <a href="salaire-status.jsp?id=<%= salaire.getId() %>&statut=PAYE" class="btn" style="margin-top:6px; display:inline-block;">Marquer PAYE</a>
-                    <a href="salaire-status.jsp?id=<%= salaire.getId() %>&statut=ATTENTE" class="btn" style="margin-top:6px; display:inline-block;">Marquer ATTENTE</a>
-                    <br/>
-                    <% if ("PAYE".equals(statut)) { %>
-                        <a href="facture.jsp?id=<%= salaire.getId() %>" class="btn"  style="margin-top:6px; display:inline-block;">📄 Facture</a>
-                    <% } %>
-                    <a href="salaire-export-csv.jsp?id=<%= salaire.getId() %>" class="btn" style="margin-top:6px; display:inline-block;">📊 Exporter CSV</a>
-                    <br/>
-                    <button onclick="envoyerEmailSalaire(<%= salaire.getId() %>, '<%= EmployeDAO.getNomEmployeById(salaire.getEmployeId()) %>')" class="btn" style="margin-top:6px; background-color: #e8820c; color: white;">📧 Envoyer Email</button>
                 </td>
             </tr>
             <%   }

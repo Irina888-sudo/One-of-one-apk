@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulaire Salaire - OneOfOne</title>
-    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/salaire-form.css">
 </head>
 <body>
     <%@ include file="nav/navbar.jsp" %>
@@ -167,8 +167,8 @@
             </div>
             
             <div class="form-actions">
-                <button type="submit" class="btn btn-success">💾 Enregistrer</button>
-                <a href="salaire-list.jsp" class="btn btn-warning">❌ Annuler</a>
+                <button type="submit" class="btn btn-success"> Enregistrer</button>
+                <a href="salaire-list.jsp" class="btn btn-warning"> Annuler</a>
             </div>
         </form>
     </div>

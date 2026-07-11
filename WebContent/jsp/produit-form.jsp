@@ -43,7 +43,7 @@
     <head>
         <meta charset="UTF-8">
         <title><%= titre %> – One of One</title>
-        <link rel="stylesheet" href="../css/commandes-form.css">
+        <link rel="stylesheet" href="../css/produit-form.css">
         <script>
             function updateUnite(selectEl) {
                 const selectedOpt = selectEl.options[selectEl.selectedIndex];
@@ -89,19 +89,21 @@
         </script>
     </head>
    
-    <body>
-        <div class="card">
-            <h2><%= titre %></h2>
-            <p class="sub"><%= isEdit ? "Modifiez les informations du produit." : "Remplissez les informations du nouveau produit." %></p>
+        <body>
+            <div class="page-header">
+                <h1><%= titre %></h1>
+                <p><%= isEdit ? "Modifiez les informations du produit." : "Remplissez les informations du nouveau produit." %></p>
+            </div>
 
-            <%
-    if (erreur != null) {
+            <div class="form-container">
+                <%
+        if (erreur != null) {
 
 %>
-            <div class="erreur"><%= erreur %></div>
-            <% } %>
+                <div class="erreur"><%= erreur %></div>
+                <% } %>
 
-            <form method="post" action="produit-save.jsp" enctype="multipart/form-data">
+                <form method="post" action="produit-save.jsp" enctype="multipart/form-data">
                 <%
     if (isEdit) {
 

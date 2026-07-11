@@ -98,7 +98,7 @@
                 <!-- En-tête page -->
                 <div class="page-header">
                     <div>
-                        <h2>PRODUITS FINIS</h2>
+                        <h1>PRODUITS FINIS</h1>
                         <p>Gérez votre catalogue de pièces uniques et éditions limitées.</p>
                     </div>
                     <a href="produit-form.jsp" class="btn-primary">+ Ajouter produit</a>

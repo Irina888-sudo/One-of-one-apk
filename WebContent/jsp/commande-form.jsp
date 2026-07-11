@@ -76,81 +76,99 @@
     </script>
 </head>
 <body>
-    <div class="card">
-        <h2><%= isEdit ? "Modifier la commande" : "Ajouter une commande" %></h2>
-        <p class="sub"><%= isEdit ? "Mettez à jour les informations de la commande." : "Créez une nouvelle commande client." %></p>
-        <% if (erreur != null) { %>
-            <div class="erreur"><%= erreur %></div>
-        <% } %>
-        <form action="commande-save.jsp" method="post">
-            <% if (isEdit) { %><input type="hidden" name="id" value="<%= commande.getId() %>"><% } %>
-            <div class="row2">
-                <div class="form-group">
-                    <label for="numero">N° de commande</label>
-                    <input type="text" id="numero" name="numero" value="<%= commande.getNumero() != null ? commande.getNumero() : "" %>" placeholder="ORD-2026-001" required>
-                </div>
-                <div class="form-group">
-                    <label for="clientId">Client</label>
-                    <select id="clientId" name="clientId" required>
-                        <option value="">-- Choisir un client --</option>
-                        <% for (Client client : clients) { %>
-                            <option value="<%= client.getId() %>" <%= client.getId() == commande.getClientId() ? "selected" : "" %>><%= client.getNom() %> - <%= client.getEmail() %></option>
-                        <% } %>
-                    </select>
-                </div>
+    <%@ include file="nav/navbar.jsp" %>
+
+    <div class="main-content">
+        <div class="page-header">
+            <div>
+                <h1><%= isEdit ? "MODIFIER LA COMMANDE" : "AJOUTER UNE COMMANDE" %></h1>
+                <p>
+                    <a href="commandes.jsp">← Retour à la liste des commandes</a>
+                </p>
             </div>
-            <div class="row2">
-                <div class="form-group">
-                    <label for="dateCommande">Date de commande</label>
-                    <input type="datetime-local" id="dateCommande" name="dateCommande" value="<%= commande.getDateCommande() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm").format(commande.getDateCommande()) : "" %>" required>
+        </div>
+
+        <div class="form-container">
+            <% if (erreur != null) { %>
+                <div class="message-erreur"><%= erreur %></div>
+            <% } %>
+
+            <form class="form" action="commande-save.jsp" method="post">
+                <% if (isEdit) { %><input type="hidden" name="id" value="<%= commande.getId() %>"><% } %>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="numero">N° de commande</label>
+                        <input type="text" id="numero" name="numero" value="<%= commande.getNumero() != null ? commande.getNumero() : "" %>" placeholder="ORD-2026-001" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientId">Client</label>
+                        <select id="clientId" name="clientId" required>
+                            <option value="">-- Choisir un client --</option>
+                            <% for (Client client : clients) { %>
+                                <option value="<%= client.getId() %>" <%= client.getId() == commande.getClientId() ? "selected" : "" %>><%= client.getNom() %> - <%= client.getEmail() %></option>
+                            <% } %>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="statut">Statut</label>
-                    <select name="statut" id="statut" required>
-                        <option value="ATTENTE" <%= "ATTENTE".equals(commande.getStatut()) ? "selected" : "" %>>En attente</option>
-                        <option value="PRODUCTION" <%= "PRODUCTION".equals(commande.getStatut()) ? "selected" : "" %>>En production</option>
-                        <option value="LIVREE" <%= "LIVREE".equals(commande.getStatut()) ? "selected" : "" %>>Livrée</option>
-                        <option value="ANNULEE" <%= "ANNULEE".equals(commande.getStatut()) ? "selected" : "" %>>Annulée</option>
-                    </select>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="dateCommande">Date de commande</label>
+                        <input type="datetime-local" id="dateCommande" name="dateCommande" value="<%= commande.getDateCommande() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm").format(commande.getDateCommande()) : "" %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="statut">Statut</label>
+                        <select name="statut" id="statut" required>
+                            <option value="ATTENTE" <%= "ATTENTE".equals(commande.getStatut()) ? "selected" : "" %>>En attente</option>
+                            <option value="PRODUCTION" <%= "PRODUCTION".equals(commande.getStatut()) ? "selected" : "" %>>En production</option>
+                            <option value="LIVREE" <%= "LIVREE".equals(commande.getStatut()) ? "selected" : "" %>>Livrée</option>
+                            <option value="ANNULEE" <%= "ANNULEE".equals(commande.getStatut()) ? "selected" : "" %>>Annulée</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>Lignes de commande</label>
-                <table class="ligne-table">
-                    <thead>
-                        <tr><th>Produit</th><th>Quantité</th><th>Prix unitaire</th><th>Action</th></tr>
-                    </thead>
-                    <tbody id="lignes-body">
-                        <% if (commande.getLignes() != null && !commande.getLignes().isEmpty()) {
-                            for (LigneCommande ligne : commande.getLignes()) { %>
-                                <tr>
-                                    <td>
-                                        <select name="produitId" required>
-                                            <option value="">-- Choisir un produit --</option>
-                                            <% for (Produit p : produits) { %>
-                                                <option value="<%= p.getId() %>" <%= p.getId() == ligne.getProduitId() ? "selected" : "" %>><%= p.getNom() %></option>
-                                            <% } %>
-                                        </select>
-                                    </td>
-                                    <td><input type="number" name="quantite" min="1" value="<%= ligne.getQuantite() %>" required></td>
-                                    <td><input type="number" name="prixUnitaire" step="0.01" min="0" value="<%= ligne.getPrixUnitaire() %>" required></td>
-                                    <td><button type="button" class="action-small" onclick="supprimerLigne(this)">Supprimer</button></td>
-                                </tr>
-                            <% }
-                        } else { %>
-                            <tr>
-                                <td colspan="4" style="text-align:center;color:var(--text-muted);">Ajoutez au moins une ligne de produit.</td>
-                            </tr>
-                        <% } %>
-                    </tbody>
-                </table>
-                <button type="button" class="btn-secondary" onclick="ajouterLigne()">Ajouter un produit</button>
-            </div>
-            <div class="btn-row">
-                <a href="commandes.jsp" class="btn-secondary">Annuler</a>
-                <button type="submit" class="btn-primary"><%= isEdit ? "Enregistrer la commande" : "Créer la commande" %></button>
-            </div>
-        </form>
+
+                <div class="form-group lignes-group">
+                    <label>Lignes de commande</label>
+                    <div class="table-wrapper">
+                        <table class="ligne-table">
+                            <thead>
+                                <tr><th>Produit</th><th>Quantité</th><th>Prix unitaire</th><th>Action</th></tr>
+                            </thead>
+                            <tbody id="lignes-body">
+                                <% if (commande.getLignes() != null && !commande.getLignes().isEmpty()) {
+                                    for (LigneCommande ligne : commande.getLignes()) { %>
+                                        <tr>
+                                            <td>
+                                                <select name="produitId" required>
+                                                    <option value="">-- Choisir un produit --</option>
+                                                    <% for (Produit p : produits) { %>
+                                                        <option value="<%= p.getId() %>" <%= p.getId() == ligne.getProduitId() ? "selected" : "" %>><%= p.getNom() %></option>
+                                                    <% } %>
+                                                </select>
+                                            </td>
+                                            <td><input type="number" name="quantite" min="1" value="<%= ligne.getQuantite() %>" required></td>
+                                            <td><input type="number" name="prixUnitaire" step="0.01" min="0" value="<%= ligne.getPrixUnitaire() %>" required></td>
+                                            <td><button type="button" class="action-small" onclick="supprimerLigne(this)">Supprimer</button></td>
+                                        </tr>
+                                    <% }
+                                } else { %>
+                                    <tr>
+                                        <td colspan="4" class="empty-row">Ajoutez au moins une ligne de produit.</td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn-secondary" onclick="ajouterLigne()">Ajouter un produit</button>
+                </div>
+
+                <div class="form-actions">
+                    <a href="commandes.jsp" class="btn-secondary">Annuler</a>
+                    <button type="submit" class="btn-primary"><%= isEdit ? "Enregistrer la commande" : "Créer la commande" %></button>
+                </div>
+            </form>
+        </div>
     </div>
 </body>
 </html>

@@ -1,129 +1,264 @@
-/* PAGE */
+/* ==========================================================================
+   SALAIRES.CSS
+   Page "Salaires" — liste, statuts, actions, pagination
+   Charte graphique brutiste rouge, alignée sur
+   commandes.css / finances.css / livraisons.css / salaire-form.css / stock-form.css
+   ========================================================================== */
 
-.container{
-    padding:35px;
+/* ── PAGE ── */
+.container {
+    padding: 42px 32px;
+    background: var(--bg-main, #fbf2f2);
 }
 
-/* TITRE */
-
-.container h1{
-    margin:0 0 25px;
-    font-size:36px;
-    font-weight:800;
-    text-transform:uppercase;
+/* ── TITRE ── */
+.container h1 {
+    font-size: clamp(5rem, 9vw, 7rem);
+    line-height: 0.88;
+    margin: 0 0 32px;
+    color: #111111;
+    text-transform: uppercase;
+    letter-spacing: -0.10em;
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 
-/* ALERTES */
-
-.alert{
-    padding:14px 18px;
-    border-radius:8px;
-    margin-bottom:20px;
+/* ── ALERTES ── */
+.alert {
+    padding: 14px 18px;
+    border-radius: 0;
+    margin-bottom: 24px;
+    font-size: 14px;
+    font-weight: 700;
+    border: 2px solid;
 }
 
-.alert-error{
-    background:#fdeaea;
-    color:#d84a4a;
+.alert-error {
+    background: rgba(195, 0, 0, 0.12);
+    color: #951111;
+    border-color: rgba(195, 0, 0, 0.24);
 }
 
-/* TABLE */
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    background:#fff;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 5px 18px rgba(0,0,0,.05);
+/* ── TABLE ── */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 0;
+    overflow: hidden;
+    border: 2px solid rgba(195, 0, 0, 0.16);
+    box-shadow: 0 24px 60px rgba(195, 0, 0, 0.08);
 }
 
-thead{
-    background:#faf8f5;
+thead {
+    background: rgba(195, 0, 0, 0.06);
 }
 
-th{
-    padding:18px;
-    text-align:left;
-    font-size:13px;
-    color:#666;
+th {
+    padding: 16px 18px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6f4c4c;
+    border-bottom: 2px solid rgba(195, 0, 0, 0.12);
 }
 
-td{
-    padding:18px;
-    border-top:1px solid #f1ece5;
+td {
+    padding: 16px 18px;
+    border-top: 1px solid rgba(195, 0, 0, 0.08);
+    font-size: 14px;
+    color: #111111;
 }
 
-tbody tr:hover{
-    background:#fcfaf8;
+tbody tr:hover {
+    background: rgba(195, 0, 0, 0.04);
 }
 
-/* LIGNE PAYEE */
-
-.paid-row{
-    background:#f3fff9;
+/* ── GROUPE D'ACTIONS ── */
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
 }
 
-/* BADGES */
-
-.badge-paid{
-    background:#e8faf2;
-    color:#159b63;
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:11px;
-    font-weight:700;
+.btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+    margin: 0;
 }
 
-.badge-wait{
-    background:#fff3db;
-    color:#b97b00;
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:11px;
-    font-weight:700;
+/* ── BOUTONS ICONE (rouge + tooltip au survol) ── */
+.icon-btn {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(195, 0, 0, 0.16);
+    background: rgba(195, 0, 0, 0.06);
+    border-radius: 0;
+    color: #c30000;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    padding: 0;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-/* BOUTONS */
-
-.btn{
-    display:inline-block;
-    margin:2px;
-    padding:8px 14px;
-    background:#f78b11;
-    color:white;
-    text-decoration:none;
-    border-radius:6px;
-    font-size:13px;
-    font-weight:600;
+.icon-btn svg {
+    width: 16px;
+    height: 16px;
 }
 
-.btn:hover{
-    background:#ea8209;
+.icon-btn:hover {
+    background: #c30000;
+    border-color: #c30000;
+    color: #ffffff;
 }
 
-/* PAGINATION */
+/* Tooltip : nom de la fonctionnalité au survol */
+.icon-btn::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111111;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    padding: 5px 9px;
+    border-radius: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 5;
+}
 
-.pagination{
-    display:flex;
-    justify-content:center;
-    gap:8px;
-    margin-top:25px;
+.icon-btn:hover::after {
+    opacity: 1;
+}
+
+/* ── LIGNE PAYEE ── */
+.paid-row {
+    background: rgba(29, 184, 153, 0.08);
+}
+
+/* ── BADGES ── */
+.badge-paid {
+    display: inline-block;
+    background: rgba(29, 184, 153, 0.10);
+    color: #1db899;
+    border: 2px solid rgba(29, 184, 153, 0.25);
+    padding: 6px 12px;
+    border-radius: 0;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.badge-wait {
+    display: inline-block;
+    background: rgba(195, 0, 0, 0.08);
+    color: #c30000;
+    border: 2px solid rgba(195, 0, 0, 0.18);
+    padding: 6px 12px;
+    border-radius: 0;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* ── BOUTONS ── */
+.btn {
+    display: inline-block;
+    margin: 2px;
+    padding: 8px 14px;
+    background: #c30000;
+    color: #ffffff;
+    text-decoration: none;
+    border: 2px solid #c30000;
+    border-radius: 0;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    background: #9b0000;
+    border-color: #9b0000;
+    transform: translateY(-1px);
+}
+
+/* ── PAGINATION ── */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 28px;
+    flex-wrap: wrap;
 }
 
 .pagination a,
-.pagination span{
-    padding:10px 14px;
-    border-radius:8px;
-    text-decoration:none;
+.pagination span {
+    padding: 10px 14px;
+    border-radius: 0;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
 }
 
-.pagination a{
-    background:white;
-    border:1px solid #e4ddd3;
-    color:#555;
+.pagination a {
+    background: #ffffff;
+    border: 2px solid rgba(195, 0, 0, 0.16);
+    color: #111111;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.pagination .active{
-    background:#f78b11;
-    color:white;
+.pagination a:hover {
+    background: rgba(195, 0, 0, 0.04);
+    border-color: rgba(195, 0, 0, 0.26);
+}
+
+.pagination .active {
+    background: #c30000;
+    border: 2px solid #c30000;
+    color: #ffffff;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+
+    .container h1 {
+        font-size: clamp(5rem, 9vw, 7rem);
+    line-height: 0.88;
+    margin: 0;
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: -0.12em;
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
+    table {
+        overflow-x: auto;
+    }
+
+    th,
+    td {
+        padding: 10px 12px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
 }

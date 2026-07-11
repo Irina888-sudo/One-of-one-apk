@@ -92,7 +92,7 @@
 <head>
     <meta charset="UTF-8">
     <title>One of One — <%= titrePage %></title>
-    <link rel="stylesheet" href="../css/base.css">
+    <link rel="stylesheet" href="../css/client-form.css">
 </head>
 <body>
 
@@ -119,7 +119,7 @@
     <%-- ── FORMULAIRE ── --%>
     <%-- action="" = soumettre vers la même page (client-form.jsp) --%>
     <div class="form-container">
-        <form action="client-form.jsp<%= modeModification ? "?id=" + idParam : "" %>" method="POST">
+        <form class="form" action="client-form.jsp<%= modeModification ? "?id=" + idParam : "" %>" method="POST">
 
             <%-- Champ NOM — obligatoire --%>
             <div class="form-groupe">

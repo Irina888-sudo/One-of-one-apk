@@ -1,72 +1,93 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="dao.UtilisateurDAO" %>
 <%@ page import="model.Utilisateur" %>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - One of One</title>
     <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
 
-<div class="card">
-    <h2>Connexion</h2>
+<%
+    String error = null;
+    String success = null;
 
-    <%
-        String error = null;
-        String success = null;
-
-        if (request.getParameter("logout") != null) {
-            HttpSession sess = request.getSession(false);
-            if (sess != null) {
-                sess.invalidate();
-            }
-            success = "Vous avez été déconnecté.";
+    if (request.getParameter("logout") != null) {
+        HttpSession sess = request.getSession(false);
+        if (sess != null) {
+            sess.invalidate();
         }
+        success = "Vous avez été déconnecté.";
+    }
 
-        if ("POST".equalsIgnoreCase(request.getMethod())) {
-            String u = request.getParameter("username");
-            String p = request.getParameter("password");
+    if ("POST".equalsIgnoreCase(request.getMethod())) {
+        String u = request.getParameter("username");
+        String p = request.getParameter("password");
 
-            if (u == null || u.trim().isEmpty() || p == null || p.trim().isEmpty()) {
-                error = "Veuillez saisir un utilisateur et un mot de passe.";
+        if (u == null || u.trim().isEmpty() || p == null || p.trim().isEmpty()) {
+            error = "Veuillez saisir un utilisateur et un mot de passe.";
+        } else {
+            UtilisateurDAO utilisateurDAO = new UtilisateurDAO();
+            Utilisateur utilisateur = utilisateurDAO.authentifier(u.trim(), p);
+
+            if (utilisateur != null) {
+                HttpSession sess = request.getSession(true);
+                sess.setAttribute("userNom", utilisateur.getEmail());
+                sess.setAttribute("userRole", utilisateur.getRole() != null ? utilisateur.getRole() : "ADMIN");
+                sess.setAttribute("userInitials", "AD");
+                response.sendRedirect("dashboard.jsp");
+                return;
             } else {
-                UtilisateurDAO utilisateurDAO = new UtilisateurDAO();
-                Utilisateur utilisateur = utilisateurDAO.authentifier(u.trim(), p);
-
-                if (utilisateur != null) {
-                    HttpSession sess = request.getSession(true);
-                    sess.setAttribute("userNom", utilisateur.getEmail());
-                    sess.setAttribute("userRole", utilisateur.getRole() != null ? utilisateur.getRole() : "ADMIN");
-                    sess.setAttribute("userInitials", "AD");
-                    response.sendRedirect("dashboard.jsp");
-                    return;
-                } else {
-                    error = "Identifiants incorrects.";
-                }
+                error = "Identifiants incorrects.";
             }
         }
-    %>
+    }
+%>
 
-    <% if (error != null) { %>
-        <div class="error"><%= error %></div>
-    <% } %>
-    <% if (success != null) { %>
-        <div class="success"><%= success %></div>
-    <% } %>
+<div class="login-card">
+    <div class="login-form-side">
+        <div class="login-header">
+            <h1 class="login-title">Login</h1>
+            <p class="login-subtitle">Please enter your details.</p>
+        </div>
 
-    <form action="login.jsp" method="POST">
-        <div class="input-group">
-            <label for="username">Utilisateur :</label>
-            <input type="text" id="username" name="username" value="admin@oneofone.fr" required placeholder="ex: admin@oneofone.fr">
+        <% if (error != null) { %>
+            <div class="error"><%= error %></div>
+        <% } %>
+        <% if (success != null) { %>
+            <div class="success"><%= success %></div>
+        <% } %>
+
+        <form action="login.jsp" method="POST" class="login-form">
+            <div class="input-group">
+                <input type="text" id="username" name="username" value="admin@oneofone.fr" required placeholder="Email">
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" name="password" value="admin123" required placeholder="Password">
+            </div>
+
+            <div class="login-options">
+                <label class="remember-me">
+                    <input type="checkbox" name="remember">
+                    Remember for 30 days
+                </label>
+                <a href="#" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
+        <div class="login-footer">
+            Need an account? <a href="#">Contact administrator</a>
         </div>
-        <div class="input-group">
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" value="admin123" required placeholder="ex: admin123">
-        </div>
-        <button type="submit">Se connecter</button>
-    </form>
+    </div>
+
+    <div class="login-image-side">
+        <div class="login-image-inner"></div>
+    </div>
 </div>
 
 </body>

@@ -70,7 +70,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord – One of One</title>
-    
+    <link rel="stylesheet" href="../css/dashboard.css">
    
 </head>
 <body>
@@ -84,7 +84,10 @@
         </div>
         <div class="content">
             <div class="page-header">
-                <div><h2>TABLEAU DE BORD</h2><p>Aperçu de l'activité pour l'année <%= currentYear %> et le mois en cours.</p></div>
+                <div>
+                    <h1>TABLEAU DE BORD</h1>
+                    <p>Aperçu de l'activité pour l'année <%= currentYear %> et le mois en cours.</p>
+                </div>
             </div>
             
             <!-- KPIs Top Cards -->
@@ -166,8 +169,8 @@
                     {
                         label: 'Revenus (CA)',
                         data: caData,
-                        borderColor: '#1a3631',
-                        backgroundColor: 'rgba(26, 54, 49, 0.1)',
+                        borderColor: '#c30000',
+                        backgroundColor: 'rgba(195, 0, 0, 0.06)',
                         borderWidth: 2,
                         tension: 0.4,
                         fill: true
@@ -175,9 +178,10 @@
                     {
                         label: 'Dépenses',
                         data: depensesData,
-                        borderColor: '#e05c5c',
+                        borderColor: '#6f4c4c',
                         backgroundColor: 'transparent',
                         borderWidth: 2,
+                        borderDash: [5, 3],
                         tension: 0.4,
                         fill: false
                     }
@@ -191,10 +195,10 @@
                     intersect: false,
                 },
                 plugins: {
-                    legend: { position: 'top', align: 'end' }
+                    legend: { position: 'top', align: 'end', labels: { font: { weight: 'bold' } } }
                 },
                 scales: {
-                    y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                    y: { beginAtZero: true, grid: { borderDash: [4, 4], color: 'rgba(195, 0, 0, 0.06)' } },
                     x: { grid: { display: false } }
                 }
             }
@@ -209,9 +213,9 @@
                 datasets: [{
                     label: 'Stock Total',
                     data: stockData,
-                    backgroundColor: 'rgba(62, 207, 178, 0.5)',
-                    hoverBackgroundColor: 'rgba(62, 207, 178, 0.8)',
-                    borderRadius: 4
+                    backgroundColor: 'rgba(195, 0, 0, 0.12)',
+                    hoverBackgroundColor: 'rgba(195, 0, 0, 0.25)',
+                    borderRadius: 0
                 }]
             },
             options: {
@@ -221,13 +225,13 @@
                     legend: { display: false }
                 },
                 scales: {
-                    y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                    y: { beginAtZero: true, grid: { borderDash: [4, 4], color: 'rgba(195, 0, 0, 0.06)' } },
                     x: { grid: { display: false } }
                 }
             }
         });
 
-        // Chart 3: Orders Volume (Bar Chart instead of Donut, matching Stock style as requested)
+        // Chart 3: Orders Volume (Bar Chart)
         const ctxOrders = document.getElementById('ordersChart').getContext('2d');
         new Chart(ctxOrders, {
             type: 'bar',
@@ -236,9 +240,9 @@
                 datasets: [{
                     label: 'Nombre de Commandes',
                     data: commandesData,
-                    backgroundColor: 'rgba(232, 130, 12, 0.5)',
-                    hoverBackgroundColor: 'rgba(232, 130, 12, 0.8)',
-                    borderRadius: 4
+                    backgroundColor: 'rgba(195, 0, 0, 0.25)',
+                    hoverBackgroundColor: 'rgba(195, 0, 0, 0.4)',
+                    borderRadius: 0
                 }]
             },
             options: {
@@ -248,7 +252,7 @@
                     legend: { display: false }
                 },
                 scales: {
-                    y: { beginAtZero: true, grid: { borderDash: [4, 4] } },
+                    y: { beginAtZero: true, grid: { borderDash: [4, 4], color: 'rgba(195, 0, 0, 0.06)' } },
                     x: { grid: { display: false } }
                 }
             }

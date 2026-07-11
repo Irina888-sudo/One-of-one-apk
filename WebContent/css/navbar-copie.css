@@ -1,13 +1,14 @@
 /* ==========================================================================
-   NAVBAR.CSS
-   Sidebar (fond blanc + accents rouges) + layout
+   NAVBAR-COPIE.CSS
+   Sidebar + layout (dashboard, etc.)
    Charte graphique : brutalisme réaliste, aligné sur
    commandes.css / finances.css / livraisons.css / salaire-form.css / stock-form.css
    ========================================================================== */
 
 :root {
-    --sidebar-bg: #ffffff;
-    --sidebar-hover: rgba(195, 0, 0, 0.06);
+    --sidebar-bg: #1a0c0c;
+    --sidebar-bg-2: #240f0f;
+    --sidebar-border: rgba(195, 0, 0, 0.22);
     --accent-red: #c30000;
     --accent-red-hover: #9b0000;
     --accent-red-dark: #951111;
@@ -49,14 +50,14 @@ body {
     width: 80px;
     transition: width 0.3s ease, padding 0.3s ease;
     background: var(--sidebar-bg);
-    color: var(--text-dark);
+    color: #fff;
     display: flex;
     flex-direction: column;
     padding: 24px 0;
     min-height: 100vh;
     position: relative;
     overflow: hidden;
-    border-right: 2px solid var(--border);
+    border-right: 2px solid var(--sidebar-border);
 }
 
 .sidebar:not(.collapsed) {
@@ -109,7 +110,7 @@ body {
 
 .sidebar .brand {
     padding: 0 20px 28px;
-    border-bottom: 2px solid var(--border);
+    border-bottom: 2px solid var(--sidebar-border);
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -117,7 +118,6 @@ body {
     gap: 12px;
     min-height: 60px;
     transition: padding 0.3s ease;
-    cursor: pointer;
 }
 
 /* État COLLAPSED - Logo centré */
@@ -135,8 +135,6 @@ body {
     height: 40px;
     min-width: 40px;
     flex-shrink: 0;
-    filter: drop-shadow(0 0 6px rgba(195, 0, 0, 0.9))
-            drop-shadow(0 0 12px rgba(195, 0, 0, 0.6));
 }
 
 .brand-text {
@@ -148,7 +146,6 @@ body {
     font-weight: 800;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: var(--text-dark);
 }
 
 .sidebar .brand p {
@@ -157,7 +154,6 @@ body {
     margin-top: 2px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    font-weight: 700;
 }
 
 /* ========================================
@@ -176,7 +172,7 @@ body {
     justify-content: center;
     gap: 12px;
     padding: 12px 20px;
-    color: var(--text-dark);
+    color: #c9a3a3;
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;
@@ -223,36 +219,21 @@ body {
 }
 
 .sidebar nav a:hover {
-    background: var(--sidebar-hover);
-    color: var(--accent-red);
+    background: rgba(195, 0, 0, 0.16);
+    color: #fff;
     border-left-color: var(--accent-red);
 }
 
-.sidebar nav a:hover svg {
-    opacity: 1;
-    color: var(--accent-red);
-}
-
-/* ========================================
-   ÉTAT ACTIF - page courante (en rouge)
-   ======================================== */
-
+/* État ACTIF (page courante) */
 .sidebar nav a.active {
     background: var(--accent-red);
     color: #fff;
     font-weight: 700;
-    border-left-color: var(--accent-red-dark);
+    border-left-color: #fff;
 }
 
 .sidebar nav a.active svg {
     opacity: 1;
-    color: #fff;
-}
-
-.sidebar nav a.logout:hover {
-    color: var(--accent-red-dark);
-    border-left-color: var(--accent-red-dark);
-    background: rgba(195, 0, 0, 0.06);
 }
 
 .sidebar .new-entry {

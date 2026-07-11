@@ -1,7 +1,18 @@
-/* ==========================================================
-   One of One - Management Suite
-   CSS adapté à la maquette (hors sidebar verte)
-   ========================================================== */
+﻿/* ==========================================================================
+   LIVRAISONS.CSS
+   Page "Livraisons" — liste, filtres, formulaire
+   Style réaliste / brutaliste, aligné sur clients.css / commandes.css
+   ========================================================================== */
+
+:root {
+    --bg-main-liv: #fbf2f2;
+    --text-dark-liv: #111111;
+    --text-muted-liv: #6f4c4c;
+    --accent-red-liv: #c30000;
+    --accent-soft-liv: rgba(195, 0, 0, 0.08);
+    --border-liv: rgba(195, 0, 0, 0.16);
+    --card-bg-liv: #ffffff;
+}
 
 * {
     box-sizing: border-box;
@@ -9,25 +20,26 @@
 
 body {
     margin: 0;
-    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-    background-color: #f7f1e8;
-    color: #2f2b26;
+    font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
+    background: var(--bg-main-liv);
+    color: var(--text-dark-liv);
 }
 
 .app-container {
     display: flex;
     min-height: 100vh;
+    width: 100%;
 }
-
-/* ---------- Zone principale ---------- */
 
 .main-content {
     flex: 1;
-    padding: 30px 40px;
-    background-color: #f7f1e8;
+    padding: 42px 32px;
+    background: var(--bg-main-liv);
+    width: 100%;
+    max-width: 100%;
 }
 
-/* ---------- Barre logo + recherche ---------- */
+/* ---------- Header page ---------- */
 
 .search-header {
     display: flex;
@@ -39,24 +51,27 @@ body {
 .logo-area h2 {
     margin: 0;
     font-size: 20px;
-    color: #2f2b26;
+    color: var(--text-dark-liv);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
 }
 
 .search-wrapper input {
     width: 320px;
     padding: 10px 16px;
-    border: 1px solid #e6ddcf;
-    border-radius: 10px;
-    background-color: #ffffff;
+    border: 2px solid var(--border-liv);
+    border-radius: 0;
+    background: var(--card-bg-liv);
     font-size: 14px;
+    color: var(--text-dark-liv);
     outline: none;
+    transition: border-color 0.2s ease;
 }
 
 .search-wrapper input:focus {
-    border-color: #ff8c42;
+    border-color: var(--accent-red-liv);
 }
-
-/* ---------- Titre + bouton ajouter ---------- */
 
 .header-row {
     display: flex;
@@ -67,33 +82,43 @@ body {
 
 .title-section h1 {
     margin: 0 0 6px 0;
-    font-size: 26px;
-    letter-spacing: 0.5px;
-    color: #2f2b26;
+    font-size: clamp(5rem, 9vw, 7rem);
+    line-height: 0.88;
+    color: var(--text-dark-liv);
+    text-transform: uppercase;
+    letter-spacing: -0.10em;
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 
 .title-section p {
     margin: 0;
-    color: #8a8378;
-    font-size: 14px;
+    color: var(--text-muted-liv);
+    font-size: 13px;
+    max-width: 520px;
+    line-height: 1.4;
 }
 
+/* ---------- Bouton Ajouter ---------- */
+
 .add-btn {
-    background-color: #ff8c42;
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--accent-red-liv);
     color: #ffffff;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
+    border: 2px solid var(--accent-red-liv);
+    border-radius: 0;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(255, 140, 66, 0.35);
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .add-btn:hover {
-    background-color: #f5772a;
-    transform: translateY(-1px);
+    background: #9b0000;
+    border-color: #9b0000;
+    transform: translateY(-2px);
 }
 
 /* ---------- Barre de filtres ---------- */
@@ -101,12 +126,14 @@ body {
 .filters-bar {
     display: flex;
     gap: 20px;
-    background-color: #ffffff;
+    background: var(--card-bg-liv);
     padding: 18px 24px;
-    border-radius: 14px;
-    margin-bottom: 25px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border-radius: 0;
+    margin-bottom: 24px;
+    border: 2px solid var(--border-liv);
+    box-shadow: 0 24px 60px rgba(195, 0, 0, 0.08);
     flex-wrap: wrap;
+    align-items: flex-end;
 }
 
 .filter-group {
@@ -120,32 +147,36 @@ body {
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    color: #8a8378;
+    color: var(--text-muted-liv);
+    text-transform: uppercase;
 }
 
 .filter-group select,
 .filter-group input {
-    padding: 9px 12px;
-    border: 1px solid #e6ddcf;
-    border-radius: 8px;
-    background-color: #fbf8f3;
+    padding: 10px 14px;
+    border: 2px solid var(--border-liv);
+    border-radius: 0;
+    background: var(--card-bg-liv);
     font-size: 14px;
-    color: #2f2b26;
+    color: var(--text-dark-liv);
     outline: none;
+    transition: border-color 0.2s ease;
 }
 
 .filter-group select:focus,
 .filter-group input:focus {
-    border-color: #ff8c42;
+    border-color: var(--accent-red-liv);
 }
 
 /* ---------- Tableau ---------- */
 
 .table-container {
-    background-color: #ffffff;
-    border-radius: 14px;
+    background: var(--card-bg-liv);
+    border-radius: 0;
     padding: 10px 24px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: 2px solid var(--border-liv);
+    box-shadow: 0 24px 60px rgba(195, 0, 0, 0.08);
+    overflow-x: auto;
 }
 
 table {
@@ -157,17 +188,18 @@ thead th {
     text-align: left;
     font-size: 11px;
     letter-spacing: 0.5px;
-    color: #8a8378;
+    color: var(--text-muted-liv);
     font-weight: 700;
-    padding: 14px 10px;
-    border-bottom: 1px solid #f0e9dd;
+    padding: 16px 14px;
+    border-bottom: 2px solid rgba(195, 0, 0, 0.12);
+    background: rgba(195, 0, 0, 0.06);
 }
 
 tbody td {
-    padding: 16px 10px;
+    padding: 16px 14px;
     font-size: 14px;
-    color: #2f2b26;
-    border-bottom: 1px solid #f5efe4;
+    color: var(--text-dark-liv);
+    border-bottom: 1px solid rgba(195, 0, 0, 0.08);
 }
 
 tbody tr:last-child td {
@@ -175,14 +207,14 @@ tbody tr:last-child td {
 }
 
 tbody tr:hover {
-    background-color: #fbf7ef;
+    background: rgba(195, 0, 0, 0.04);
 }
 
 /* Numéro de livraison / commande en couleur */
 tbody td:first-child,
 tbody td:nth-child(2) {
-    color: #d97a3d;
-    font-weight: 600;
+    color: var(--accent-red-liv);
+    font-weight: 700;
 }
 
 /* ---------- Badges de statut ---------- */
@@ -191,28 +223,34 @@ tbody td:nth-child(2) {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 12px;
-    border-radius: 999px;
+    padding: 6px 14px;
+    border-radius: 0;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border: 2px solid;
 }
 
 .statut-livre {
-    background-color: #e3f6ea;
-    color: #2e9d5b;
+    background: rgba(29, 184, 153, 0.10);
+    color: #1db899;
+    border-color: rgba(29, 184, 153, 0.25);
 }
 
 .statut-en-cours {
-    background-color: #eaf1ff;
-    color: #3b7de0;
+    background: rgba(195, 0, 0, 0.08);
+    color: var(--accent-red-liv);
+    border-color: rgba(195, 0, 0, 0.18);
 }
 
 .statut-attente {
-    background-color: #fdeaea;
-    color: #d9534f;
+    background: rgba(195, 0, 0, 0.12);
+    color: #951111;
+    border-color: rgba(195, 0, 0, 0.24);
 }
 
-/* ---------- Actions (modifier / supprimer) ---------- */
+/* ---------- Actions ---------- */
 
 .actions {
     display: flex;
@@ -221,21 +259,22 @@ tbody td:nth-child(2) {
 
 .actions a {
     text-decoration: none;
-    color: #8a8378;
+    color: var(--text-muted-liv);
     font-size: 13px;
-    padding: 6px 8px;
-    border-radius: 6px;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    padding: 6px 10px;
+    border-radius: 0;
+    font-weight: 600;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .actions a:first-child:hover {
-    background-color: #eaf1ff;
-    color: #3b7de0;
+    background: rgba(195, 0, 0, 0.06);
+    color: var(--accent-red-liv);
 }
 
 .actions a:last-child:hover {
-    background-color: #fdeaea;
-    color: #d9534f;
+    background: rgba(195, 0, 0, 0.10);
+    color: #951111;
 }
 
 /* ==========================================================
@@ -245,63 +284,102 @@ tbody td:nth-child(2) {
 .form-container {
     max-width: 560px;
     margin: 0 auto;
-    background-color: #ffffff;
-    border-radius: 14px;
-    padding: 30px 34px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    background: var(--card-bg-liv);
+    border-radius: 0;
+    padding: 40px 44px;
+    border: 2px solid var(--border-liv);
+    box-shadow: 0 24px 60px rgba(195, 0, 0, 0.08);
 }
 
 .form-container h1 {
-    font-size: 22px;
-    margin-bottom: 25px;
-    color: #2f2b26;
+    font-size: clamp(2.2rem, 4vw, 2.8rem);
+    margin-bottom: 28px;
+    color: var(--text-dark-liv);
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    color: #8a8378;
+    color: var(--text-muted-liv);
+    text-transform: uppercase;
 }
 
 .form-group input,
 .form-group select {
-    padding: 11px 14px;
-    border: 1px solid #e6ddcf;
-    border-radius: 8px;
-    background-color: #fbf8f3;
+    padding: 12px 16px;
+    border: 2px solid var(--border-liv);
+    border-radius: 0;
+    background: var(--card-bg-liv);
     font-size: 14px;
-    color: #2f2b26;
+    color: var(--text-dark-liv);
     outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-    border-color: #ff8c42;
+    border-color: var(--accent-red-liv);
+    box-shadow: 0 0 0 4px rgba(195, 0, 0, 0.08);
 }
 
 .form-submit-btn {
     width: 100%;
-    background-color: #ff8c42;
+    background: var(--accent-red-liv);
     color: #ffffff;
-    border: none;
-    padding: 13px;
-    border-radius: 10px;
+    border: 2px solid var(--accent-red-liv);
+    border-radius: 0;
+    padding: 14px;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(255, 140, 66, 0.35);
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .form-submit-btn:hover {
-    background-color: #f5772a;
-    transform: translateY(-1px);
+    background: #9b0000;
+    border-color: #9b0000;
+    transform: translateY(-2px);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 768px) {
+    .main-content {
+        padding: 16px;
+    }
+
+    .filters-bar {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .filter-group {
+        width: 100%;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table td,
+    table th {
+        padding: 10px 8px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .form-container {
+        padding: 24px;
+    }
 }

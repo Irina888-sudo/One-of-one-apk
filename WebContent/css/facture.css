@@ -1,199 +1,377 @@
-/*==================================================
-=                FACTURE SALAIRE
-==================================================*/
+﻿/* ==========================================================================
+   FACTURE.CSS
+   Page "Facture Salaire" — format A4, impression réaliste
+   Style réaliste / brutaliste, titre "ONE OF ONE" comme clients.css
+   ========================================================================== */
 
-body{
-    margin:0;
-    padding:40px;
-    background:#f5f1eb;
-    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-    color:#333;
+:root {
+    --accent-red-fac: #c30000;
+    --text-dark-fac: #111111;
+    --text-muted-fac: #6f4c4c;
+    --border-fac: rgba(195, 0, 0, 0.16);
+    --card-bg-fac: #ffffff;
 }
 
-/*==================================================
-=                Bouton Impression
-==================================================*/
-
-.btn-print{
-    display:block;
-    margin:0 auto 25px;
-    padding:12px 26px;
-    border:none;
-    border-radius:8px;
-    background:#e88912;
-    color:#fff;
-    font-size:15px;
-    font-weight:600;
-    cursor:pointer;
-    transition:.25s;
+* {
+    box-sizing: border-box;
 }
 
-.btn-print:hover{
-    background:#cf7708;
+body {
+    margin: 0;
+    padding: 30px 20px;
+    background: #f0ece6;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-dark-fac);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/*==================================================
-=                Carte Facture
-==================================================*/
-
-.facture-container{
-    max-width:900px;
-    margin:auto;
-    background:#fff;
-    border-radius:18px;
-    padding:40px 45px;
-    box-shadow:0 8px 30px rgba(0,0,0,.08);
-    border:1px solid #ece4d9;
+.btn-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
 }
 
-/*==================================================
-=                Header
-==================================================*/
-
-.facture-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-    padding-bottom:25px;
-    border-bottom:2px solid #efe7dc;
+.btn-print,
+.btn-back {
+    padding: 12px 24px;
+    border: 2px solid var(--accent-red-fac);
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    font-family: 'Inter', sans-serif;
 }
 
-.entreprise-nom{
-    font-size:30px;
-    font-weight:700;
-    color:#1f1f1f;
-    margin:0;
+.btn-print {
+    background: var(--accent-red-fac);
+    color: #ffffff;
 }
 
-.entreprise-sub{
-    margin-top:6px;
-    color:#7c7c7c;
-    font-size:14px;
+.btn-print:hover {
+    background: #9b0000;
+    border-color: #9b0000;
+    transform: translateY(-2px);
 }
 
-.facture-meta{
-    text-align:right;
-    font-size:14px;
-    color:#666;
-    line-height:28px;
+.btn-back {
+    background: #ffffff;
+    color: var(--accent-red-fac);
 }
 
-.facture-meta strong{
-    color:#111;
+.btn-back:hover {
+    background: rgba(195, 0, 0, 0.06);
+    transform: translateY(-2px);
 }
 
-/*==================================================
-=                Titre
-==================================================*/
-
-.facture-titre{
-    text-align:center;
-    font-size:30px;
-    font-weight:700;
-    margin:35px 0;
-    color:#222;
+.facture-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-/*==================================================
-=                Tableau
-==================================================*/
-
-.detail{
-    width:100%;
-    border-collapse:collapse;
-    overflow:hidden;
-    border-radius:12px;
-    border:1px solid #e8ddd0;
+.facture-container {
+    background: var(--card-bg-fac);
+    border-radius: 0;
+    padding: 50px 55px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0d8d0;
 }
 
-.detail th{
-    width:30%;
-    text-align:left;
-    background:#faf7f3;
-    padding:18px;
-    color:#7d5b34;
-    font-weight:600;
-    border-bottom:1px solid #ece2d7;
+.facture-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 32px;
+    border-bottom: 3px solid var(--accent-red-fac);
+    margin-bottom: 28px;
 }
 
-.detail td{
-    padding:18px;
-    border-bottom:1px solid #f1ebe4;
-    font-size:15px;
+.header-left .enseigne {
+    font-size: clamp(2.8rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 0.88;
+    color: var(--text-dark-fac);
+    text-transform: uppercase;
+    letter-spacing: -0.10em;
+    margin: 0 0 6px 0;
 }
 
-.detail tr:last-child th,
-.detail tr:last-child td{
-    border-bottom:none;
+.header-left .enseigne-sub {
+    font-size: 13px;
+    color: var(--text-muted-fac);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 2px;
 }
 
-.detail tr:hover{
-    background:#fcfaf7;
+.header-left .enseigne-addr {
+    font-size: 12px;
+    color: var(--text-muted-fac);
+    margin-top: 4px;
 }
 
-/*==================================================
-=                Montant
-==================================================*/
-
-.montant-net{
-    color:#16914a;
-    font-size:20px;
-    font-weight:700;
+.header-right {
+    text-align: right;
 }
 
-/*==================================================
-=                Badge Statut
-==================================================*/
-
-.statut-badge{
-    display:inline-block;
-    padding:8px 18px;
-    background:#fff5df;
-    color:#c67900;
-    border-radius:30px;
-    font-weight:600;
-    font-size:14px;
-    border:1px solid #f0d7a3;
+.facture-label {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent-red-fac);
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
 }
 
-/*==================================================
-=                Footer
-==================================================*/
-
-.facture-footer{
-    margin-top:40px;
-    text-align:center;
-    color:#888;
-    font-size:13px;
-    border-top:1px solid #ece4d8;
-    padding-top:20px;
+.facture-ref,
+.facture-date {
+    font-size: 14px;
+    color: var(--text-muted-fac);
+    line-height: 1.8;
 }
 
-/*==================================================
-=                Impression
-==================================================*/
+.facture-ref strong,
+.facture-date strong {
+    color: var(--text-dark-fac);
+    font-weight: 700;
+}
 
-@media print{
+.info-section {
+    margin-bottom: 28px;
+    border: 1px solid #e8e0d8;
+    border-left: 4px solid var(--accent-red-fac);
+    padding: 18px 22px;
+}
 
-    body{
-        background:#fff;
-        padding:0;
+.info-row {
+    display: flex;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0ece6;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    width: 140px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted-fac);
+    flex-shrink: 0;
+}
+
+.info-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-dark-fac);
+}
+
+.detail {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+}
+
+.detail thead th {
+    text-align: left;
+    padding: 14px 18px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted-fac);
+    background: rgba(195, 0, 0, 0.06);
+    border-bottom: 2px solid rgba(195, 0, 0, 0.12);
+}
+
+.detail tbody td {
+    padding: 16px 18px;
+    font-size: 15px;
+    color: var(--text-dark-fac);
+    border-bottom: 1px solid #f0ece6;
+}
+
+.montant-th {
+    text-align: right !important;
+    width: 200px;
+}
+
+.montant-td {
+    text-align: right !important;
+    font-weight: 600;
+}
+
+.tr-total td {
+    border-bottom: 3px solid var(--accent-red-fac) !important;
+    background: rgba(195, 0, 0, 0.03);
+    padding: 18px 18px !important;
+}
+
+.tr-total td:first-child {
+    font-size: 16px;
+}
+
+.montant-net {
+    text-align: right !important;
+    color: #1db899 !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+}
+
+.statut-row {
+    text-align: right;
+    margin-bottom: 32px;
+}
+
+.statut-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 2px solid;
+}
+
+.statut-badge.PAYE {
+    background: rgba(29, 184, 153, 0.10);
+    color: #1db899;
+    border-color: rgba(29, 184, 153, 0.25);
+}
+
+.statut-badge.EN_ATTENTE {
+    background: rgba(195, 0, 0, 0.08);
+    color: var(--accent-red-fac);
+    border-color: rgba(195, 0, 0, 0.18);
+}
+
+.signature-section {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #e0d8d0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.signature-box {
+    width: 260px;
+    text-align: center;
+}
+
+.signature-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted-fac);
+    display: block;
+    margin-bottom: 10px;
+}
+
+.signature-line {
+    height: 50px;
+    border-bottom: 2px solid #d0c8c0;
+    margin-bottom: 6px;
+}
+
+@media print {
+    @page {
+        size: A4;
+        margin: 15mm 18mm 15mm 18mm;
     }
 
-    .btn-print{
-        display:none;
+    body {
+        background: #ffffff;
+        padding: 0;
+        margin: 0;
+        display: block;
     }
 
-    .facture-container{
-        box-shadow:none;
-        border:none;
-        width:100%;
-        max-width:100%;
-        padding:0;
+    .btn-bar {
+        display: none !important;
     }
 
-    .facture-header{
-        margin-top:20px;
+    .facture-wrapper {
+        max-width: 100%;
     }
 
+    .facture-container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .facture-header {
+        border-bottom: 3px solid #000000;
+    }
+
+    .header-left .enseigne {
+        color: #000000;
+    }
+
+    .header-left .enseigne-sub {
+        color: #555555;
+    }
+
+    .facture-label {
+        color: #000000;
+    }
+
+    .info-section {
+        border: 1px solid #cccccc;
+        border-left: 4px solid #000000;
+    }
+
+    .detail thead th {
+        background: #f0f0f0;
+        color: #000000;
+        border-bottom: 2px solid #000000;
+    }
+
+    .detail tbody td {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .tr-total td {
+        border-bottom: 3px solid #000000 !important;
+    }
+
+    .montant-net {
+        color: #000000 !important;
+    }
+
+    .statut-badge {
+        border: 2px solid #000000;
+    }
+
+    .statut-badge.PAYE {
+        color: #000000;
+        border-color: #000000;
+        background: #f0f0f0;
+    }
+
+    .statut-badge.EN_ATTENTE {
+        color: #000000;
+        border-color: #000000;
+        background: #f0f0f0;
+    }
+
+    .signature-section {
+        border-top: 1px solid #cccccc;
+    }
+
+    .signature-line {
+        border-bottom: 2px solid #000000;
+    }
 }

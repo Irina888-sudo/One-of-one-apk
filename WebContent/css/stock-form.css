@@ -17,11 +17,11 @@ body {
 }
 
 .main-content {
-    max-width: 1280px;
+    max-width: 1180px;
     margin: 0 auto;
     padding: 42px 32px;
     display: grid;
-    grid-template-columns: minmax(520px, 600px) minmax(420px, 1fr);
+    grid-template-columns: minmax(420px, 520px) minmax(420px, 1fr);
     gap: 60px;
     align-items: start;
 }
@@ -34,15 +34,14 @@ body {
 }
 
 .page-header h1 {
-    font-size: clamp(4rem, 7vw, 5.5rem);
+    font-size: clamp(5rem, 9vw, 7rem);
     line-height: 0.88;
     margin: 0;
     color: var(--text-dark);
     text-transform: uppercase;
-    letter-spacing: -0.08em;
+    letter-spacing: -0.12em;
     max-width: 100%;
     overflow-wrap: break-word;
-    word-break: break-word;
 }
 
 .page-header p {
@@ -57,7 +56,7 @@ body {
     color: var(--accent-red);
     background: rgba(195, 0, 0, 0.1);
     padding: 8px 14px;
-    border-radius: 0;
+    border-radius: 8px;
     text-decoration: none;
     font-weight: 700;
     transition: background 0.2s ease;
@@ -91,30 +90,20 @@ body {
     gap: 24px;
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-}
-
-.form-group {
+.form-groupe {
     display: grid;
     gap: 14px;
 }
 
-.lignes-group {
-    grid-column: 1 / -1;
-}
-
-.form-group label {
+.form-groupe label {
     font-size: 0.95rem;
     font-weight: 700;
     color: #ffffff;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.form-groupe input,
+.form-groupe textarea,
+.form-groupe select {
     width: 100%;
     border: 1px solid rgba(255, 255, 255, 0.32);
     border-radius: 0;
@@ -122,91 +111,20 @@ body {
     color: #ffffff;
     padding: 16px 18px;
     font-size: 1rem;
-    font-family: inherit;
-    outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.form-group textarea {
+.form-groupe textarea {
     min-height: 140px;
     resize: vertical;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.form-groupe input:focus,
+.form-groupe textarea:focus,
+.form-groupe select:focus {
+    outline: none;
     border-color: #ffffff;
     box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.16);
-}
-
-.table-wrapper {
-    overflow-x: auto;
-    margin: 12px 0;
-}
-
-.ligne-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #ffffff;
-}
-
-.ligne-table th {
-    background: #fff1f1;
-    color: #8b1a1a;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    font-size: 0.78rem;
-    padding: 12px 10px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    text-align: left;
-}
-
-.ligne-table td {
-    padding: 12px 10px;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    text-align: left;
-    font-size: 0.95rem;
-    color: #111111;
-}
-
-.ligne-table input,
-.ligne-table select {
-    width: 100%;
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    border-radius: 0;
-    background: #ffffff;
-    color: #111111;
-    padding: 8px 10px;
-    font-size: 0.95rem;
-    outline: none;
-}
-
-.ligne-table input:focus,
-.ligne-table select:focus {
-    border-color: var(--accent-red);
-    box-shadow: 0 0 0 3px rgba(195, 0, 0, 0.08);
-}
-
-.empty-row {
-    text-align: center;
-    color: #999;
-    font-size: 0.95rem;
-}
-
-.action-small {
-    border: none;
-    background: none;
-    color: var(--accent-red);
-    cursor: pointer;
-    font-weight: 700;
-    padding: 0;
-    text-decoration: underline;
-    transition: opacity 0.2s ease;
-}
-
-.action-small:hover {
-    opacity: 0.8;
 }
 
 .form-actions {
@@ -214,11 +132,13 @@ body {
     flex-wrap: wrap;
     gap: 16px;
     justify-content: flex-start;
-    margin-top: 8px;
 }
 
+.form-actions a,
+.form-actions button,
+.btn,
 .btn-primary,
-.btn-secondary {
+.btn-secondaire {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -229,7 +149,12 @@ body {
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border: 1px solid transparent;
-    font-size: 1rem;
+}
+
+.btn:hover,
+.form-actions a:hover,
+.form-actions button:hover {
+    transform: translateY(-1px);
 }
 
 .btn-primary {
@@ -238,15 +163,10 @@ body {
     border-color: #ffffff;
 }
 
-.btn-secondary {
+.btn-secondaire {
     background: rgba(255, 255, 255, 0.12);
     color: #ffffff;
     border-color: rgba(255, 255, 255, 0.22);
-}
-
-.btn-primary:hover,
-.btn-secondary:hover {
-    transform: translateY(-1px);
 }
 
 @media (max-width: 860px) {
@@ -261,11 +181,6 @@ body {
 
     .form-container {
         padding: 24px;
-        min-width: auto;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr;
     }
 
     .form-actions {
@@ -274,7 +189,6 @@ body {
     }
 
     .page-header h1 {
-        font-size: clamp(2.4rem, 7vw, 3.6rem);
-        letter-spacing: -0.05em;
+        font-size: clamp(3rem, 9vw, 4.8rem);
     }
 }

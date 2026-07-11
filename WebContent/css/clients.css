@@ -1,107 +1,118 @@
 /* ==========================================================================
    CLIENTS.CSS
    Page "Clients" — filtres par statut, tableau avec avatar et pagination
-   Nécessite les variables CSS du thème principal (définies dans 00-base.css ou dans la page)
+   Thème rouge/blanc adapté au reste des formulaires
    ========================================================================== */
 
-/* ── Conteneur principal ── */
-.main-content {
-    padding: 28px 32px;
-    flex: 1;
+:root {
+    --bg-main-client: #fbf2f2;
+    --text-dark-client: #111111;
+    --text-muted-client: #6f4c4c;
+    --accent-red-client: #c30000;
+    --accent-soft-client: rgba(195, 0, 0, 0.08);
+    --border-client: rgba(195, 0, 0, 0.16);
+    --card-bg-client: #ffffff;
 }
 
-/* ── En‑tête de page ── */
-.page-header {
+.main-content {
+    padding: 42px 32px;
+    flex: 1;
+    background: var(--bg-main-client);
+}
+
+.main-content .page-header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    margin-bottom: 24px;
+    gap: 24px;
+    margin-bottom: 32px;
 }
 
-.page-header h1 {
-    font-size: 26px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: var(--text-dark);
+.main-content .page-header h1 {
+    font-size: clamp(5rem, 9vw, 7rem);
+    line-height: 0.88;
     margin: 0;
+    color: var(--text-dark-client);
+    text-transform: uppercase;
+    letter-spacing: -0.10em;
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 
-.page-header p {
-    color: var(--text-muted);
+.main-content .page-header p {
+    color: var(--text-muted-client);
     font-size: 13px;
-    margin-top: 4px;
+    margin-top: 6px;
+    max-width: 520px;
 }
 
 .btn-primary {
-    background: var(--accent-orange);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 11px 18px;
+    background: var(--accent-red-client);
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 12px 22px;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
     text-decoration: none;
-    white-space: nowrap;
-    transition: opacity 0.15s;
+    transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .btn-primary:hover {
-    opacity: 0.9;
+    background: #9b0000;
+    transform: translateY(-1px);
 }
 
-/* ── Message de confirmation / erreur ── */
 .message-info {
-    border-radius: 8px;
-    padding: 12px 18px;
-    margin-bottom: 20px;
+    border-radius: 14px;
+    padding: 14px 20px;
+    margin-bottom: 24px;
     font-size: 14px;
-    font-weight: 500;
-    background: #e6f9f5;
-    color: #1db899;
-    border: 1px solid #b0eada;
+    font-weight: 700;
+    background: rgba(195, 0, 0, 0.08);
+    color: var(--accent-red-client);
+    border: 1px solid rgba(195, 0, 0, 0.18);
 }
 
-/* ── Barre de filtres par statut ── */
 .filtres {
     display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 24px;
     flex-wrap: wrap;
 }
 
 .btn-filtre {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 8px 18px;
+    background: #ffffff;
+    border: 1px solid rgba(195, 0, 0, 0.16);
+    border-radius: 999px;
+    padding: 10px 18px;
     font-size: 13px;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-weight: 700;
+    color: var(--text-dark-client);
     text-decoration: none;
-    transition: all 0.15s;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-filtre:hover {
-    background: #f0ede8;
-    border-color: #ccc;
+    background: rgba(195, 0, 0, 0.06);
+    border-color: rgba(195, 0, 0, 0.26);
 }
 
 .btn-filtre.actif {
-    background: var(--accent-teal);
-    border-color: var(--accent-teal);
-    color: #fff;
+    background: var(--accent-red-client);
+    border-color: var(--accent-red-client);
+    color: #ffffff;
 }
 
-/* ── Tableau ── */
 .table-container {
-    background: #fff;
-    border-radius: 12px;
-    border: 1px solid var(--border);
+    background: var(--card-bg-client);
+    border-radius: 18px;
+    border: 1px solid rgba(195, 0, 0, 0.16);
     overflow: hidden;
+    box-shadow: 0 24px 60px rgba(195, 0, 0, 0.08);
 }
 
 .table {
@@ -110,20 +121,20 @@
 }
 
 .table thead th {
-    padding: 13px 16px;
+    padding: 16px 18px;
     text-align: left;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: var(--text-muted);
-    background: #faf9f6;
-    border-bottom: 1px solid var(--border);
+    color: var(--text-muted-client);
+    background: rgba(195, 0, 0, 0.06);
+    border-bottom: 1px solid rgba(195, 0, 0, 0.12);
 }
 
 .table tbody tr {
-    border-bottom: 1px solid var(--border);
-    transition: background 0.12s;
+    border-bottom: 1px solid rgba(195, 0, 0, 0.08);
+    transition: background 0.15s ease;
 }
 
 .table tbody tr:last-child {
@@ -131,28 +142,29 @@
 }
 
 .table tbody tr:hover {
-    background: #f9f7f4;
+    background: rgba(195, 0, 0, 0.04);
 }
 
 .table td {
-    padding: 14px 16px;
+    padding: 16px 18px;
     font-size: 14px;
     vertical-align: middle;
+    color: var(--text-dark-client);
 }
 
-/* ── Profil client (avatar + nom/email) ── */
 .client-profil {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
 }
 
 .avatar {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: var(--sidebar-bg);
-    color: var(--accent-teal);
+    background: #ffffff;
+    color: var(--accent-red-client);
+    border: 1px solid rgba(195, 0, 0, 0.18);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -163,101 +175,96 @@
 }
 
 .client-profil strong {
-    font-weight: 600;
-    font-size: 14px;
+    font-weight: 700;
+    font-size: 15px;
     display: block;
 }
 
 .client-profil small {
     font-size: 12px;
-    color: var(--text-muted);
+    color: var(--text-muted-client);
 }
 
-/* ── Badge de statut ── */
 .badge {
     display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
+    padding: 6px 14px;
+    border-radius: 999px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.3px;
 }
 
 .badge-actif {
-    background: #e6f9f5;
-    color: #1db899;
+    background: rgba(195, 0, 0, 0.08);
+    color: var(--accent-red-client);
 }
 
 .badge-bloque {
-    background: #fdeee5;
-    color: var(--accent-orange);
+    background: rgba(195, 0, 0, 0.18);
+    color: #951111;
 }
 
-/* ── Actions (modifier / supprimer) ── */
 .btn-action {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    background: transparent;
-    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(195, 0, 0, 0.06);
+    border: 1px solid rgba(195, 0, 0, 0.14);
     font-size: 16px;
     text-decoration: none;
-    color: var(--text-muted);
-    transition: background 0.15s, color 0.15s;
+    color: var(--text-dark-client);
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .btn-action:hover {
-    background: #f0ede8;
+    background: rgba(195, 0, 0, 0.14);
+    color: var(--accent-red-client);
 }
 
 .btn-danger:hover {
-    background: #fde8e8;
-    color: var(--status-error);
+    background: rgba(255, 255, 255, 0.95);
+    color: #c30000;
 }
 
-/* ── Pagination ── */
 .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 6px;
-    margin-top: 24px;
+    gap: 8px;
+    margin-top: 28px;
     flex-wrap: wrap;
 }
 
 .btn-page {
     display: inline-block;
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: #fff;
-    color: var(--text-dark);
+    padding: 9px 16px;
+    border: 1px solid rgba(195, 0, 0, 0.16);
+    border-radius: 10px;
+    background: #ffffff;
+    color: var(--text-dark-client);
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 700;
     text-decoration: none;
-    transition: all 0.15s;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-page:hover {
-    background: #f0ede8;
-    border-color: #ccc;
+    background: rgba(195, 0, 0, 0.04);
+    border-color: rgba(195, 0, 0, 0.26);
 }
 
 .btn-page-actif {
-    background: var(--accent-teal);
-    border-color: var(--accent-teal);
-    color: #fff;
+    background: var(--accent-red-client);
+    border-color: var(--accent-red-client);
+    color: #ffffff;
 }
 
 .btn-page-actif:hover {
-    background: var(--accent-teal);
-    border-color: var(--accent-teal);
-    color: #fff;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 /* ── Informations de pagination ── */

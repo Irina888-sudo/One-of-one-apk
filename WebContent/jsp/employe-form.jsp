@@ -6,9 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulaire Employé - OneOfOne</title>
-    <link rel="stylesheet" href="../css/employes.css">
+    <link rel="stylesheet" href="../css/employe-form.css">
 </head>
 <body>
+<%@ include file="nav/navbar.jsp" %>
 <%
     EmployeDAO employeDAO = new EmployeDAO();
     Employe employe = null;
@@ -98,25 +99,28 @@
 %>
 
 <div class="container">
-    <div class="header">
-        <h1><%= id > 0 ? " Modifier l'employé" : " Ajouter un employé" %></h1>
-        <p>OneOfOne - Gestion RH</p>
+    <div class="page-sidebar">
+        <div class="header">
+            <h1><%= id > 0 ? " Modifier l'employé" : " Ajouter un employé" %></h1>
+            <p>OneOfOne - Gestion RH</p>
+        </div>
+        
+        <div class="nav">
+            <div class="nav-links">
+                <a href="employe-list.jsp">Retour à la liste</a>
+            </div>
+        </div>
+        
+        <% if (errorMsg != null) { %>
+            <div class="alert-error">
+                Erreur : <%= errorMsg %>
+            </div>
+        <% } %>
     </div>
     
-    <div class="nav">
-        <div class="nav-links">
-            <a href="employe-list.jsp"> Retour à la liste</a>
-        </div>
-    </div>
-    
-    <% if (errorMsg != null) { %>
-        <div class="alert alert-error">
-            Erreur <%= errorMsg %>
-        </div>
-    <% } %>
-    
-    <div class="form-container">
-        <form method="post" action="employe-form.jsp<%= id > 0 ? "?id=" + id : "" %>" class="form">
+    <div class="form-panel">
+        <div class="form-container">
+            <form method="post" action="employe-form.jsp<%= id > 0 ? "?id=" + id : "" %>" class="form">
             <% if (id > 0) { %>
                 <input type="hidden" name="id" value="<%= id %>">
             <% } %>

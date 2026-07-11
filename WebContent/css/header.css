@@ -1,17 +1,26 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    TOPBAR — En-tête 100% de largeur avec infos utilisateur
+   Style réaliste / brutaliste, aligné sur clients.css / commandes.css
    ========================================================================== */
 
+:root {
+    --topbar-bg: #ffffff;
+    --topbar-border: rgba(195, 0, 0, 0.16);
+    --topbar-text-dark: #111111;
+    --topbar-text-muted: #6f4c4c;
+    --topbar-accent: #c30000;
+}
+
 .topbar {
-    background: #fff;
-    padding: 12px 32px;              /* Aligné avec le contenu en dessous */
+    background: var(--topbar-bg);
+    padding: 12px 32px;
     display: flex;
     align-items: center;
-    justify-content: flex-end;       /* Pousse tout le bloc utilisateur à droite */
-    border-bottom: 1px solid var(--border);
-    width: 100%;                     /* Force l'occupation complète */
-    box-sizing: border-box;          /* Évite les débordements de padding */
-    min-height: 68px;                /* Hauteur confortable */
+    justify-content: flex-end;
+    border-bottom: 2px solid var(--topbar-border);
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 68px;
 }
 
 /* Conteneur du profil utilisateur (nom + rôle + avatar) */
@@ -20,7 +29,7 @@
     align-items: center;
     gap: 14px;
     font-size: 13px;
-    color: var(--text-dark);
+    color: var(--topbar-text-dark);
 }
 
 /* Bloc texte (nom / rôle) */
@@ -30,32 +39,33 @@
 }
 
 .topbar .user-name {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 14px;
-    color: var(--text-dark);
+    color: var(--topbar-text-dark);
     display: block;
 }
 
 .topbar .user-role {
     font-size: 10px;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-weight: 700;
+    color: var(--topbar-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: block;
 }
 
-/* Avatar (rond avec initiales) */
+/* Avatar (carré avec initiales) */
 .topbar .avatar {
     width: 38px;
     height: 38px;
-    border-radius: 50%;
-    background: var(--accent-teal);
-    color: #fff;
+    border-radius: 0;
+    background: var(--topbar-accent);
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 14px;
-    flex-shrink: 0;                  /* Empêche l'avatar de se réduire */
+    flex-shrink: 0;
+    border: 2px solid rgba(195, 0, 0, 0.24);
 }
