@@ -110,9 +110,7 @@ public class FinanceDAO {
         return total;
     }
 
-    public double getTotalAchatsMatières() {
-        return getTotalAchatsMatieres();
-    }
+   
 
     // ─────────────────────────────────────────────────────────────
     // 4. NOMBRE TOTAL DE COMMANDES LIVRÉES
