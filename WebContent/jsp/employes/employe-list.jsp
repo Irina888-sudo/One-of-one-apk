@@ -75,7 +75,7 @@
     
     <div class="nav">
         <div class="nav-links">
-            <a href="<%= basePath %>employe-form.jsp" class="btn btn-primary">+ Nouvel Employe</a>
+            <a href="employe-form.jsp" class="btn btn-primary">+ Nouvel Employe</a>
         </div>
         <div>
             Total : <strong><%= totalEmployes %></strong> employe(s)
@@ -97,7 +97,7 @@
     
     <!-- Filtres et recherche -->
     <div class="filters">
-        <form method="get" action="<%= basePath %>employe-list.jsp" class="filter-form">
+        <form method="get" action="employe-list.jsp" class="filter-form">
             <div class="filter-group">
                 <label>Statut</label>
                 <select name="statut">
@@ -129,10 +129,6 @@
                 <input type="date" name="dateFin" value="<%= dateFin != null ? dateFin : "" %>">
             </div>
             
-            <div class="filter-group">
-                <label>Recherche</label>
-                <input type="text" name="search" placeholder="Nom ou email..." value="<%= search != null ? search : "" %>">
-            </div>
             
             <!-- NOUVEAU : Selecteur de tri -->
             <div class="filter-group">
@@ -152,14 +148,9 @@
                 </select>
             </div>
             
-            <div class="filter-group">
-                <label>&nbsp;</label>
+            <div class="filter-group" style="display: flex; align-items: flex-end; gap: 10px;">
                 <button type="submit" class="btn btn-primary">Rechercher</button>
-            </div>
-            
-            <div class="filter-group">
-                <label>&nbsp;</label>
-                <a href="<%= basePath %>employe-list.jsp" class="btn btn-warning">Reinitialiser</a>
+                <a href="employe-list.jsp" class="btn btn-warning">Reinitialiser</a>
             </div>
         </form>
     </div>
@@ -220,7 +211,7 @@
                             </td>
                             <td><%= e.getDateEmbauche() != null ? e.getDateEmbauche() : "-" %></td>
                             <td class="actions">
-                                <a href="<%= basePath %>employe-form.jsp?id=<%= e.getId() %>" class="btn btn-primary btn-small">Modifier</a>
+                                <a href="employe-form.jsp?id=<%= e.getId() %>" class="btn btn-primary btn-small">Modifier</a>
                                 <%
                                     Salaire latestSalaire = null;
                                     try {
@@ -229,7 +220,7 @@
                                         latestSalaire = null;
                                     }
                                 %>
-                                <a href="<%= basePath %>employe-delete.jsp?id=<%= e.getId() %>" class="btn btn-danger btn-small" 
+                                <a href="employe-delete.jsp?id=<%= e.getId() %>" class="btn btn-danger btn-small" 
                                    onclick="return confirm('Êtes-vous sûr de vouloir desactiver cet employe ?')">Desactiver</a>
                             </td>
                         </tr>
