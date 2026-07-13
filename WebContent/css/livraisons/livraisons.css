@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    LIVRAISONS.CSS
    Page "Livraisons" — liste, filtres, formulaire
    Style realiste / brutaliste, aligne sur clients.css / commandes.css
@@ -356,6 +356,41 @@ tbody td:nth-child(2) {
     background: #9b0000;
     border-color: #9b0000;
     transform: translateY(-2px);
+}
+
+/* ---------- Pagination ---------- */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-block;
+    padding: 9px 16px;
+    border: 2px solid rgba(195, 0, 0, 0.16);
+    border-radius: 0;
+    background: #ffffff;
+    color: var(--text-dark-liv);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.pagination a:hover {
+    background: rgba(195, 0, 0, 0.04);
+    border-color: rgba(195, 0, 0, 0.26);
+}
+
+.pagination .active {
+    background: var(--accent-red-liv);
+    color: #ffffff;
+    border-color: var(--accent-red-liv);
 }
 
 /* ---------- Responsive ---------- */

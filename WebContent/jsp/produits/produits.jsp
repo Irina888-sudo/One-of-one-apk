@@ -263,34 +263,43 @@
                 </table>
             </div>
 
-            <%
-    if (totalPages > 1) {
-
-%>
+            <% if (totalPages > 1) { %>
             <div class="pagination">
-                <%
-    if (pageCourante > 1) {
-
-%>
-                <a href="produits.jsp?page=<%= pageCourante - 1 %><%= queryParams %>" class="btn-page">◀ Précédent</a>
+                <% if (pageCourante > 1) { %>
+                    <a href="produits.jsp?page=<%= pageCourante - 1 %><%= queryParams %>">&laquo; Precedent</a>
                 <% } %>
-                <%
-    for (int pIdx = 1;    pIdx <= totalPages;    pIdx++) {
-
-%>
-                <a href="produits.jsp?page=<%= pIdx %><%= queryParams %>"
-                class="btn-page <%= pIdx == pageCourante ? "btn-page-actif" : "" %>">
-                <%= pIdx %>
-            </a>
+                
+                <% 
+                int startPage = Math.max(1, pageCourante - 2);
+                int endPage = Math.min(totalPages, pageCourante + 2);
+                
+                if (startPage > 1) { %>
+                    <a href="produits.jsp?page=1<%= queryParams %>">1</a>
+                    <% if (startPage > 2) { %>
+                        <span>...</span>
+                    <% } %>
+                <% } %>
+                
+                <% for(int pIdx = startPage; pIdx <= endPage; pIdx++) { %>
+                    <% if (pIdx == pageCourante) { %>
+                        <span class="active"><%= pIdx %></span>
+                    <% } else { %>
+                        <a href="produits.jsp?page=<%= pIdx %><%= queryParams %>"><%= pIdx %></a>
+                    <% } %>
+                <% } %>
+                
+                <% if (endPage < totalPages) { %>
+                    <% if (endPage < totalPages - 1) { %>
+                        <span>...</span>
+                    <% } %>
+                    <a href="produits.jsp?page=<%= totalPages %><%= queryParams %>"><%= totalPages %></a>
+                <% } %>
+                
+                <% if (pageCourante < totalPages) { %>
+                    <a href="produits.jsp?page=<%= pageCourante + 1 %><%= queryParams %>">Suivant &raquo;</a>
+                <% } %>
+            </div>
             <% } %>
-            <%
-    if (pageCourante < totalPages) {
-
-%>
-            <a href="produits.jsp?page=<%= pageCourante + 1 %><%= queryParams %>" class="btn-page">Suivant ▶</a>
-            <% } %>
-        </div>
-        <% } %>
 
         <p class="pagination-info">
             Affichage de <%= (totalProduitsFiltres == 0 ? 0 : debut + 1) %> à <%= fin %> sur <%= totalProduitsFiltres %> produit(s)

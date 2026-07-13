@@ -141,15 +141,39 @@
                 <% } %>
             </div>
             <% if (totalPages > 1) { %>
-            <div class="pagination" style="margin-top:16px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+            <div class="pagination">
                 <% if (pageCourante > 1) { %>
-                    <a href="commandes.jsp?page=<%= pageCourante - 1 %><%= queryParams %>" class="btn-filter">◀ Precedent</a>
+                    <a href="commandes.jsp?page=<%= pageCourante - 1 %><%= queryParams %>">&laquo; Precedent</a>
                 <% } %>
-                <% for (int p = 1; p <= totalPages; p++) { %>
-                    <a href="commandes.jsp?page=<%= p %><%= queryParams %>" class="btn-filter <%= p == pageCourante ? "active" : "" %>"><%= p %></a>
+                
+                <% 
+                int startPage = Math.max(1, pageCourante - 2);
+                int endPage = Math.min(totalPages, pageCourante + 2);
+                
+                if (startPage > 1) { %>
+                    <a href="commandes.jsp?page=1<%= queryParams %>">1</a>
+                    <% if (startPage > 2) { %>
+                        <span>...</span>
+                    <% } %>
                 <% } %>
+                
+                <% for(int p = startPage; p <= endPage; p++) { %>
+                    <% if (p == pageCourante) { %>
+                        <span class="active"><%= p %></span>
+                    <% } else { %>
+                        <a href="commandes.jsp?page=<%= p %><%= queryParams %>"><%= p %></a>
+                    <% } %>
+                <% } %>
+                
+                <% if (endPage < totalPages) { %>
+                    <% if (endPage < totalPages - 1) { %>
+                        <span>...</span>
+                    <% } %>
+                    <a href="commandes.jsp?page=<%= totalPages %><%= queryParams %>"><%= totalPages %></a>
+                <% } %>
+                
                 <% if (pageCourante < totalPages) { %>
-                    <a href="commandes.jsp?page=<%= pageCourante + 1 %><%= queryParams %>" class="btn-filter">Suivant ▶</a>
+                    <a href="commandes.jsp?page=<%= pageCourante + 1 %><%= queryParams %>">Suivant &raquo;</a>
                 <% } %>
             </div>
             <% } %>

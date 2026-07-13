@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="dao.FinanceDAO" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.time.LocalDate" %>
@@ -211,7 +211,7 @@
             </tbody>
         </table>
         <p class="lien-voir-tout">
-            <a href="commande-list.jsp?statut=LIVREE">Voir toutes les commandes livr&eacute;es &rarr;</a>
+            <a href="../commandes/commandes.jsp?statut=LIVREE">Voir toutes les commandes livr&eacute;es &rarr;</a>
         </p>
     </div>
 

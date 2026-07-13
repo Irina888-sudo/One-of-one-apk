@@ -99,7 +99,6 @@
 %>
 
 <div class="container">
-    <%@ include file="/jsp/nav/navbar.jsp" %>
     <div class="page-sidebar">
         <div class="header">
             <h1><%= id > 0 ? " Modifier l'employe" : " Ajouter un employe" %></h1>

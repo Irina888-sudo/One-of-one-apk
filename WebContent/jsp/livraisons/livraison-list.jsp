@@ -49,6 +49,30 @@
             filtered.add(liv);
         }
     }
+
+    int itemsPerPage = 10;
+    int totalItems = filtered.size();
+    int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+    int currentPage = 1;
+    String pageParam = request.getParameter("page");
+    if (pageParam != null) {
+        try { currentPage = Integer.parseInt(pageParam); } catch (NumberFormatException ignored) {}
+    }
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+    int start = (currentPage - 1) * itemsPerPage;
+    int end = Math.min(start + itemsPerPage, totalItems);
+    List<Livraison> livraisonsPage = new ArrayList<>();
+    for (int i = start; i < end; i++) {
+        livraisonsPage.add(filtered.get(i));
+    }
+
+    String queryParams = "";
+    if (statut != null && !statut.isEmpty()) queryParams += "&statut=" + statut;
+    if (lieu != null && !lieu.isEmpty()) queryParams += "&lieu=" + java.net.URLEncoder.encode(lieu, "UTF-8");
+    if (date != null && !date.isEmpty()) queryParams += "&date=" + date;
+    if (livreur != null && !livreur.isEmpty()) queryParams += "&livreur=" + java.net.URLEncoder.encode(livreur, "UTF-8");
+    if (search != null && !search.isEmpty()) queryParams += "&search=" + java.net.URLEncoder.encode(search, "UTF-8");
 %>
 <%
     String deleteId = request.getParameter("delete");
@@ -140,7 +164,7 @@
                 </thead>
                 <tbody>
                     <%
-                        for (Livraison l : filtered) {
+                        for (Livraison l : livraisonsPage) {
                             String statutClass = "";
                             String statutLabel = l.getStatut();
                             if ("LIVRE".equalsIgnoreCase(l.getStatut())) {
@@ -177,6 +201,46 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination -->
+        <% if (totalPages > 1) { %>
+            <div class="pagination">
+                <% if (currentPage > 1) { %>
+                    <a href="livraison-list.jsp?page=<%= currentPage - 1 %><%= queryParams %>">&laquo; Precedent</a>
+                <% } %>
+                
+                <% 
+                int startPage = Math.max(1, currentPage - 2);
+                int endPage = Math.min(totalPages, currentPage + 2);
+                
+                if (startPage > 1) { %>
+                    <a href="livraison-list.jsp?page=1<%= queryParams %>">1</a>
+                    <% if (startPage > 2) { %>
+                        <span>...</span>
+                    <% } %>
+                <% } %>
+                
+                <% for(int i = startPage; i <= endPage; i++) { %>
+                    <% if (i == currentPage) { %>
+                        <span class="active"><%= i %></span>
+                    <% } else { %>
+                        <a href="livraison-list.jsp?page=<%= i %><%= queryParams %>"><%= i %></a>
+                    <% } %>
+                <% } %>
+                
+                <% if (endPage < totalPages) { %>
+                    <% if (endPage < totalPages - 1) { %>
+                        <span>...</span>
+                    <% } %>
+                    <a href="livraison-list.jsp?page=<%= totalPages %><%= queryParams %>"><%= totalPages %></a>
+                <% } %>
+                
+                <% if (currentPage < totalPages) { %>
+                    <a href="livraison-list.jsp?page=<%= currentPage + 1 %><%= queryParams %>">Suivant &raquo;</a>
+                <% } %>
+            </div>
+        <% } %>
+
     </div>
 </div>
 </body>

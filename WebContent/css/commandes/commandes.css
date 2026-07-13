@@ -281,7 +281,8 @@ tbody td {
     flex-wrap: wrap;
 }
 
-.btn-page {
+.pagination a,
+.pagination span {
     display: inline-block;
     padding: 9px 16px;
     border: 2px solid rgba(195, 0, 0, 0.16);
@@ -294,18 +295,18 @@ tbody td {
     transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.btn-page:hover {
+.pagination a:hover {
     background: rgba(195, 0, 0, 0.04);
     border-color: rgba(195, 0, 0, 0.26);
 }
 
-.btn-page-actif {
+.pagination .active {
     background: var(--accent-red-cmd);
     border-color: var(--accent-red-cmd);
     color: #ffffff;
 }
 
-.btn-page-actif:hover {
+.pagination .active:hover {
     opacity: 0.95;
 }
 
