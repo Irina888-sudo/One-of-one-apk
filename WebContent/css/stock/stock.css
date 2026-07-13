@@ -59,28 +59,25 @@ body {
     max-width: 520px;
 }
 
-/* ── BOUTON PRIMAIRE ── */
 .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 14px 22px;
-    background: var(--accent-red);
-    color: #fff;
-    text-decoration: none;
-    border: 2px solid var(--accent-red);
+    background: var( --accent-red);
+    color: #ffffff;
     border-radius: 0;
+    padding: 12px 22px;
     font-size: 14px;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    border: 2px solid var( --accent-red);
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .btn-primary:hover {
-    background: var(--accent-red-hover);
-    border-color: var(--accent-red-hover);
+    background: #9b0000;
+    border-color: #9b0000;
     transform: translateY(-2px);
 }
 

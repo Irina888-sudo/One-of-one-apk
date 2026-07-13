@@ -102,18 +102,14 @@
             <p>Visualisez et gerez votre base de donnees clients.</p>
         </div>
         <%-- Bouton pour ouvrir le popup d'ajout --%>
-        <a href="client-form.jsp" class="btn-primary">👤+ Ajouter client</a>
+        <a href="client-form.jsp" class="btn-primary">+ Ajouter client</a>
     </div>
 
     <%-- Message de confirmation / erreur apres suppression --%>
     <% if (!messageRetour.isEmpty()) { %>
         <div class="message-info"><%= messageRetour %></div>
     <% } %>
-
-    <%-- ── RECHERCHE GLOBALE ── --%>
-    <div class="filtres">
-        <div class="message-info" style="margin:0;">La recherche globale se fait depuis l'en-tête.</div>
-    </div>
+    
 
     <%-- ── TABLEAU DES CLIENTS ── --%>
     <div class="table-container">

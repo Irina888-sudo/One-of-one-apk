@@ -96,7 +96,7 @@
             <h1>STOCK / MATIeRES</h1>
             <p>Gerez les matieres premieres et stocks disponibles.</p>
         </div>
-        <a href="stock-form.jsp" class="btn-primary">➕ Ajouter matiere</a>
+        <a href="stock-form.jsp" class="btn-primary">+ Ajouter matiere</a>
     </div>
 
     <div class="filtres">

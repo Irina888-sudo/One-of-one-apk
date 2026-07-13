@@ -47,9 +47,9 @@
 }
 
 .btn-primary {
-    background: var(--accent-red-client);
+    background: var( --accent-red-client);
     color: #ffffff;
-    border-radius: 10px;
+    border-radius: 0;
     padding: 12px 22px;
     font-size: 14px;
     font-weight: 700;
@@ -58,12 +58,14 @@
     align-items: center;
     gap: 10px;
     text-decoration: none;
+    border: 2px solid var( --accent-red-client);
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .btn-primary:hover {
     background: #9b0000;
-    transform: translateY(-1px);
+    border-color: #9b0000;
+    transform: translateY(-2px);
 }
 
 .message-info {

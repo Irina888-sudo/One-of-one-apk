@@ -19,7 +19,7 @@
 <div class="container">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
         <h1>Liste des Salaires</h1>
-        <a href="salaire-form.jsp" class="btn" style="background-color: #3ecfb2; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: 600;">+ Nouveau Paiement</a>
+        <a href="salaire-form.jsp" class="btn">+ Nouveau Paiement</a>
     </div>
     
     <% 

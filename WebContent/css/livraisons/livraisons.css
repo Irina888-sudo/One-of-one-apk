@@ -78,6 +78,7 @@ body {
 }
 
 .header-row {
+    padding: 42px 32px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
