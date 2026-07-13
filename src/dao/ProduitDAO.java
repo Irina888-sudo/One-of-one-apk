@@ -38,13 +38,32 @@ public class ProduitDAO {
     private static final String BASE_SELECT = "SELECT p.*, c.nom AS collection_nom " +
             "FROM produit p LEFT JOIN collection c ON p.collection_id = c.id ";
 
+    private boolean hasSupprimeColumn(Connection conn) throws SQLException {
+        DatabaseMetaData meta = conn.getMetaData();
+        try (ResultSet rs = meta.getColumns(null, null, "produit", "supprime")) {
+            return rs.next();
+        }
+    }
+
+    private String buildBaseSelect(boolean includeDeleted) throws SQLException {
+        String sql = BASE_SELECT;
+        try (Connection conn = getConnection()) {
+            if (hasSupprimeColumn(conn)) {
+                sql += includeDeleted ? "WHERE p.supprime = 1 " : "WHERE p.supprime = 0 ";
+            } else {
+                sql += "WHERE 1=1 ";
+            }
+        }
+        return sql;
+    }
+
     // ── Lister avec filtres (maquette : categorie, statut, collection, taille,
     // couleur, recherche) ──
     public List<Produit> lister(String recherche, String categorie,
             String statut, String collectionId,
             String taille, String couleur) throws SQLException {
         List<Produit> liste = new ArrayList<>();
-        StringBuilder sql = new StringBuilder(BASE_SELECT + "WHERE 1=1 ");
+        StringBuilder sql = new StringBuilder(buildBaseSelect(false));
         List<Object> params = new ArrayList<>();
 
         if (recherche != null && !recherche.trim().isEmpty()) {
@@ -87,7 +106,7 @@ public class ProduitDAO {
 
     // ── Trouver par ID ─────────────────────────────────────
     public Produit trouverParId(int id) throws SQLException {
-        String sql = BASE_SELECT + "WHERE p.id = ?";
+        String sql = buildBaseSelect(false) + "AND p.id = ?";
         try (Connection conn = getConnection();
                 PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -104,8 +123,6 @@ public class ProduitDAO {
     }
 
     public void ajouter(Produit p, List<Integer> matiereIds, List<Double> quantites) throws SQLException {
-        String sqlProduit = "INSERT INTO produit (nom, categorie, taille, couleur, prix, statut, collection_id, image) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         String sqlPM = "INSERT INTO produit_matiere (produit_id, matiere_id, quantite) VALUES (?, ?, ?)";
         String sqlSelectMatiere = "SELECT nom, quantite FROM matiere WHERE id = ? FOR UPDATE";
         String sqlUpdateMatiere = "UPDATE matiere SET quantite = quantite - ? WHERE id = ?";
@@ -114,6 +131,11 @@ public class ProduitDAO {
         try {
             conn = getConnection();
             conn.setAutoCommit(false);
+
+            boolean useSoftDelete = hasSupprimeColumn(conn);
+            String sqlProduit = useSoftDelete
+                    ? "INSERT INTO produit (nom, categorie, taille, couleur, prix, statut, collection_id, image, supprime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)"
+                    : "INSERT INTO produit (nom, categorie, taille, couleur, prix, statut, collection_id, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             
             int prodId;
             try (PreparedStatement ps = conn.prepareStatement(sqlProduit, Statement.RETURN_GENERATED_KEYS)) {
@@ -135,7 +157,7 @@ public class ProduitDAO {
                         prodId = rs.getInt(1);
                         p.setId(prodId);
                     } else {
-                        throw new SQLException("Échec de la création du produit, aucun ID généré.");
+                        throw new SQLException("echec de la creation du produit, aucun ID genere.");
                     }
                 }
             }
@@ -154,11 +176,11 @@ public class ProduitDAO {
                                 String nomMat = rs.getString("nom");
                                 double currentQty = rs.getDouble("quantite");
                                 if (currentQty < qtyNeeded) {
-                                    throw new SQLException("Stock insuffisant pour la matière \"" + nomMat + 
-                                        "\" (disponible: " + currentQty + ", demandé: " + qtyNeeded + ")");
+                                    throw new SQLException("Stock insuffisant pour la matiere \"" + nomMat + 
+                                        "\" (disponible: " + currentQty + ", demande: " + qtyNeeded + ")");
                                 }
                             } else {
-                                throw new SQLException("Matière avec l'ID " + matId + " introuvable.");
+                                throw new SQLException("Matiere avec l'ID " + matId + " introuvable.");
                             }
                         }
                     }
@@ -217,33 +239,36 @@ public class ProduitDAO {
 
     // ── Supprimer ──────────────────────────────────────────
     public void supprimer(int id) throws SQLException {
-        String deleteLignes = "DELETE FROM ligne_commande WHERE produit_id = ?";
-        String deleteProduit = "DELETE FROM produit WHERE id = ?";
+        CorbeilleDAO corbeilleDAO = new CorbeilleDAO();
+        corbeilleDAO.archiverProduit(id);
+    }
 
-        Connection conn = null;
-        try {
-            conn = getConnection();
-            conn.setAutoCommit(false);
-
-            try (PreparedStatement psLignes = conn.prepareStatement(deleteLignes)) {
-                psLignes.setInt(1, id);
-                psLignes.executeUpdate();
+    public List<Produit> listerCorbeille() throws SQLException {
+        List<Produit> liste = new ArrayList<>();
+        try (Connection conn = getConnection()) {
+            if (!hasSupprimeColumn(conn)) {
+                return liste;
             }
-
-            try (PreparedStatement psProduit = conn.prepareStatement(deleteProduit)) {
-                psProduit.setInt(1, id);
-                psProduit.executeUpdate();
+        }
+        String sql = buildBaseSelect(true) + "ORDER BY p.id DESC";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                liste.add(map(rs));
             }
+        }
+        return liste;
+    }
 
-            conn.commit();
-        } catch (SQLException e) {
-            if (conn != null) {
-                try { conn.rollback(); } catch (SQLException ex) { /* ignore */ }
+    public void restaurer(int id) throws SQLException {
+        try (Connection conn = getConnection()) {
+            if (!hasSupprimeColumn(conn)) {
+                return;
             }
-            throw e;
-        } finally {
-            if (conn != null) {
-                try { conn.close(); } catch (SQLException e) { /* ignore */ }
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE produit SET supprime = 0 WHERE id = ?")) {
+                ps.setInt(1, id);
+                ps.executeUpdate();
             }
         }
     }
@@ -278,16 +303,24 @@ public class ProduitDAO {
     }
 
     public int compterParStatut(String statut) throws SQLException {
-        String sql = statut == null
-                ? "SELECT COUNT(*) FROM produit"
-                : "SELECT COUNT(*) FROM produit WHERE statut = ?";
-        try (Connection conn = getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)) {
-            if (statut != null)
-                ps.setString(1, statut);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next())
-                return rs.getInt(1);
+        try (Connection conn = getConnection()) {
+            String sql;
+            if (hasSupprimeColumn(conn)) {
+                sql = statut == null
+                        ? "SELECT COUNT(*) FROM produit WHERE supprime = 0"
+                        : "SELECT COUNT(*) FROM produit WHERE supprime = 0 AND statut = ?";
+            } else {
+                sql = statut == null
+                        ? "SELECT COUNT(*) FROM produit"
+                        : "SELECT COUNT(*) FROM produit WHERE statut = ?";
+            }
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                if (statut != null)
+                    ps.setString(1, statut);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next())
+                    return rs.getInt(1);
+            }
         }
         return 0;
     }

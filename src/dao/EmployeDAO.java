@@ -93,8 +93,8 @@ public List<Employe> getAllEmployes(String statut, String role, String dateDebut
     }
     
     // Tri dynamique
-    String orderBy = "id"; // par défaut
-    String order = "ASC"; // par défaut
+    String orderBy = "id"; // par defaut
+    String order = "ASC"; // par defaut
     
     if (sortBy != null && !sortBy.isEmpty()) {
         switch(sortBy) {
@@ -291,25 +291,13 @@ public List<Employe> getAllEmployes(String statut, String role, String dateDebut
     }
     
     public boolean deleteEmployeLogique(int id) {
-        String sql = "UPDATE employe SET statut = 'INACTIF' WHERE id = ?";
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        
         try {
-            conn = DBConnection.getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            return pstmt.executeUpdate() > 0;
+            CorbeilleDAO corbeilleDAO = new CorbeilleDAO();
+            corbeilleDAO.archiverEmploye(id);
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
     

@@ -15,24 +15,24 @@ import java.util.ArrayList;
  *
  * Toutes les requêtes SQL pour la page finance-list.jsp.
  *
- * Les données viennent de DEUX tables différentes :
+ * Les donnees viennent de DEUX tables differentes :
  *   1. `commande`  → le chiffre d'affaires (montant_total des commandes LIVREES)
- *   2. `salaire`   → les dépenses salaires (salaire_net des salaires PAYES)
- *   3. `matiere`   → les dépenses matières (quantite * valeur_unitaire)
+ *   2. `salaire`   → les depenses salaires (salaire_net des salaires PAYES)
+ *   3. `matiere`   → les depenses matieres (quantite * valeur_unitaire)
  *
- * Méthodes :
+ * Methodes :
  *   getChiffreAffairesTotal()     → SUM montant_total des commandes LIVREES
  *   getTotalSalairesPaies()       → SUM salaire_net des salaires statut=PAYE
- *   getTotalAchatsMatières()      → SUM quantite * valeur_unitaire de toutes les matières
- *   listerDernieresCommandes()    → les 10 dernières commandes livrées (pour le tableau)
+ *   getTotalAchatsMatieres()      → SUM quantite * valeur_unitaire de toutes les matieres
+ *   listerDernieresCommandes()    → les 10 dernieres commandes livrees (pour le tableau)
  */
 public class FinanceDAO {
 
     // ─────────────────────────────────────────────────────────────
     // 1. CHIFFRE D'AFFAIRES TOTAL
     //    = somme des montant_total de toutes les commandes LIVREES
-    //    Une commande est comptée dans le CA seulement quand elle
-    //    est livrée (statut != 'ANNULEE')
+    //    Une commande est comptee dans le CA seulement quand elle
+    //    est livree (statut != 'ANNULEE')
     // ─────────────────────────────────────────────────────────────
     public double getChiffreAffairesTotal() {
         return getChiffreAffairesTotal(LocalDate.now().getYear());
@@ -57,7 +57,7 @@ public class FinanceDAO {
     }
 
     // ─────────────────────────────────────────────────────────────
-    // 2. TOTAL SALAIRES PAYÉS
+    // 2. TOTAL SALAIRES PAYeS
     //    = somme des salaire_brut de tous les salaires avec statut=PAYE
     //    pour garder le même calcul que le dashboard
     // ─────────────────────────────────────────────────────────────
@@ -84,8 +84,8 @@ public class FinanceDAO {
     }
 
     // ─────────────────────────────────────────────────────────────
-    // 3. TOTAL ACHATS MATIÈRES PREMIÈRES
-    //    = somme des dépenses enregistrées dans la table finance
+    // 3. TOTAL ACHATS MATIeRES PREMIeRES
+    //    = somme des depenses enregistrees dans la table finance
     //    pour correspondre au calcul du dashboard
     // ─────────────────────────────────────────────────────────────
     public double getTotalAchatsMatieres() {
@@ -113,7 +113,7 @@ public class FinanceDAO {
    
 
     // ─────────────────────────────────────────────────────────────
-    // 4. NOMBRE TOTAL DE COMMANDES LIVRÉES
+    // 4. NOMBRE TOTAL DE COMMANDES LIVReES
     //    Sert à afficher un KPI sur la page finance
     // ─────────────────────────────────────────────────────────────
     public int getNbCommandesLivrees() {
@@ -137,9 +137,9 @@ public class FinanceDAO {
     }
 
     // ─────────────────────────────────────────────────────────────
-    // 5. LISTE DES DERNIÈRES COMMANDES LIVRÉES
-    //    Pour le tableau "Détail des recettes" sur finance-list.jsp
-    //    On récupère les 10 plus récentes avec le nom du client
+    // 5. LISTE DES DERNIeRES COMMANDES LIVReES
+    //    Pour le tableau "Detail des recettes" sur finance-list.jsp
+    //    On recupere les 10 plus recentes avec le nom du client
     // ─────────────────────────────────────────────────────────────
     public ArrayList<String[]> getDernieresCommandesLivrees() {
         return getDernieresCommandesLivrees(LocalDate.now().getYear());
@@ -147,7 +147,7 @@ public class FinanceDAO {
 
     public ArrayList<String[]> getDernieresCommandesLivrees(int annee) {
         // On utilise String[] à 4 cases : [numero, client_nom, montant, date]
-        // Règle du projet : pas de HashMap → tableau simple String[]
+        // Regle du projet : pas de HashMap → tableau simple String[]
         ArrayList<String[]> liste = new ArrayList<String[]>();
 
         String sql = "SELECT c.numero, cl.nom AS client_nom, "
@@ -165,7 +165,7 @@ public class FinanceDAO {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 String[] ligne = new String[4];
-                ligne[0] = rs.getString("numero");          // numéro commande
+                ligne[0] = rs.getString("numero");          // numero commande
                 ligne[1] = rs.getString("client_nom");      // nom du client
                 ligne[2] = String.format("%,.0f", rs.getDouble("montant"));
                 ligne[3] = rs.getString("date_commande");   // date

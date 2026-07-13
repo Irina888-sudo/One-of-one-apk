@@ -5,13 +5,13 @@ $sqlFiles = @(
 )
 
 foreach ($sqlFile in $sqlFiles) {
-    Write-Host "Exécution de: $sqlFile"
+    Write-Host "Execution de: $sqlFile"
     Get-Content $sqlFile | & $mysqlPath -u root
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "✓ Fichier exécuté avec succès"
+        Write-Host "✓ Fichier execute avec succes"
     } else {
-        Write-Host "✗ Erreur lors de l'exécution du fichier"
+        Write-Host "✗ Erreur lors de l'execution du fichier"
     }
 }
 
-Write-Host "Déploiement SQL terminé!"
+Write-Host "Deploiement SQL termine!"

@@ -5,7 +5,7 @@ Content-Length: 2534
 Date: Thu, 09 Jul 2026 08:02:53 GMT
 Connection: close
 
-<!doctype html><html lang="fr"><head><title>État HTTP 500 – Erreur interne du serveur</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>État HTTP 500 – Erreur interne du serveur</h1><hr class="line" /><p><b>Type</b> Rapport d'exception</p><p><b>message</b> Impossible de compiler la classe pour la JSP: </p><p><b>description</b> Le serveur a rencontré une erreur interne qui l'a empêché de satisfaire la requête.</p><p><b>exception</b></p><pre>org.apache.jasper.JasperException: Impossible de compiler la classe pour la JSP: 
+<!doctype html><html lang="fr"><head><title>etat HTTP 500 – Erreur interne du serveur</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>etat HTTP 500 – Erreur interne du serveur</h1><hr class="line" /><p><b>Type</b> Rapport d'exception</p><p><b>message</b> Impossible de compiler la classe pour la JSP: </p><p><b>description</b> Le serveur a rencontre une erreur interne qui l'a empêche de satisfaire la requête.</p><p><b>exception</b></p><pre>org.apache.jasper.JasperException: Impossible de compiler la classe pour la JSP: 
 
 Une erreur s&#39;est produite à la ligne : [62] dans le fichier jsp : [&#47;jsp&#47;send-email.jsp]
 System.out cannot be resolved to a type
@@ -31,4 +31,4 @@ Stacktrace:
 	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:331)
 	javax.servlet.http.HttpServlet.service(HttpServlet.java:583)
 	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
-</pre><p><b>note</b> La trace complète de la cause mère de cette erreur est disponible dans les fichiers journaux de ce serveur.</p><hr class="line" /><h3>Apache Tomcat/8.5.96</h3></body></html>
+</pre><p><b>note</b> La trace complete de la cause mere de cette erreur est disponible dans les fichiers journaux de ce serveur.</p><hr class="line" /><h3>Apache Tomcat/8.5.96</h3></body></html>

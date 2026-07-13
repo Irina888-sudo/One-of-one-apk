@@ -2,15 +2,15 @@ package model;
 
 /**
  * Finance.java
- * Représente une ligne de la table `finance`.
+ * Represente une ligne de la table `finance`.
  *
  * Dans ce projet, une Finance peut être :
- *   - Une RECETTE  : vient automatiquement d'une commande livrée
- *   - Une DEPENSE  : achat de matière première, ou salaire payé
+ *   - Une RECETTE  : vient automatiquement d'une commande livree
+ *   - Une DEPENSE  : achat de matiere premiere, ou salaire paye
  *
  * Colonnes de la table :
  *   id, description, type (RECETTE/DEPENSE), montant,
- *   date_transaction, commande_id (si recette liée à une commande)
+ *   date_transaction, commande_id (si recette liee à une commande)
  */
 public class Finance {
 
@@ -19,7 +19,7 @@ public class Finance {
     private String type;          // "RECETTE" ou "DEPENSE"
     private double montant;
     private String dateTransaction; // format YYYY-MM-DD
-    private int    commandeId;      // 0 si pas lié à une commande
+    private int    commandeId;      // 0 si pas lie à une commande
 
     public Finance() {}
 

@@ -5,22 +5,22 @@
                              http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <!-- Déclare produit-save.jsp comme servlet pour activer multipart/form-data -->
+    <!-- Declare produit-save.jsp comme servlet pour activer multipart/form-data -->
     <servlet>
         <servlet-name>ProduitSave</servlet-name>
-        <jsp-file>/jsp/produit-save.jsp</jsp-file>
+        <jsp-file>/jsp/produits/produit-save.jsp</jsp-file>
         <multipart-config>
             <!-- Taille max du fichier : 5 MB -->
             <max-file-size>5242880</max-file-size>
             <!-- Taille max de la requête : 10 MB -->
             <max-request-size>10485760</max-request-size>
-            <!-- Seuil avant écriture sur disque : 512 KB -->
+            <!-- Seuil avant ecriture sur disque : 512 KB -->
             <file-size-threshold>524288</file-size-threshold>
         </multipart-config>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProduitSave</servlet-name>
-        <url-pattern>/jsp/produit-save.jsp</url-pattern>
+        <url-pattern>/jsp/produits/produit-save.jsp</url-pattern>
     </servlet-mapping>
 
 

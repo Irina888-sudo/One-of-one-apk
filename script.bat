@@ -1,14 +1,15 @@
+
 @echo off
 setlocal enabledelayedexpansion
 
 :: ==============================================================================
 :: CONFIGURATION DES CHEMINS - MODIFIEZ CES CHEMINS SELON VOTRE CONFIGURATION
 :: ==============================================================================
-set "TOMCAT_DIR=D:\xampp\tomcat"
+set "TOMCAT_DIR=C:\xampp\tomcat"
 
-:: Définir JAVA_HOME (si non défini)
+:: Definir JAVA_HOME (si non defini)
 if "%JAVA_HOME%"=="" (
-    set "JAVA_HOME=D:\Program Files\Java\jdk-23"
+    set "JAVA_HOME=C:\Program Files\Java\jdk-21"
 )
 :: Ajouter le JDK au PATH pour cette session
 set "PATH=%JAVA_HOME%\bin;%PATH%"
@@ -24,7 +25,7 @@ if not exist "WebContent\WEB-INF\classes" (
     mkdir "WebContent\WEB-INF\classes"
 )
 
-:: Générer la liste de tous les fichiers .java récursivement
+:: Generer la liste de tous les fichiers .java recursivement
 (for /f "delims=" %%i in ('dir /s /b src\*.java') do (
     set "filePath=%%i"
     set "filePath=!filePath:\=/!"
@@ -44,7 +45,7 @@ echo Compilation reussie.
 
 echo.
 echo [2/4] Creation du fichier WAR...
-:: Supprimer l'ancien WAR local pour éviter une copie erronée
+:: Supprimer l'ancien WAR local pour eviter une copie erronee
 if exist "One-of-one-apk.war" del /f /q "One-of-one-apk.war"
 
 cd WebContent

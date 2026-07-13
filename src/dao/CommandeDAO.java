@@ -210,21 +210,8 @@ public class CommandeDAO {
     }
 
     public void supprimer(int id) throws SQLException {
-        String deleteLignes = "DELETE FROM ligne_commande WHERE commande_id = ?";
-        String deleteCommande = "DELETE FROM commande WHERE id = ?";
-
-        try (Connection conn = getConnection()) {
-            conn.setAutoCommit(false);
-            try (PreparedStatement ps = conn.prepareStatement(deleteLignes)) {
-                ps.setInt(1, id);
-                ps.executeUpdate();
-            }
-            try (PreparedStatement ps = conn.prepareStatement(deleteCommande)) {
-                ps.setInt(1, id);
-                ps.executeUpdate();
-            }
-            conn.commit();
-        }
+        CorbeilleDAO corbeilleDAO = new CorbeilleDAO();
+        corbeilleDAO.archiverCommande(id);
     }
 
     private void insererLignes(Connection conn, Commande commande) throws SQLException {

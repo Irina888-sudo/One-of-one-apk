@@ -47,7 +47,11 @@ public class SalaireDAO {
         }
         return null;
     }
-    public boolean delete(int id) throws SQLException { throw new UnsupportedOperationException("Not implemented yet"); }
+    public boolean delete(int id) throws SQLException {
+        CorbeilleDAO corbeilleDAO = new CorbeilleDAO();
+        corbeilleDAO.archiverSalaire(id);
+        return true;
+    }
 
     public boolean updateStatut(int salaireId, String statut) throws SQLException {
         String sql = "UPDATE salaire SET statut = ? WHERE id = ?";

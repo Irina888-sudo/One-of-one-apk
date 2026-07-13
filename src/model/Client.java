@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Modèle Java représentant un enregistrement de la table `client`.
+ * Modele Java representant un enregistrement de la table `client`.
  *
  * Chaque attribut correspond à une colonne de la table :
  *   id, nom, email, telephone, adresse, statut, motif_blocage, created_at
@@ -16,12 +16,12 @@ public class Client {
     private String adresse;
     private String statut;        // 'ACTIF' ou 'BLOQUE'
     private String motifBlocage;  // rempli seulement si statut = BLOQUE
-    private String createdAt;     // date de création (stockée en String pour simplifier l'affichage JSP)
+    private String createdAt;     // date de creation (stockee en String pour simplifier l'affichage JSP)
 
-    // ── Constructeur vide (obligatoire pour créer un objet avant de le remplir) ──
+    // ── Constructeur vide (obligatoire pour creer un objet avant de le remplir) ──
     public Client() {}
 
-    // ── Constructeur complet (pratique pour créer un client depuis la BDD) ──
+    // ── Constructeur complet (pratique pour creer un client depuis la BDD) ──
     public Client(int id, String nom, String email, String telephone,
                   String adresse, String statut, String motifBlocage, String createdAt) {
         this.id           = id;
@@ -54,7 +54,7 @@ public class Client {
     public void setMotifBlocage(String m)       { this.motifBlocage = m; }
     public void setCreatedAt(String c)          { this.createdAt = c; }
 
-    // ── toString (utile pour déboguer dans la console) ─────────────────────
+    // ── toString (utile pour deboguer dans la console) ─────────────────────
     @Override
     public String toString() {
         return "Client{id=" + id + ", nom='" + nom + "', statut='" + statut + "'}";

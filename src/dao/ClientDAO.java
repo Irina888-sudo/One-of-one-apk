@@ -26,7 +26,7 @@ public class ClientDAO {
     }
 
     // ─────────────────────────────────────────────────────────────────────
-    // LISTER TOUS LES CLIENTS (tri alphabétique sur le nom)
+    // LISTER TOUS LES CLIENTS (tri alphabetique sur le nom)
     // ─────────────────────────────────────────────────────────────────────
     public ArrayList<Client> listerTous() {
         ArrayList<Client> liste = new ArrayList<Client>();
@@ -62,7 +62,7 @@ public class ClientDAO {
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, statut);  // évite les injections SQL
+            ps.setString(1, statut);  // evite les injections SQL
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -82,7 +82,7 @@ public class ClientDAO {
 
     // ─────────────────────────────────────────────────────────────────────
     // TROUVER UN CLIENT PAR SON ID
-    // Retourne null si non trouvé
+    // Retourne null si non trouve
     // ─────────────────────────────────────────────────────────────────────
     public Client trouverParId(int id) {
         Client client = null;
@@ -111,7 +111,7 @@ public class ClientDAO {
 
     // ─────────────────────────────────────────────────────────────────────
     // AJOUTER UN NOUVEAU CLIENT (INSERT)
-    // Retourne true si l'insertion a réussi, false sinon
+    // Retourne true si l'insertion a reussi, false sinon
     // ─────────────────────────────────────────────────────────────────────
     public boolean ajouter(Client client) {
         String sql = "INSERT INTO client (nom, email, telephone, adresse, statut) VALUES (?, ?, ?, ?, 'ACTIF')";
@@ -129,7 +129,7 @@ public class ClientDAO {
             ps.close();
             conn.close();
 
-            return lignesAffectees > 0;  // true si au moins 1 ligne insérée
+            return lignesAffectees > 0;  // true si au moins 1 ligne inseree
 
         } catch (SQLException e) {
             System.err.println("Erreur ClientDAO.ajouter() : " + e.getMessage());
@@ -165,10 +165,33 @@ public class ClientDAO {
         }
     }
 
+    private boolean aDesCommandesLiees(int id) {
+        String sql = "SELECT COUNT(*) FROM commande WHERE client_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Erreur ClientDAO.aDesCommandesLiees() : " + e.getMessage());
+        }
+
+        return false;
+    }
+
     // ─────────────────────────────────────────────────────────────────────
     // SUPPRIMER UN CLIENT (DELETE)
     // ─────────────────────────────────────────────────────────────────────
     public boolean supprimer(int id) {
+        if (aDesCommandesLiees(id)) {
+            System.err.println("Impossible de supprimer le client " + id + " : des commandes sont dejà liees.");
+            return false;
+        }
+
         String sql = "DELETE FROM client WHERE id = ?";
 
         try {

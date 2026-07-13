@@ -43,7 +43,7 @@ public class DashboardDAO {
                 }
             }
 
-            // 2. Dépenses par mois (Achats matières et autres dans la table finance)
+            // 2. Depenses par mois (Achats matieres et autres dans la table finance)
             String sqlDepensesFinance = "SELECT MONTH(date_transaction) as mois, SUM(montant) as depenses " +
                                         "FROM finance " +
                                         "WHERE type = 'DEPENSE' AND YEAR(date_transaction) = ? " +
@@ -61,7 +61,7 @@ public class DashboardDAO {
                 }
             }
 
-            // Dépenses par mois (Salaires payés, depuis la table salaire si non inclus dans finance)
+            // Depenses par mois (Salaires payes, depuis la table salaire si non inclus dans finance)
             String sqlSalaires = "SELECT MONTH(mois) as mois, SUM(salaire_brut) as total_salaires " +
                                  "FROM salaire " +
                                  "WHERE statut = 'PAYE' AND YEAR(mois) = ? " +
@@ -79,9 +79,9 @@ public class DashboardDAO {
                 }
             }
 
-            // 3. Évolution du stock de matières 
-            // Note: Faute d'historique (ex: table mouvement_stock), on récupère la quantité actuelle globale
-            // que l'on assigne au mois actuel de l'année. 
+            // 3. evolution du stock de matieres 
+            // Note: Faute d'historique (ex: table mouvement_stock), on recupere la quantite actuelle globale
+            // que l'on assigne au mois actuel de l'annee. 
             String sqlStock = "SELECT SUM(quantite) as total_stock FROM matiere";
             double currentStock = 0;
             try (PreparedStatement ps = conn.prepareStatement(sqlStock);

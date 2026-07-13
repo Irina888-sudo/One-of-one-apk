@@ -29,7 +29,7 @@ echo "=== Compilation des fichiers Java ==="
 
 find "$SRC_DIR" -name "*.java" > sources.txt
 
-# Correction du Classpath pour macOS (séparateur ':') avec servlet-api.jar de Tomcat
+# Correction du Classpath pour macOS (separateur ':') avec servlet-api.jar de Tomcat
 javac \
 -cp "$TOMCAT_HOME/lib/servlet-api.jar:$WEB_DIR/WEB-INF/lib/*" \
 -d "$BUILD_CLASSES" \
@@ -45,9 +45,9 @@ fi
 rm -f sources.txt
 
 # ===========================
-# Création du WAR
+# Creation du WAR
 # ===========================
-echo "=== Création du fichier WAR ==="
+echo "=== Creation du fichier WAR ==="
 
 cd "$WEB_DIR" || exit
 
@@ -56,9 +56,9 @@ jar -cvf "../$APP_NAME.war" .
 cd ..
 
 # ===========================
-# Déploiement dans Tomcat
+# Deploiement dans Tomcat
 # ===========================
-echo "=== Déploiement ==="
+echo "=== Deploiement ==="
 
 rm -f "$TOMCAT_WEBAPPS/$APP_NAME.war"
 rm -rf "$TOMCAT_WEBAPPS/$APP_NAME"
@@ -66,8 +66,8 @@ rm -rf "$TOMCAT_WEBAPPS/$APP_NAME"
 cp "$APP_NAME.war" "$TOMCAT_WEBAPPS/"
 
 echo ""
-echo "✅ Déploiement terminé !"
-echo "Le fichier $APP_NAME.war a été copié dans :"
+echo "✅ Deploiement termine !"
+echo "Le fichier $APP_NAME.war a ete copie dans :"
 echo "$TOMCAT_WEBAPPS"
 echo ""
-echo "Redémarre Tomcat si nécessaire."
+echo "Redemarre Tomcat si necessaire."

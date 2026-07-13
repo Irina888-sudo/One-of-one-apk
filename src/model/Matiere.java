@@ -1,7 +1,7 @@
 package model;
 
 /**
- * Modèle Java représentant un enregistrement de la table `matiere`.
+ * Modele Java representant un enregistrement de la table `matiere`.
  */
 public class Matiere {
 

@@ -96,12 +96,12 @@ public class Produit {
         this.image = image;
     }
 
-    /** Génère un SKU d'affichage type OOO-24-001 */
+    /** Genere un SKU d'affichage type OOO-24-001 */
     public String getSku() {
         return String.format("OOO-24-%03d", id);
     }
 
-    /** Initiales pour l'avatar couleur (2 premières lettres du nom) */
+    /** Initiales pour l'avatar couleur (2 premieres lettres du nom) */
     public String getInitiales() {
         if (nom == null || nom.isEmpty())
             return "??";

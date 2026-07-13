@@ -80,16 +80,16 @@ public class LivraisonDAO {
     try {
         Connection conn = DBConnection.getConnection();
 
-        String sql = "SELECT DISTINCT livreur_nom " +
-                     "FROM vue_livraisons " +
-                     "WHERE livreur_nom IS NOT NULL " +
-                     "ORDER BY livreur_nom";
+        String sql = "SELECT DISTINCT livreur " +
+                     "FROM livraison " +
+                     "WHERE livreur IS NOT NULL " +
+                     "ORDER BY livreur";
 
         PreparedStatement ps = conn.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
 
         while (rs.next()) {
-            livreurs.add(rs.getString("livreur_nom"));
+            livreurs.add(rs.getString("livreur"));
         }
 
         rs.close();
@@ -241,18 +241,8 @@ public void update(Livraison l) {
 public void delete(int id) {
 
     try {
-        Connection conn = DBConnection.getConnection();
-
-        String sql = "DELETE FROM livraison WHERE id = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-
-        ps.setInt(1, id);
-
-        ps.executeUpdate();
-
-        ps.close();
-        conn.close();
-
+        CorbeilleDAO corbeilleDAO = new CorbeilleDAO();
+        corbeilleDAO.archiverLivraison(id);
     } catch (Exception e) {
         e.printStackTrace();
     }

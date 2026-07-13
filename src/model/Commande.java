@@ -77,8 +77,8 @@ public class Commande {
         switch (statut) {
             case "ATTENTE": return "En attente";
             case "PRODUCTION": return "En production";
-            case "LIVREE": return "Livrée";
-            case "ANNULEE": return "Annulée";
+            case "LIVREE": return "Livree";
+            case "ANNULEE": return "Annulee";
             default: return statut;
         }
     }
