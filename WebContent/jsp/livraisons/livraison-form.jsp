@@ -61,6 +61,7 @@ if (idParam != null) {
 </head>
 <body>
     <div class="main-content">
+        <%@ include file="/jsp/nav/navbar.jsp" %>
         <div class="form-container">
             <h1><%= (livraison == null) ? "Creer une livraison" : "Modifier la livraison" %></h1>
             <% if (errorMessage != null) { %>

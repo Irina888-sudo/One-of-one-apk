@@ -90,6 +90,7 @@
     </head>
    
         <body>
+            <%@ include file="/jsp/nav/navbar.jsp" %>
             <div class="page-header">
                 <h1><%= titre %></h1>
                 <p><%= isEdit ? "Modifiez les informations du produit." : "Remplissez les informations du nouveau produit." %></p>

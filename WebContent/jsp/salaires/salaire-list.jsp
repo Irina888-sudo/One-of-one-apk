@@ -102,8 +102,8 @@
             <option value="PAYE" <%= "PAYE".equals(statutFilter) ? "selected" : "" %>>PAYE</option>
             <option value="ATTENTE" <%= "ATTENTE".equals(statutFilter) ? "selected" : "" %>>ATTENTE</option>
         </select>
-        <button type="submit" class="btn" style="background-color:#3ecfb2; color:white; padding:10px 16px; border:none; border-radius:8px;">Rechercher</button>
-        <a href="salaire-list.jsp" class="btn" style="background-color:#6b7280; color:white; padding:10px 16px; border-radius:8px; text-decoration:none;">Reinitialiser</a>
+        <button type="submit" class="btn" >Rechercher</button>
+        <a href="salaire-list.jsp" class="btn" >Reinitialiser</a>
     </form>
 
     <table>

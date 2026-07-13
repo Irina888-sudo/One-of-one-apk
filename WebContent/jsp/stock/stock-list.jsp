@@ -112,10 +112,10 @@
            class="btn-filtre <%= "INACTIF".equals(filtreStatut) ? "actif" : "" %>">
             Inactifs
         </a>
-        <form action="stock-list.jsp" method="GET" class="form-recherche" style="display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;">
+        <form action="stock-list.jsp" method="GET" class="filtre" >
             <input type="hidden" name="statut" value="<%= filtreStatut %>">
-            <input type="number" name="qMin" placeholder="Min" value="<%= qMin != null ? qMin : "" %>" style="width:90px;">
-            <input type="number" name="qMax" placeholder="Max" value="<%= qMax != null ? qMax : "" %>" style="width:90px;">
+            <input type="number"  name="qMin" placeholder="Min" value=" <%= qMin != null ? qMin : "" %>" style="width:100px;height: 40px; margin-right: 8px;">
+            <input type="number"  name="qMax" placeholder="Max" value=" <%= qMax != null ? qMax : "" %>" style="width:100px;height: 40px; margin-right: 8px;">
             <button type="submit" class="btn-primary">Appliquer</button>
         </form>
     </div>

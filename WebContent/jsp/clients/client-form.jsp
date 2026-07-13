@@ -100,7 +100,7 @@
 
 <%-- ── CONTENU PRINCIPAL ── --%>
 <div class="main-content">
-
+<%@ include file="/jsp/nav/navbar.jsp" %>
     <div class="page-header">
         <div>
             <h1><%= titrePage.toUpperCase() %></h1>
