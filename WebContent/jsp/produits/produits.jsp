@@ -25,6 +25,33 @@
     int totalDisponibles= dao.compterParStatut("DISPONIBLE");
     int totalVendus     = dao.compterParStatut("VENDU");
 
+    // ── Pagination ─────────────────────────────────────────
+    int produitsParPage = 10;
+    int totalProduitsFiltres = produits.size();
+    int totalPages = (int) Math.ceil((double) totalProduitsFiltres / produitsParPage);
+
+    int pageCourante = 1;
+    String pageParam = request.getParameter("page");
+    if (pageParam != null) {
+        try {
+            pageCourante = Integer.parseInt(pageParam);
+        } catch(NumberFormatException e) {
+        }
+    }
+    if (pageCourante < 1) pageCourante = 1;
+    if (pageCourante > totalPages && totalPages > 0) pageCourante = totalPages;
+
+    int debut = (pageCourante - 1) * produitsParPage;
+    int fin = Math.min(debut + produitsParPage, totalProduitsFiltres);
+
+    String queryParams = "";
+    if (recherche != null && !recherche.isBlank()) queryParams += "&recherche=" + java.net.URLEncoder.encode(recherche, "UTF-8");
+    if (filtreCat != null && !filtreCat.isBlank()) queryParams += "&categorie=" + java.net.URLEncoder.encode(filtreCat, "UTF-8");
+    if (filtreStatut != null && !filtreStatut.isBlank()) queryParams += "&statut=" + java.net.URLEncoder.encode(filtreStatut, "UTF-8");
+    if (filtreCol != null && !filtreCol.isBlank()) queryParams += "&collection=" + java.net.URLEncoder.encode(filtreCol, "UTF-8");
+    if (filtreTaille != null && !filtreTaille.isBlank()) queryParams += "&taille=" + java.net.URLEncoder.encode(filtreTaille, "UTF-8");
+    if (filtreCouleur != null && !filtreCouleur.isBlank()) queryParams += "&couleur=" + java.net.URLEncoder.encode(filtreCouleur, "UTF-8");
+
     // Message flash (apres ajout/modif/suppression)
     String flash = (String) session.getAttribute("flash");
     String flashType = (String) session.getAttribute("flashType");
@@ -174,7 +201,8 @@
 
 %>
                             <%
-    for (Produit p : produits) {
+    for (int i = debut;    i < fin;    i++) {
+        Produit p = produits.get(i);
 
 %>
                             <tr>
@@ -234,8 +262,42 @@
                     </tbody>
                 </table>
             </div>
-            </div><!-- /content -->
-            </div><!-- /main -->
 
-        </body>
-    </html>
+            <%
+    if (totalPages > 1) {
+
+%>
+            <div class="pagination">
+                <%
+    if (pageCourante > 1) {
+
+%>
+                <a href="produits.jsp?page=<%= pageCourante - 1 %><%= queryParams %>" class="btn-page">◀ Précédent</a>
+                <% } %>
+                <%
+    for (int pIdx = 1;    pIdx <= totalPages;    pIdx++) {
+
+%>
+                <a href="produits.jsp?page=<%= pIdx %><%= queryParams %>"
+                class="btn-page <%= pIdx == pageCourante ? "btn-page-actif" : "" %>">
+                <%= pIdx %>
+            </a>
+            <% } %>
+            <%
+    if (pageCourante < totalPages) {
+
+%>
+            <a href="produits.jsp?page=<%= pageCourante + 1 %><%= queryParams %>" class="btn-page">Suivant ▶</a>
+            <% } %>
+        </div>
+        <% } %>
+
+        <p class="pagination-info">
+            Affichage de <%= (totalProduitsFiltres == 0 ? 0 : debut + 1) %> à <%= fin %> sur <%= totalProduitsFiltres %> produit(s)
+        </p>
+
+        </div><!-- /content -->
+        </div><!-- /main -->
+
+    </body>
+</html>
