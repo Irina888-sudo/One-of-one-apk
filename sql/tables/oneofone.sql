@@ -185,6 +185,17 @@ FOREIGN KEY (commande_id) REFERENCES commande(id)
 
 
 
+ALTER TABLE conge
+  ADD COLUMN IF NOT EXISTS type_conge ENUM('PAYE','NON_PAYE') DEFAULT 'NON_PAYE';
+
+ALTER TABLE salaire
+  ADD COLUMN IF NOT EXISTS salaire_net DECIMAL(10,2) DEFAULT 0.00,
+  ADD COLUMN IF NOT EXISTS jours_conges INT DEFAULT 0;
+
+-- Optionally initialize salaire_net to salaire_brut for existing rows
+UPDATE salaire SET salaire_net = salaire_brut WHERE salaire_net IS NULL OR salaire_net = 0;
+
+
 
 
 CREATE VIEW vue_commandes AS
@@ -287,4 +298,10 @@ FROM salaire
 WHERE statut = 'ATTENTE'
 AND MONTH(mois) = MONTH(NOW())
 AND YEAR(mois)  = YEAR(NOW())) AS salaires_attente;
+
+-- Donnees initiales fusionnees depuis sql/inserts/test_data_b3.sql
+INSERT IGNORE INTO utilisateur (id, email, password, role, actif) VALUES
+(1, 'admin@oneofone.fr', SHA2('admin123', 256), 'ADMIN', TRUE);
+
+
 
