@@ -118,7 +118,7 @@
                     <option value="">Tous les statuts</option>
                     <option value="ATTENTE" <%= "ATTENTE".equals(statut) ? "selected" : "" %>>ATTENTE</option>
                     <option value="EN_COURS" <%= "EN_COURS".equals(statut) ? "selected" : "" %>>EN COURS</option>
-                    <option value="LIVRE" <%= "LIVRE".equals(statut) ? "selected" : "" %>>LIVRe</option>
+                    <option value="LIVRE" <%= "LIVRE".equals(statut) ? "selected" : "" %>>LIVREE</option>
                 </select>
             </div>
 
@@ -188,7 +188,7 @@
                             </span>
                         </td>
                         <td><%= String.format("%.0f", l.getFrais()) %> Ariary</td>
-                        <td><span class="statut-badge <%= statutClass %>">● <%= statutLabel %></span></td>
+                        <td><span class="statut-badge <%= statutClass %>"> <%= statutLabel %></span></td>
                         <td class="actions">
                             <a href="livraison-form.jsp?id=<%= l.getId() %>" class="btn-icon edit" title="Modifier">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:inherit;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>

@@ -112,10 +112,13 @@
                                 <% } %>
                             </select>
                         </div>
-
-                        <button type="submit" class="form-submit-btn">
-                            <%= (livraison == null) ? "Creer" : "Modifier" %>
-                        </button>
+                        
+                        <div class="form-actions">
+                            <a href="livraison-list.jsp" class="form-cancel-btn">Annuler</a>
+                            <button type="submit" class="form-submit-btn">
+                                <%= (livraison == null) ? "Creer" : "Modifier" %>
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>

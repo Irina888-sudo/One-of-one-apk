@@ -128,16 +128,6 @@
                     </tr>
                 </tbody>
             </table>
-
-            <div class="note-calcul">
-                <strong><span class="note-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></span> Calculs :</strong>
-                <ul>
-                    <li><b>CA</b> = SOMME du montant total des commandes de l'ann&eacute;e (hors annul&eacute;es)</li>
-                    <li><b>Salaires</b> = SOMME des salaires pay&eacute;s de l'ann&eacute;e</li>
-                    <li><b>Mati&egrave;res</b> = CO&Ucirc;T des mati&egrave;res consomm&eacute;es par les commandes de l'ann&eacute;e</li>
-                    <li><b>Marge</b> = CA &minus; (Salaires + Mati&egrave;res)</li>
-                </ul>
-            </div>
         </div>
 
         <div class="graphique-container">
