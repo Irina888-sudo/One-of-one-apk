@@ -105,7 +105,7 @@
                     <div class="form-group">
                         <label for="clientId">Client</label>
                         <select id="clientId" name="clientId" required>
-                            <option value="">-- Choisir un client --</option>
+                            <option value=""> Choisir un client </option>
                             <% for (Client client : clients) { %>
                                 <option value="<%= client.getId() %>" <%= client.getId() == commande.getClientId() ? "selected" : "" %>><%= client.getNom() %> - <%= client.getEmail() %></option>
                             <% } %>
@@ -142,7 +142,7 @@
                                         <tr>
                                             <td>
                                                 <select name="produitId" required>
-                                                    <option value="">-- Choisir un produit --</option>
+                                                    <option value=""> Choisir un produit </option>
                                                     <% for (Produit p : produits) { %>
                                                         <option value="<%= p.getId() %>" <%= p.getId() == ligne.getProduitId() ? "selected" : "" %>><%= p.getNom() %></option>
                                                     <% } %>

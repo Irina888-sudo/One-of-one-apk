@@ -130,15 +130,7 @@
                 </tbody>
             </table>
 
-            <div class="note-calcul">
-                <strong><span class="note-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></span> Calculs :</strong>
-                <ul>
-                    <li><b>CA</b> = SOMME du montant total des commandes de l'annee (hors annulees)</li>
-                    <li><b>Salaires</b> = SOMME des salaires payes de l'annee</li>
-                    <li><b>Matieres</b> = COUT des matieres consommees par les commandes de l'annee</li>
-                    <li><b>Marge</b> = CA &minus; (Salaires + Matieres)</li>
-                </ul>
-            </div>
+            
         </div>
 
         <div class="graphique-container">
@@ -160,28 +152,28 @@
         <h3>Tableau recapitulatif</h3>
         <table class="table-recap">
             <thead>
-                <tr><th>Indicateur</th><th>Montant</th><th>Detail du calcul</th></tr>
+                <tr><th>Indicateur</th><th>Montant</th><th>Details</th></tr>
             </thead>
             <tbody>
                 <tr>
                     <td><span class="row-icon-label"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="row-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17l6-6 4 4 8-8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 7h6v6"/></svg> Chiffre d'affaires total</span></td>
                     <td class="montant-positif"><strong><%= String.format("%,.0f", ca) %> Ar</strong></td>
-                    <td><%= nbCmd %> commandes livrees (ligne_commande &times; commande LIVREE)</td>
+                    <td><%= nbCmd %> commandes livrees</td>
                 </tr>
                 <tr>
                     <td><span class="row-icon-label"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="row-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 7V6a2 2 0 012-2h8a2 2 0 012 2v1"/><rect x="4" y="7" width="16" height="10" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11h6"/></svg> Salaires payes</span></td>
                     <td class="montant-negatif">&minus; <%= String.format("%,.0f", salaires) %> Ar</td>
-                    <td>SUM(salaire_net) ou statut = PAYE</td>
+                    <td>Sommes des salaires payees</td>
                 </tr>
                 <tr>
                     <td><span class="row-icon-label"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="row-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4v9l8 4 8-4V7z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10.14v5.86"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 10.14v5.86"/></svg> Achats matieres premieres</span></td>
                     <td class="montant-negatif">&minus; <%= String.format("%,.0f", matieres) %> Ar</td>
-                    <td>SUM(quantite &times; valeur_unitaire) dans la table matiere</td>
+                    <td>Sommes des valeurs des matieres</td>
                 </tr>
                 <tr class="ligne-separateur">
                     <td><span class="row-icon-label"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="row-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 11h16"/></svg> Depenses totales</span></td>
                     <td class="montant-negatif"><strong>&minus; <%= String.format("%,.0f", depenses) %> Ar</strong></td>
-                    <td>Salaires + Matieres</td>
+                    <td>Sommes des Salaires et des Matieres</td>
                 </tr>
                 <tr class="ligne-marge-finale">
                     <td><strong><%= margeLabel %></strong></td>

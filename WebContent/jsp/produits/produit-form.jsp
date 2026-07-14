@@ -177,7 +177,7 @@
                     <div class="form-group">
                         <label>Collection</label>
                         <select name="collection_id">
-                            <option value="">— Aucune —</option>
+                            <option value=""> Aucune </option>
                             <%
     for (Collection col : collections) {
         boolean selected = p.getCollectionId() != null && p.getCollectionId() == col.getId();
@@ -223,7 +223,7 @@
                                 <tr>
                                     <td style="padding: 8px 4px;">
                                         <select name="matiereId" class="select-matiere" style="width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 14px; outline: none; background: #faf9f7;" onchange="updateUnite(this)">
-                                            <option value="">-- Choisir une matiere --</option>
+                                            <option value=""> Choisir une matiere </option>
                                             <% for (Matiere m : matieres) { %>
                                                 <option value="<%= m.getId() %>" data-unite="<%= m.getUnite() != null ? m.getUnite() : "" %>">
                                                     <%= m.getNom() %> (Stock: <%= m.getQuantite() %> <%= m.getUnite() != null ? m.getUnite() : "" %>)
