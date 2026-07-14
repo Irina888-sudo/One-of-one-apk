@@ -79,6 +79,53 @@ body {
     margin-bottom: 14px;
 }
 
+.kpi-icone svg {
+    width: 28px;
+    height: 28px;
+    display: block;
+}
+
+.row-icon-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.row-icon {
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+}
+
+.note-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+
+.status-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+}
+
+.status-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.status-positive {
+    color: #1db899;
+}
+
+.status-warning {
+    color: #951111;
+}
+
 .kpi-contenu small {
     display: block;
     font-size: 11px;

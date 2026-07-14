@@ -91,7 +91,7 @@ tbody tr:hover {
 }
 
 /* ── BOUTONS ICONE (rouge + tooltip au survol) ── */
-.icon-btn {
+.btn-icon, .icon-btn {
     width: 34px;
     height: 34px;
     display: inline-flex;
@@ -108,19 +108,17 @@ tbody tr:hover {
     transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-.icon-btn svg {
+.btn-icon svg, .icon-btn svg {
     width: 16px;
     height: 16px;
-}
-
-.icon-btn:hover {
-    background: #c30000;
-    border-color: #c30000;
-    color: #ffffff;
+    color: inherit;
+    background: none;
+    border-color: initial;
+    fill: none;
 }
 
 /* Tooltip : nom de la fonctionnalite au survol */
-.icon-btn::after {
+.btn-icon::after, .icon-btn::after {
     content: attr(data-tip);
     position: absolute;
     bottom: calc(100% + 8px);
@@ -139,7 +137,7 @@ tbody tr:hover {
     z-index: 5;
 }
 
-.icon-btn:hover::after {
+.btn-icon:hover::after, .icon-btn:hover::after {
     opacity: 1;
 }
 

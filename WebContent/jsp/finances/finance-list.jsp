@@ -56,7 +56,9 @@
     <div class="kpi-grille">
 
         <div class="kpi-card">
-            <div class="kpi-icone">&#x1F4B9;</div>
+            <div class="kpi-icone">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17l6-6 4 4 8-8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 7h6v6"/></svg>
+            </div>
             <div class="kpi-contenu">
                 <small>CHIFFRE D'AFFAIRES TOTAL</small>
                 <h2><%= String.format("%,.0f", ca) %> Ar</h2>
@@ -65,7 +67,9 @@
         </div>
 
         <div class="kpi-card">
-            <div class="kpi-icone">&#x1F4B8;</div>
+            <div class="kpi-icone">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 11h16"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 15h.01"/></svg>
+            </div>
             <div class="kpi-contenu">
                 <small>D&Eacute;PENSES TOTALES</small>
                 <h2><%= String.format("%,.0f", depenses) %> Ar</h2>
@@ -74,7 +78,9 @@
         </div>
 
         <div class="kpi-card">
-            <div class="kpi-icone"><%= margeNette >= 0 ? "&#x1F4C8;" : "&#x1F4C9;" %></div>
+            <div class="kpi-icone">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 17h18"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 13v4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 5v12"/></svg>
+            </div>
             <div class="kpi-contenu">
                 <small><%= margeLabel.toUpperCase() %></small>
                 <h2 style="<%= margeStyle %>">
@@ -96,7 +102,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><span class="point-couleur point-salaires"></span> &#x1F4BC; Salaires pay&eacute;s</td>
+                        <td><span class="point-couleur point-salaires"></span> <span class="row-icon-label"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="row-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 7V6a2 2 0 012-2h8a2 2 0 012 2v1"/><rect x="4" y="7" width="16" height="10" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11h6"/></svg> Salaires pay&eacute;s</span></td>
                         <td><strong><%= String.format("%,.0f", salaires) %> Ar</strong></td>
                         <td>
                             <div class="barre-progress">
@@ -106,7 +112,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td><span class="point-couleur point-matieres"></span> &#x1F9F5; Mati&egrave;res premi&egrave;res</td>
+                        <td><span class="point-couleur point-matieres"></span> <span class="row-icon-label"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="row-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4v9l8 4 8-4V7z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10.14v5.86"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 10.14v5.86"/></svg> Mati&egrave;res premi&egrave;res</span></td>
                         <td><strong><%= String.format("%,.0f", matieres) %> Ar</strong></td>
                         <td>
                             <div class="barre-progress">
@@ -124,7 +130,7 @@
             </table>
 
             <div class="note-calcul">
-                <strong>&#x1F4CC; Calculs :</strong>
+                <strong><span class="note-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg></span> Calculs :</strong>
                 <ul>
                     <li><b>CA</b> = SOMME du montant total des commandes de l'ann&eacute;e (hors annul&eacute;es)</li>
                     <li><b>Salaires</b> = SOMME des salaires pay&eacute;s de l'ann&eacute;e</li>
@@ -157,22 +163,22 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>&#x1F4B9; Chiffre d'affaires total</td>
+                    <td><span class="row-icon-label"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="row-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 17l6-6 4 4 8-8"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 7h6v6"/></svg> Chiffre d'affaires total</span></td>
                     <td class="montant-positif"><strong><%= String.format("%,.0f", ca) %> Ar</strong></td>
                     <td><%= nbCmd %> commandes livr&eacute;es (ligne_commande &times; commande LIVREE)</td>
                 </tr>
                 <tr>
-                    <td>&#x1F4BC; Salaires pay&eacute;s</td>
+                    <td><span class="row-icon-label"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="row-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 7V6a2 2 0 012-2h8a2 2 0 012 2v1"/><rect x="4" y="7" width="16" height="10" rx="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 11h6"/></svg> Salaires pay&eacute;s</span></td>
                     <td class="montant-negatif">&minus; <%= String.format("%,.0f", salaires) %> Ar</td>
                     <td>SUM(salaire_net) o&ugrave; statut = PAYE</td>
                 </tr>
                 <tr>
-                    <td>&#x1F9F5; Achats mati&egrave;res premi&egrave;res</td>
+                    <td><span class="row-icon-label"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="row-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4v9l8 4 8-4V7z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10.14v5.86"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 10.14v5.86"/></svg> Achats mati&egrave;res premi&egrave;res</span></td>
                     <td class="montant-negatif">&minus; <%= String.format("%,.0f", matieres) %> Ar</td>
                     <td>SUM(quantite &times; valeur_unitaire) dans la table matiere</td>
                 </tr>
                 <tr class="ligne-separateur">
-                    <td>&#x1F4B8; D&eacute;penses totales</td>
+                    <td><span class="row-icon-label"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="row-icon"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1V8a1 1 0 011-1z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 11h16"/></svg> D&eacute;penses totales</span></td>
                     <td class="montant-negatif"><strong>&minus; <%= String.format("%,.0f", depenses) %> Ar</strong></td>
                     <td>Salaires + Mati&egrave;res</td>
                 </tr>
@@ -181,7 +187,7 @@
                     <td style="<%= margeStyle %>; font-size:1.1rem; font-weight:800;">
                         <strong><%= margeSymbole %> <%= String.format("%,.0f", Math.abs(margeNette)) %> Ar</strong>
                     </td>
-                    <td><%= margeNette >= 0 ? "&#x2705; R&eacute;sultat positif" : "&#x26A0;&#xFE0F; D&eacute;penses > CA" %></td>
+                    <td><%= margeNette >= 0 ? "<span class='status-icon status-positive'><svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7'/></svg> R&eacute;sultat positif</span>" : "<span class='status-icon status-warning'><svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 9v4'/><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 17h.01'/><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10.29 3.86l-8 14A1 1 0 002.17 19h19.66a1 1 0 00.86-1.5l-8-14a1 1 0 00-1.72 0z'/></svg> D&eacute;penses > CA</span>" %></td>
                 </tr>
             </tbody>
         </table>

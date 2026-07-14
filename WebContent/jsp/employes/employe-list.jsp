@@ -148,7 +148,7 @@
                 </select>
             </div>
             
-            <div class="filter-group" style="display: flex; align-items: flex-end; gap: 10px;">
+            <div class="filter-group filter-actions">
                 <button type="submit" class="btn btn-primary">Rechercher</button>
                 <a href="employe-list.jsp" class="btn btn-warning">Reinitialiser</a>
             </div>
@@ -211,7 +211,9 @@
                             </td>
                             <td><%= e.getDateEmbauche() != null ? e.getDateEmbauche() : "-" %></td>
                             <td class="actions">
-                                <a href="employe-form.jsp?id=<%= e.getId() %>" class="btn btn-primary btn-small">Modifier</a>
+                                <a href="employe-form.jsp?id=<%= e.getId() %>" class="btn-icon edit" title="Modifier">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                                </a>
                                 <%
                                     Salaire latestSalaire = null;
                                     try {
@@ -220,8 +222,14 @@
                                         latestSalaire = null;
                                     }
                                 %>
-                                <a href="employe-delete.jsp?id=<%= e.getId() %>" class="btn btn-danger btn-small" 
-                                   onclick="return confirm('Êtes-vous sûr de vouloir desactiver cet employe ?')">Desactiver</a>
+                                <a href="employe-delete.jsp?id=<%= e.getId() %>" class="btn-icon del" 
+                                   title="Desactiver" onclick="return confirm('Êtes-vous sûr de vouloir desactiver cet employe ?')">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 20.5a6.5 6.5 0 0113 0"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 8l-4 4m0 0l4 4M15 12h-9"/>
+                                    </svg>
+                                </a>
                             </td>
                         </tr>
                     <% } %>

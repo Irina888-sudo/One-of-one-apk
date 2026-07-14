@@ -257,29 +257,18 @@ tbody td {
     background: rgba(195, 0, 0, 0.06);
     border: 2px solid rgba(195, 0, 0, 0.14);
     text-decoration: none;
-    color: var(--text-dark-cmd);
-    transition: background 0.2s ease, color 0.2s ease;
-}
+        color: var(--accent-red);
+        transition: background 0.2s ease, color 0.2s ease;
+    }
 
-.btn-icon:hover {
-    background: rgba(195, 0, 0, 0.14);
-    color: var(--accent-red-cmd);
-}
+    .btn-icon svg {
+        color: inherit;
+    }
 
-.btn-icon.del:hover {
-    background: rgba(195, 0, 0, 0.2);
-    color: #951111;
-}
-
-/* ── Pagination ── */
-.pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-top: 28px;
-    flex-wrap: wrap;
-}
+    .btn-icon:hover {
+        background: rgba(195, 0, 0, 0.14);
+        color: var(--accent-red);
+    }
 
 .pagination a,
 .pagination span {

@@ -503,32 +503,30 @@ body {
 }
 
 .btn-icon {
-    border: 2px solid var(--border);
-    background: var(--accent-red-soft);
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
-}
+    width: 34px;
+    height: 34px;
+    border-radius: 0;
+    background: rgba(195, 0, 0, 0.06);
+    border: 2px solid rgba(195, 0, 0, 0.14);
+    text-decoration: none;
+        color: var(--accent-red);
+        transition: background 0.2s ease, color 0.2s ease;
+    }
 
-.btn-icon:hover {
-    background: rgba(195, 0, 0, 0.14);
-    border-color: rgba(195, 0, 0, 0.26);
-}
-
-.btn-icon.edit svg {
-    color: var(--accent-red);
+    .btn-icon svg {
+        color: inherit;
 }
 
 .btn-icon.del svg {
-    color: var(--status-error);
+    color: currentColor;
 }
 
 .btn-icon.del:hover {
     background: rgba(195, 0, 0, 0.20);
+    color: #951111;
 }
 
 /* ── Empty state ── */

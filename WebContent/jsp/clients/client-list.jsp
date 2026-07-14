@@ -160,12 +160,16 @@
                         <td><%= c.getAdresse()   != null ? c.getAdresse()   : "—" %></td>
                         <td>
                             <%-- Bouton modifier : envoie vers client-form.jsp avec l'id --%>
-                            <a href="client-form.jsp?id=<%= c.getId() %>" class="btn-action" title="Modifier">✏️</a>
+                            <a href="client-form.jsp?id=<%= c.getId() %>" class="btn-icon edit" title="Modifier">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            </a>
                             <%-- Bouton supprimer : recharge la même page avec action=supprimer --%>
                             <a href="client-list.jsp?action=supprimer&id=<%= c.getId() %>"
-                               class="btn-action btn-danger"
+                               class="btn-icon del"
                                title="Supprimer"
-                               onclick="return confirm('Supprimer ce client ?');">🗑️</a>
+                               onclick="return confirm('Supprimer ce client ?');">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6m5 0V4h4v2"/></svg>
+                            </a>
                         </td>
                     </tr>
                 <%

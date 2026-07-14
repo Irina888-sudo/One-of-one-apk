@@ -261,6 +261,30 @@ body {
     color: #fff;
 }
 
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 0;
+    background: rgba(195, 0, 0, 0.06);
+    border: 2px solid rgba(195, 0, 0, 0.14);
+    text-decoration: none;
+    color: var(--accent-red);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-icon:hover {
+    background: rgba(195, 0, 0, 0.14);
+    color: var(--accent-red);
+}
+
+.btn-icon.del:hover {
+    background: rgba(195, 0, 0, 0.20);
+    color: #951111;
+}
+
 .btn-danger {
     color: var(--accent-red-dark);
 }

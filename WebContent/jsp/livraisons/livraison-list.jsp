@@ -181,13 +181,21 @@
                     <tr>
                         <td><%= l.getNumero() %></td>
                         <td><%= l.getCommandeId() %></td>
-                        <td>📍 <%= l.getLieu() %></td>
+                        <td>
+                            <span class="loc-icon" style="display:inline-flex;align-items:center;gap:6px;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:inherit;"><path stroke-linecap="round" stroke-linejoin="round" d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1118 0z"/><circle cx="12" cy="10" r="2"/></svg>
+                                <span><%= l.getLieu() %></span>
+                            </span>
+                        </td>
                         <td><%= String.format("%.0f", l.getFrais()) %> Ariary</td>
                         <td><span class="statut-badge <%= statutClass %>">● <%= statutLabel %></span></td>
                         <td class="actions">
-                            <a href="livraison-form.jsp?id=<%= l.getId() %>">Modifier</a>
-                            <a href="livraison-list.jsp?delete=<%= l.getId() %>"
-                               onclick="return confirm('Supprimer cette livraison ?');">Supprimer</a>
+                            <a href="livraison-form.jsp?id=<%= l.getId() %>" class="btn-icon edit" title="Modifier">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:inherit;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                            </a>
+                            <a href="livraison-list.jsp?delete=<%= l.getId() %>" class="btn-icon del" title="Supprimer" onclick="return confirm('Supprimer cette livraison ?');">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:inherit;"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6m5 0V4h4v2"/></svg>
+                            </a>
                         </td>
                     </tr>
                     <%
