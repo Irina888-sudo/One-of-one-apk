@@ -132,7 +132,7 @@
             <div class="form-group">
                 <label>Employe *</label>
                 <select name="employe_id" required>
-                    <option value="">-- Selectionner un employe --</option>
+                    <option value=""> Selectionner un employe </option>
                     <% if (employes != null) {
                         for (Employe e : employes) { %>
                         <option value="<%= e.getId() %>" 

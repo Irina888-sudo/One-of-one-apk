@@ -61,7 +61,7 @@
             row.innerHTML = `
                 <td>
                     <select name="produitId" class="ligne-produit" required>
-                        <option value="">-- Choisir un produit --</option>
+                        <option value=""> Choisir un produit </option>
                         <% for (Produit p : produits) { %>
                             <option value="<%= p.getId() %>"><%= p.getNom() %> (<%= p.getCategorie() != null ? p.getCategorie() : "Produit" %>)</option>
                         <% } %>
