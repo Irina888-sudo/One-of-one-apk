@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.MatiereDAO" %>
 <%@ page import="model.Matiere" %>
 <%@ page import="java.util.ArrayList" %>
@@ -199,7 +200,7 @@
             <% } %>
 
             <p class="pagination-info">
-                Affichage de <%= (totalMatieres == 0 ? 0 : debut + 1) %> à <%= fin %> sur <%= totalMatieres %> matiere(s)
+                Affichage de <%= (totalMatieres == 0 ? 0 : debut + 1) %> a <%= fin %> sur <%= totalMatieres %> matiere(s)
             </p>
         </div>
     </div>

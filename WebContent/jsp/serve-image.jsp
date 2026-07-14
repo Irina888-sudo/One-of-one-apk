@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="java.io.File, java.io.FileInputStream, java.io.OutputStream" %>
 <%@ page import="java.nio.file.Files" %>
 <%
@@ -13,7 +14,7 @@
     // Decoder le nom envoye (securiser contre l'url-encoding)
     String name = java.net.URLDecoder.decode(rawName, "UTF-8");
 
-    // Determiner dynamiquement le dossier d'uploads (même logique que produit-save.jsp)
+    // Determiner dynamiquement le dossier d'uploads (meme logique que produit-save.jsp)
     File webappRoot = new File(application.getRealPath(""));
     File externalUploads = new File(webappRoot.getParentFile(), "uploads" + File.separator + "img");
     File imageFile = new File(externalUploads, name);

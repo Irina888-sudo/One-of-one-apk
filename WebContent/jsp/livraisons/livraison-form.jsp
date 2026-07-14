@@ -1,4 +1,5 @@
 <%@ page import="java.util.*" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.LivraisonDAO" %>
 <%@ page import="dao.CommandeDAO" %>
 <%@ page import="model.Livraison" %>

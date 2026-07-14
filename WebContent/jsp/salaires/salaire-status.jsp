@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.SalaireDAO" %>
 <%
     String idStr = request.getParameter("id");
@@ -14,9 +15,9 @@
         boolean ok = new SalaireDAO().updateStatut(id, statut);
         if (ok) {
             // Invoice export disabled per user request. Only update status and return to list.
-            response.sendRedirect(redirect + "?success=" + java.net.URLEncoder.encode("Statut mis à jour", "UTF-8"));
+            response.sendRedirect(redirect + "?success=" + java.net.URLEncoder.encode("Statut mis a jour", "UTF-8"));
         } else {
-            response.sendRedirect(redirect + "?error=" + java.net.URLEncoder.encode("Impossible de mettre à jour", "UTF-8"));
+            response.sendRedirect(redirect + "?error=" + java.net.URLEncoder.encode("Impossible de mettre a jour", "UTF-8"));
         }
     } catch (Exception e) {
         e.printStackTrace();

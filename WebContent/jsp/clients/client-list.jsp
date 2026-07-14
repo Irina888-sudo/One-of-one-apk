@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.ClientDAO" %>
 <%@ page import="model.Client" %>
 <%@ page import="java.util.ArrayList" %>
@@ -37,7 +38,7 @@
             int idASupprimer = Integer.parseInt(request.getParameter("id"));
             ClientDAO daoTemp = new ClientDAO();
             boolean ok = daoTemp.supprimer(idASupprimer);
-            messageRetour = ok ? "✅ Client supprime avec succes." : "❌ Impossible de supprimer ce client : des commandes sont dejà liees.";
+            messageRetour = ok ? "✅ Client supprime avec succes." : "❌ Impossible de supprimer ce client : des commandes sont deja liees.";
         } catch (NumberFormatException e) {
             messageRetour = "❌ Identifiant client invalide.";
         }
@@ -163,7 +164,7 @@
                             <a href="client-form.jsp?id=<%= c.getId() %>" class="btn-icon edit" title="Modifier">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             </a>
-                            <%-- Bouton supprimer : recharge la même page avec action=supprimer --%>
+                            <%-- Bouton supprimer : recharge la meme page avec action=supprimer --%>
                             <a href="client-list.jsp?action=supprimer&id=<%= c.getId() %>"
                                class="btn-icon del"
                                title="Supprimer"
@@ -203,9 +204,9 @@
     </div>
     <% } %>
 
-    <%-- Resume : "Affichage de X à Y sur Z clients" --%>
+    <%-- Resume : "Affichage de X a Y sur Z clients" --%>
     <p class="pagination-info">
-        Affichage de <%= (totalClients == 0 ? 0 : debut + 1) %> à <%= fin %> sur <%= totalClients %> client(s)
+        Affichage de <%= (totalClients == 0 ? 0 : debut + 1) %> a <%= fin %> sur <%= totalClients %> client(s)
     </p>
 
 </div><%-- fin main-content --%>

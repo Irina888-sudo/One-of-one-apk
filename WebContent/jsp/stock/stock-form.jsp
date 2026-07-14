@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.MatiereDAO" %>
 <%@ page import="model.Matiere" %>
 
@@ -50,7 +51,7 @@
         try {
             quantite = Integer.parseInt(valQuantite);
             if (quantite < 0) {
-                messageRetour = "❌ La quantite doit être zero ou positive.";
+                messageRetour = "❌ La quantite doit etre zero ou positive.";
                 valide = false;
             }
         } catch (NumberFormatException e) {
@@ -107,7 +108,7 @@
     <div class="page-header">
         <div>
             <h1><%= titrePage.toUpperCase() %></h1>
-            <p><a href="stock-list.jsp">← Retour à la liste des matieres</a></p>
+            <p><a href="stock-list.jsp">← Retour a la liste des matieres</a></p>
         </div>
     </div>
 

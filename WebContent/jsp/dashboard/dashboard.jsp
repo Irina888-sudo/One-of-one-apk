@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.DashboardDAO" %>
 <%@ page import="model.StatistiqueMensuelle" %>
 <%@ page import="java.util.List" %>
@@ -26,7 +27,7 @@
     StringBuilder stockData = new StringBuilder("[");
     StringBuilder commandesData = new StringBuilder("[");
 
-    String[] monthNames = {"Janv", "Fev", "Mars", "Avr", "Mai", "Juin", "Juil", "Août", "Sept", "Oct", "Nov", "Dec"};
+    String[] monthNames = {"Janv", "Fev", "Mars", "Avr", "Mai", "Juin", "Juil", "Aout", "Sept", "Oct", "Nov", "Dec"};
 
     try {
         stats = dao.getStatistiquesAnnuelles(currentYear);
@@ -86,7 +87,7 @@
             <div class="page-header">
                 <div>
                     <h1>TABLEAU DE BORD</h1>
-                    <p>Aperçu de l'activite pour l'annee <%= currentYear %> et le mois en cours.</p>
+                    <p>Apercu de l'activite pour l'annee <%= currentYear %> et le mois en cours.</p>
                 </div>
             </div>
             

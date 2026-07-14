@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.CommandeDAO" %>
 <%@ page import="dao.ProduitDAO" %>
 <%@ page import="model.Commande" %>
@@ -83,7 +84,7 @@
             <div>
                 <h1><%= isEdit ? "MODIFIER LA COMMANDE" : "AJOUTER UNE COMMANDE" %></h1>
                 <p>
-                    <a href="commandes.jsp">← Retour à la liste des commandes</a>
+                    <a href="commandes.jsp">← Retour a la liste des commandes</a>
                 </p>
             </div>
         </div>

@@ -1,4 +1,5 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="model.Salaire, dao.SalaireDAO, dao.EmployeDAO" %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -68,7 +69,7 @@
                     <span class="info-value"><%= EmployeDAO.getNomEmployeById(salaire.getEmployeId()) %></span>
                 </div>
                 <div class="info-row">
-                    <span class="info-label">Rôle</span>
+                    <span class="info-label">Role</span>
                     <span class="info-value"><%= EmployeDAO.getRoleById(salaire.getEmployeId()) %></span>
                 </div>
                 <div class="info-row">
@@ -94,7 +95,7 @@
                         <td class="montant-td"><%= String.format("%,.2f", salaire.getSalaireBrut().subtract(salaire.getSalaireNet())) %> Ar</td>
                     </tr>
                     <tr class="tr-total">
-                        <td><strong>Salaire Net à payer</strong></td>
+                        <td><strong>Salaire Net a payer</strong></td>
                         <td class="montant-net"><strong><%= String.format("%,.2f", salaire.getSalaireNet()) %> Ar</strong></td>
                     </tr>
                 </tbody>

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="java.util.*, java.math.BigDecimal, model.Employe, model.Salaire, dao.EmployeDAO, dao.SalaireDAO" %>
 <%@ page import="java.sql.Date" %>
 <!DOCTYPE html>
@@ -108,7 +109,7 @@
             </div>
             
             <div class="filter-group">
-                <label>Rôle</label>
+                <label>Role</label>
                 <select name="role">
                     <option value="">Tous</option>
                     <% for(String r : roles) { 
@@ -179,7 +180,7 @@
                     <th>Nom</th>
                     <th>Email</th>
                     <th>Telephone</th>
-                    <th>Rôle</th>
+                    <th>Role</th>
                     <th>Salaire Brut</th>
                     <th>Statut</th>
                     <th>Date d'embauche</th>
@@ -223,7 +224,7 @@
                                     }
                                 %>
                                 <a href="employe-delete.jsp?id=<%= e.getId() %>" class="btn-icon del" 
-                                   title="Desactiver" onclick="return confirm('Êtes-vous sûr de vouloir desactiver cet employe ?')">
+                                   title="Desactiver" onclick="return confirm('Etes-vous sur de vouloir desactiver cet employe ?')">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 20.5a6.5 6.5 0 0113 0"/>

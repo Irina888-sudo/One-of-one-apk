@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.ClientDAO" %>
 <%@ page import="model.Client" %>
 
@@ -22,7 +23,7 @@
         clientExistant = dao.trouverParId(id);
 
         if (clientExistant == null) {
-            // Si l'ID n'existe pas → retourner à la liste
+            // Si l'ID n'existe pas → retourner a la liste
             response.sendRedirect("client-list.jsp");
             return;
         }
@@ -75,7 +76,7 @@
         }
     }
 
-    // ── VALEURS À AFFICHER DANS LE FORMULAIRE ────────────────────────────
+    // ── VALEURS A AFFICHER DANS LE FORMULAIRE ────────────────────────────
     // En mode modification : valeurs du client existant
     // En mode ajout : champs vides
     String valNom       = (clientExistant != null && clientExistant.getNom()       != null) ? clientExistant.getNom()       : "";
@@ -105,7 +106,7 @@
             <h1><%= titrePage.toUpperCase() %></h1>
             <p>
                 <%-- Fil d'ariane : Clients > Ajouter/Modifier --%>
-                <a href="client-list.jsp">← Retour à la liste des clients</a>
+                <a href="client-list.jsp">← Retour a la liste des clients</a>
             </p>
         </div>
     </div>
@@ -116,7 +117,7 @@
     <% } %>
 
     <%-- ── FORMULAIRE ── --%>
-    <%-- action="" = soumettre vers la même page (client-form.jsp) --%>
+    <%-- action="" = soumettre vers la meme page (client-form.jsp) --%>
     <div class="form-container">
         <form class="form" action="client-form.jsp<%= modeModification ? "?id=" + idParam : "" %>" method="POST">
 

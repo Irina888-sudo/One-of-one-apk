@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.ProduitDAO, dao.CollectionDAO" %>
 <%@ page import="model.Produit, model.Collection" %>
 <%@ page import="java.util.List" %>
@@ -86,7 +87,7 @@
                 <div class="flash <%= flashType != null ? flashType : "success" %>"><%= flash %></div>
                 <% } %>
 
-                <!-- En-tête page -->
+                <!-- En-tete page -->
                 <div class="page-header">
                     <div>
                         <h1>PRODUITS FINIS</h1>
@@ -302,7 +303,7 @@
             <% } %>
 
         <p class="pagination-info">
-            Affichage de <%= (totalProduitsFiltres == 0 ? 0 : debut + 1) %> à <%= fin %> sur <%= totalProduitsFiltres %> produit(s)
+            Affichage de <%= (totalProduitsFiltres == 0 ? 0 : debut + 1) %> a <%= fin %> sur <%= totalProduitsFiltres %> produit(s)
         </p>
 
         </div><!-- /content -->

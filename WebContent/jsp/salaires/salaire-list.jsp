@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="java.util.*, java.math.BigDecimal, model.Salaire, dao.SalaireDAO, dao.EmployeDAO, util.DBConnection" %>
 <%@ page import="java.sql.Date, java.sql.Connection" %>
 <%@ page import="java.time.LocalDate" %>
@@ -84,7 +85,7 @@
                 e.printStackTrace();
             }
         } catch (Exception e) {
-            errorMessage = "Erreur de connexion à la base: " + e.getMessage();
+            errorMessage = "Erreur de connexion a la base: " + e.getMessage();
             e.printStackTrace();
         } finally {
             try { if (conn != null) conn.close(); } catch (Exception ignored) {}
@@ -96,7 +97,7 @@
     <% } %>
 
     <form method="get" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:10px 0 20px;">
-        <input type="text" name="search" placeholder="Nom, rôle, mois, statut..." value="<%= search != null ? search : "" %>" style="padding:10px 12px; border:1px solid #d0d7de; border-radius:8px; min-width:240px;">
+        <input type="text" name="search" placeholder="Nom, role, mois, statut..." value="<%= search != null ? search : "" %>" style="padding:10px 12px; border:1px solid #d0d7de; border-radius:8px; min-width:240px;">
         <select name="statut" style="padding:10px 12px; border:1px solid #d0d7de; border-radius:8px;">
             <option value="" <%= (statutFilter == null || statutFilter.isBlank()) ? "selected" : "" %>>Tous les statuts</option>
             <option value="PAYE" <%= "PAYE".equals(statutFilter) ? "selected" : "" %>>PAYE</option>

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="model.Salaire, dao.SalaireDAO, dao.EmployeDAO, model.Employe, java.math.BigDecimal, java.time.LocalDate, java.sql.Date, java.util.List, util.DBConnection, java.sql.Connection" %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -22,7 +23,7 @@
         conn = DBConnection.getConnection();
         salaireDAO = new SalaireDAO(conn);
     } catch (Exception e) {
-        errorMsg = "Erreur de connexion à la base de donnees: " + e.getMessage();
+        errorMsg = "Erreur de connexion a la base de donnees: " + e.getMessage();
     }
 
     // Recuperer le salaire s'il y a un ID
@@ -62,7 +63,7 @@
                 BigDecimal salairNet = !salaireNetStr.isEmpty() ? new BigDecimal(salaireNetStr) : salaireBrut;
 
                 if (salaireBrut.compareTo(BigDecimal.ZERO) <= 0) {
-                    errorMsg = "Le salaire brut doit être superieur à 0.";
+                    errorMsg = "Le salaire brut doit etre superieur a 0.";
                 } else if (id > 0) {
                     // Modification
                     salaire = new Salaire();

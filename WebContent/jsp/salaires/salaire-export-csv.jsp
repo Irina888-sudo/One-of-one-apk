@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="model.Salaire, dao.SalaireDAO, dao.EmployeDAO" %>
 <%@ page import="java.io.*" %>
 <%

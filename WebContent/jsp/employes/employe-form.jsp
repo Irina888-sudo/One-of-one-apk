@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="model.Employe, dao.EmployeDAO, java.math.BigDecimal, java.sql.Date" %>
 <!DOCTYPE html>
 <html lang="fr">
@@ -51,7 +52,7 @@
         try {
             salaireBrut = new BigDecimal(salaireBrutStr);
             if (salaireBrut.compareTo(BigDecimal.ZERO) < 0) {
-                errorMsg = "Le salaire doit être superieur à 0.";
+                errorMsg = "Le salaire doit etre superieur a 0.";
                 hasError = true;
             }
         } catch (Exception e) {
@@ -62,7 +63,7 @@
         // verification email unique
         if (!hasError) {
             if (employeDAO.isEmailExists(email, id)) {
-                errorMsg = "Cet email est dejà utilise par un autre employe.";
+                errorMsg = "Cet email est deja utilise par un autre employe.";
                 hasError = true;
             }
         }
@@ -107,7 +108,7 @@
         
         <div class="nav">
             <div class="nav-links">
-                <a href="employe-list.jsp">Retour à la liste</a>
+                <a href="employe-list.jsp">Retour a la liste</a>
             </div>
         </div>
         
@@ -141,9 +142,9 @@
             </div>
             
             <div class="form-group">
-                <label>Rôle</label>
+                <label>Role</label>
                 <select name="role">
-                    <option value="">Selectionner un rôle</option>
+                    <option value="">Selectionner un role</option>
                     <option value="Developpeur" <%= employe != null && "Developpeur".equals(employe.getRole()) ? "selected" : "" %>>Developpeur</option>
                     <option value="Comptable" <%= employe != null && "Comptable".equals(employe.getRole()) ? "selected" : "" %>>Comptable</option>
                     <option value="Manager" <%= employe != null && "Manager".equals(employe.getRole()) ? "selected" : "" %>>Manager</option>

@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.ProduitDAO, dao.CollectionDAO, dao.MatiereDAO" %>
 <%@ page import="model.Produit, model.Collection, model.Matiere" %>
 <%@ page import="java.util.List" %>
@@ -206,7 +207,7 @@
                                 </ul>
                             </div>
                         <% } else { %>
-                            <p style="font-size: 13px; color: var(--text-muted); font-style: italic;">Aucune matiere associee à ce produit.</p>
+                            <p style="font-size: 13px; color: var(--text-muted); font-style: italic;">Aucune matiere associee a ce produit.</p>
                         <% } %>
                     <% } else { %>
                         <!-- En creation, permettre l'ajout dynamique -->

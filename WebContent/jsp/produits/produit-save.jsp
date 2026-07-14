@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.ProduitDAO" %>
 <%@ page import="model.Produit" %>
-<%@ page import="javax.servlet.http.Part" %>
+<%@ page import="jakarta.servlet.http.Part" %>
 <%@ page import="java.io.File" %>
 <%@ page import="java.io.InputStream" %>
 <%@ page import="java.nio.file.Files" %>
@@ -40,7 +41,7 @@
         prix = Double.parseDouble(prixStr);
         if (prix < 0) throw new NumberFormatException();
     } catch (NumberFormatException e) {
-        request.setAttribute("erreur", "Le prix doit être un nombre positif.");
+        request.setAttribute("erreur", "Le prix doit etre un nombre positif.");
         request.getRequestDispatcher(idParam != null
         ? "produit-form.jsp?id=" + idParam
         : "produit-form.jsp").forward(request, response);
@@ -69,7 +70,7 @@
         // Generer un nom unique pour eviter les conflits
         String uniqueName = UUID.randomUUID().toString() + extension;
 
-        // Dossier de stockage externe, situe à côte du deploiement
+        // Dossier de stockage externe, situe a cote du deploiement
         File webappRoot = new File(application.getRealPath(""));
         File externalUploads = new File(webappRoot.getParentFile(), "uploads" + File.separator + "img");
         if (!externalUploads.exists()) externalUploads.mkdirs();
@@ -131,13 +132,13 @@
                         throw new NumberFormatException();
                     }
                 } catch (NumberFormatException e) {
-                    request.setAttribute("erreur", "La quantite utilisee pour chaque matiere doit être un nombre strictement positif.");
+                    request.setAttribute("erreur", "La quantite utilisee pour chaque matiere doit etre un nombre strictement positif.");
                     request.getRequestDispatcher("produit-form.jsp").forward(request, response);
                     return;
                 }
                 
                 if (matiereIds.contains(mId)) {
-                    request.setAttribute("erreur", "Une matiere ne peut pas être selectionnee plusieurs fois.");
+                    request.setAttribute("erreur", "Une matiere ne peut pas etre selectionnee plusieurs fois.");
                     request.getRequestDispatcher("produit-form.jsp").forward(request, response);
                     return;
                 }

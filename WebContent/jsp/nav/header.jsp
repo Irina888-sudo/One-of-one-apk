@@ -8,7 +8,7 @@
 
     String headerUserInitials = (String) session.getAttribute("userInitials");
     if (headerUserInitials == null) {
-        // Generer les initiales à partir du nom si non presentes
+        // Generer les initiales a partir du nom si non presentes
         headerUserInitials = headerUserNom.length() >= 2 ? headerUserNom.substring(0, 2).toUpperCase() : headerUserNom.toUpperCase();
     }
 
