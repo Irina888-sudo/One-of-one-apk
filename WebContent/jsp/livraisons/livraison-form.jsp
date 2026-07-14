@@ -105,9 +105,11 @@
                             <select id="commande_id" name="commande_id">
                                 <%
     CommandeDAO cdao = new CommandeDAO();
-    List<Commande> commandes = cdao.lister(null, null, null);
+    // En creation : uniquement les commandes sans livraison
+    // En modification : aussi la commande deja liee a cette livraison
+    Integer currentCommandeId = (livraison != null) ? livraison.getCommandeId() : null;
+    List<Commande> commandes = cdao.listerSansLivraison(currentCommandeId);
     for (Commande c : commandes) {
-
 %>
                                 <option value="<%= c.getId() %>" <%= (livraison != null && livraison.getCommandeId() == c.getId()) ? "selected" : "" %>><%= c.getNumero() %></option>
                                 <% } %>

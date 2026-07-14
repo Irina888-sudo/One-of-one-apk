@@ -37,7 +37,7 @@
     List<Client> clients = dao.getClients();
     List<Produit> produits = null;
     try {
-        produits = produitDao.lister(null, null, null, null, null, null);
+        produits = produitDao.lister(null, null, "DISPONIBLE", null, null, null);
     } catch (Exception e) {
         produits = new java.util.ArrayList<>();
     }

@@ -224,7 +224,36 @@ public class CommandeDAO {
                 ps.setDouble(4, ligne.getPrixUnitaire());
                 ps.addBatch();
             }
-            ps.executeBatch();
         }
+    }
+
+    /**
+     * Retourne uniquement les commandes qui n'ont pas encore de livraison associee.
+     * Si excludeCommandeId est fourni (mode edition), cette commande est aussi incluse.
+     */
+    public List<Commande> listerSansLivraison(Integer excludeCommandeId) throws SQLException {
+        List<Commande> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+            "SELECT c.id, c.numero, cl.nom AS client_nom, cl.email AS client_email, c.montant_total, c.date_commande, c.statut, " +
+            "(SELECT GROUP_CONCAT(CONCAT(p.nom, ' (x', lc.quantite, ')') SEPARATOR ', ') " +
+            " FROM ligne_commande lc " +
+            " JOIN produit p ON lc.produit_id = p.id " +
+            " WHERE lc.commande_id = c.id) AS produits " +
+            "FROM commande c " +
+            "JOIN client cl ON c.client_id = cl.id " +
+            "WHERE c.id NOT IN (SELECT commande_id FROM livraison WHERE commande_id IS NOT NULL) "
+        );
+        if (excludeCommandeId != null) {
+            sql.append("OR c.id = ").append(excludeCommandeId).append(" ");
+        }
+        sql.append("ORDER BY c.id DESC");
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString());
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                list.add(mapVue(rs));
+            }
+        }
+        return list;
     }
 }
