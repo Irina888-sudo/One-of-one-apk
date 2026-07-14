@@ -1,10 +1,6 @@
 USE oneofone;
 
--- ==========================================
--- DONNÉES DE DÉMONSTRATION MALAGASY
--- ==========================================
-
--- 1. EMPLOYES (10 employés)
+-- 1. EMPLOYES 
 INSERT INTO employe (nom, email, telephone, role, salaire_brut, statut, date_embauche) VALUES
 ('Lanto Rajaonarivelo', 'lanto.rajaonarivelo@oneofone.mg', '034 41 328 27', 'VENDEUR', 300000, 'ACTIF', '2026-07-09'),
 ('Naivo Rajaonarivelo', 'naivo.rajaonarivelo@oneofone.mg', '038 14 130 21', 'VENDEUR', 1000000, 'ACTIF', '2026-01-23'),
@@ -32,7 +28,7 @@ INSERT INTO collection (nom, date_debut, date_fin, statut) VALUES
 ('Fahavaratra 2024', '2024-12-01', '2025-03-31', 'ARCHIVEE'),
 ('Ririnina 2025', '2025-06-01', '2025-08-31', 'ACTIVE');
 
--- 4. PRODUITS (400 produits, prix entre 30 000 et 100 000)
+-- 4. PRODUITS 
 INSERT INTO produit (nom, categorie, taille, couleur, prix, image, statut, collection_id) VALUES
 ('T-shirt mitaonta OOO-1', 'Kitapo (Sacs)', 'Unique', 'Manga', 56000, 'assets/img/produits/prod_9.jpg', 'DISPONIBLE', 3),
 ('Poketra rofia OOO-2', 'Kiraro (Chaussures)', 'Unique', 'Fotsy', 61000, 'assets/img/produits/prod_15.jpg', 'DISPONIBLE', 1),
@@ -1244,7 +1240,7 @@ INSERT INTO commande (numero, client_id, statut, montant_total, date_commande) V
 ('CMD-2026-0349', 34, 'LIVREE', 78000, '2026-02-19 00:00:00'),
 ('CMD-2026-0350', 3, 'PRODUCTION', 31000, '2026-06-07 00:00:00');
 
--- 8. LIGNE_COMMANDE (1 pour chaque commande)
+-- 8. LIGNE_COMMANDE 
 INSERT INTO ligne_commande (commande_id, produit_id, quantite, prix_unitaire) VALUES
 (1, 360, 1, 83000),
 (2, 294, 1, 47000),
@@ -1762,13 +1758,13 @@ INSERT INTO livraison (numero, commande_id, employe_id, livreur, lieu, frais, st
 ('LIV-2026-0161', 349, 6, NULL, 'Ampefiloha, Antananarivo', 10000, 'LIVREE', '2026-02-22'),
 ('LIV-2026-0162', 350, 6, NULL, 'Itaosy, Antananarivo', 10000, 'EN_COURS', '2026-06-08');
 
--- Mettre à jour le statut des produits vendus (statut LIVREE de la commande)
+-- Mettre à jour le statut des produits vendus
 UPDATE produit p 
 JOIN ligne_commande lc ON p.id = lc.produit_id
 JOIN commande c ON lc.commande_id = c.id
 SET p.statut = 'VENDU' WHERE c.statut = 'LIVREE';
 
--- 10. FINANCES (Quelques recettes et depenses)
+-- 10. FINANCES 
 INSERT INTO finance (description, type, montant, date_transaction, commande_id) VALUES
 ('Paiement commande CMD-2026-0008', 'RECETTE', 77000, '2026-07-13', 8),
 ('Paiement commande CMD-2026-0011', 'RECETTE', 34000, '2026-07-13', 11),
@@ -1867,7 +1863,7 @@ INSERT INTO finance (description, type, montant, date_transaction, commande_id) 
 ('Frais transport marchandise', 'DEPENSE', 360000, '2026-04-10', NULL),
 ('Achat fourniture (Kofehy)', 'DEPENSE', 354000, '2026-01-30', NULL);
 
--- 11. SALAIRES (Mois précédent et mois en cours)
+-- 11. SALAIRES 
 INSERT INTO salaire (employe_id, mois, salaire_brut, statut) VALUES
 (1, '2026-06-01', 600000, 'PAYE'),
 (1, '2026-07-01', 600000, 'ATTENTE'),
