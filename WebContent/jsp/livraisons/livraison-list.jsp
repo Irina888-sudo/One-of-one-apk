@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ page import="java.util.*" %>
 <%@ include file="/jsp/auth/check-auth.jsp" %>
 <%@ page import="dao.LivraisonDAO" %>

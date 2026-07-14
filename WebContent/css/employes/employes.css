@@ -1,4 +1,4 @@
-﻿/* ==========================================================================
+/* ==========================================================================
    EMPLOYES.CSS
    Page "Employes" — liste, filtres, tableau, pagination, formulaire
    Style realiste / brutaliste, aligne sur clients.css / commandes.css
@@ -287,15 +287,15 @@ tbody td {
 }
 
 .badge-success {
-    background: rgba(195, 0, 0, 0.08);
-    color: var(--accent-red-emp);
-    border-color: rgba(195, 0, 0, 0.18);
+    background: rgba(29, 184, 153, 0.12);
+    color: #17a086;
+    border-color: rgba(29, 184, 153, 0.25);
 }
 
 .badge-danger {
-    background: rgba(195, 0, 0, 0.18);
-    color: #951111;
-    border-color: rgba(195, 0, 0, 0.28);
+    background: rgba(195, 0, 0, 0.12);
+    color: #c30000;
+    border-color: rgba(195, 0, 0, 0.24);
 }
 
 .actions {

@@ -149,8 +149,8 @@
                 </select>
             </div>
             
-            <div class="filter-group filter-actions">
-                <button type="submit" class="btn btn-primary">Rechercher</button>
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-primary">Appliquer</button>
                 <a href="employe-list.jsp" class="btn btn-warning">Reinitialiser</a>
             </div>
         </form>
